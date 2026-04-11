@@ -1,0 +1,2181 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Curso de Reconocimiento Facial en Python · v3</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Outfit:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg-deep:#0a0e1a;--bg-card:#111827;--bg-code:#0d1117;--bg-code-header:#161b22;
+  --accent-cyan:#00d4ff;--accent-green:#10b981;--accent-purple:#a78bfa;
+  --accent-orange:#f59e0b;--accent-pink:#f472b6;--accent-red:#ef4444;
+  --text-primary:#e2e8f0;--text-secondary:#94a3b8;--text-muted:#64748b;
+  --border:#1e293b;
+}
+[data-theme="light"]{
+  --bg-deep:#f1f5f9;--bg-card:#ffffff;--bg-code:#f8fafc;--bg-code-header:#e2e8f0;
+  --accent-cyan:#0284c7;--accent-green:#059669;--accent-purple:#7c3aed;
+  --accent-orange:#d97706;--accent-pink:#db2777;--accent-red:#dc2626;
+  --text-primary:#0f172a;--text-secondary:#475569;--text-muted:#94a3b8;
+  --border:#cbd5e1;
+}
+[data-theme="light"] body::before{background-image:linear-gradient(rgba(0,0,0,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(0,0,0,.03) 1px,transparent 1px)}
+[data-theme="light"] .code-block pre{color:#24292f}
+[data-theme="light"] .kw{color:#cf222e}[data-theme="light"] .fn{color:#8250df}[data-theme="light"] .str{color:#0a3069}
+[data-theme="light"] .cm{color:#6e7781}[data-theme="light"] .num{color:#0550ae}[data-theme="light"] .var{color:#953800}
+[data-theme="light"] .cls{color:#116329}[data-theme="light"] .bi{color:#8250df}
+[data-theme="light"] .sidebar{background:linear-gradient(180deg,#e2e8f0,#f1f5f9)}
+[data-theme="light"] .sidebar-header{background:linear-gradient(180deg,#e2e8f0,#e2e8f0ee)}
+[data-theme="light"] .hero::before{background:radial-gradient(circle,rgba(2,132,199,.08) 0%,transparent 70%)}
+[data-theme="light"] .hero h1{background:linear-gradient(135deg,#0f172a 0%,#0284c7 50%,#7c3aed 100%);-webkit-background-clip:text;background-clip:text}
+[data-theme="light"] .overlay{background:rgba(0,0,0,.3)}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:'Outfit',sans-serif;background:var(--bg-deep);color:var(--text-primary);line-height:1.7;overflow-x:hidden}
+::-webkit-scrollbar{width:8px}
+::-webkit-scrollbar-track{background:var(--bg-deep)}
+::-webkit-scrollbar-thumb{background:#334155;border-radius:4px}
+body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(rgba(0,212,255,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(0,212,255,.03) 1px,transparent 1px);background-size:60px 60px;pointer-events:none;z-index:0}
+
+/* Sidebar */
+.sidebar{position:fixed;left:0;top:0;width:320px;height:100vh;background:linear-gradient(180deg,#0f1629,#0a0e1a);border-right:1px solid var(--border);overflow-y:auto;z-index:100;padding:0 0 2rem;transition:transform .35s cubic-bezier(.4,0,.2,1)}
+.sidebar-header{padding:1.5rem 1.5rem 1rem;border-bottom:1px solid var(--border);position:sticky;top:0;background:linear-gradient(180deg,#0f1629,#0f1629ee);backdrop-filter:blur(10px);z-index:2}
+.sidebar-logo{display:flex;align-items:center;gap:.75rem;font-weight:800;font-size:1.1rem;color:var(--accent-cyan)}
+.sidebar-logo .icon{width:36px;height:36px;background:linear-gradient(135deg,var(--accent-cyan),var(--accent-purple));border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.1rem}
+.sidebar-subtitle{font-size:.75rem;color:var(--text-muted);margin-top:.35rem;font-weight:400;letter-spacing:.05em;text-transform:uppercase}
+.sidebar-progress{padding:1rem 1.5rem;border-bottom:1px solid var(--border)}
+.progress-label{font-size:.7rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:.5rem;display:flex;justify-content:space-between}
+.progress-bar-bg{height:6px;background:rgba(255,255,255,.06);border-radius:3px;overflow:hidden}
+.progress-bar-fill{height:100%;background:linear-gradient(90deg,var(--accent-green),var(--accent-cyan));border-radius:3px;width:0%;transition:width .6s ease}
+.nav-section{padding:1rem 1rem 0}
+.nav-section-title{font-size:.63rem;text-transform:uppercase;letter-spacing:.12em;color:var(--text-muted);padding:.5rem;font-weight:600}
+.nav-link{display:flex;align-items:center;gap:.6rem;padding:.48rem .75rem;font-size:.8rem;color:var(--text-secondary);text-decoration:none;border-radius:8px;transition:all .2s;cursor:pointer;font-weight:400}
+.nav-link:hover{background:rgba(0,212,255,.06);color:var(--text-primary)}
+.nav-link.active{background:rgba(0,212,255,.1);color:var(--accent-cyan);font-weight:600}
+.nav-link .badge{font-size:.56rem;padding:.1rem .38rem;border-radius:4px;font-weight:600;margin-left:auto;text-transform:uppercase;letter-spacing:.05em}
+.badge-basico{background:rgba(16,185,129,.15);color:var(--accent-green)}
+.badge-intermedio{background:rgba(245,158,11,.15);color:var(--accent-orange)}
+.badge-avanzado{background:rgba(239,68,68,.15);color:var(--accent-red)}
+.badge-extra{background:rgba(167,139,250,.15);color:var(--accent-purple)}
+.nav-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
+.dot-green{background:var(--accent-green)}.dot-orange{background:var(--accent-orange)}.dot-red{background:var(--accent-red)}.dot-purple{background:var(--accent-purple)}.dot-cyan{background:var(--accent-cyan)}
+
+/* Main */
+.main{margin-left:320px;position:relative;z-index:1}
+.menu-toggle{display:none;position:fixed;top:1rem;left:1rem;z-index:200;width:44px;height:44px;background:var(--bg-card);border:1px solid var(--border);border-radius:10px;color:var(--accent-cyan);font-size:1.3rem;cursor:pointer;align-items:center;justify-content:center}
+
+/* Hero */
+.hero{padding:5rem 3rem 4rem;text-align:center;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;top:-100px;left:50%;transform:translateX(-50%);width:700px;height:700px;background:radial-gradient(circle,rgba(0,212,255,.08) 0%,transparent 70%);pointer-events:none}
+.hero-badge{display:inline-flex;align-items:center;gap:.5rem;padding:.5rem 1.2rem;background:rgba(0,212,255,.08);border:1px solid rgba(0,212,255,.2);border-radius:50px;font-size:.8rem;color:var(--accent-cyan);font-weight:600;margin-bottom:1.5rem}
+.hero h1{font-size:clamp(2.2rem,5vw,3.5rem);font-weight:900;line-height:1.1;letter-spacing:-.03em;margin-bottom:1rem;background:linear-gradient(135deg,#fff 0%,var(--accent-cyan) 50%,var(--accent-purple) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero p{font-size:1.15rem;color:var(--text-secondary);max-width:640px;margin:0 auto 2rem;font-weight:300}
+.hero-cards{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;margin-top:2rem}
+.hero-card{background:var(--bg-card);border:1px solid var(--border);border-radius:14px;padding:1.1rem 1.3rem;min-width:130px;text-align:center}
+.hero-card .hc-icon{font-size:1.4rem;margin-bottom:.2rem}
+.hero-card .hc-num{font-size:1.4rem;font-weight:800;color:var(--accent-cyan)}
+.hero-card .hc-label{font-size:.68rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:.08em}
+
+/* Progress Map */
+.progress-map{display:flex;align-items:center;justify-content:center;gap:0;margin-top:2.5rem;flex-wrap:wrap;padding:0 1rem}
+.pm-node{display:flex;flex-direction:column;align-items:center;gap:.4rem}
+.pm-circle{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:700;border:2px solid var(--border);background:var(--bg-card);color:var(--text-muted);transition:all .3s}
+.pm-node.done .pm-circle{border-color:var(--accent-green);background:rgba(16,185,129,.15);color:var(--accent-green)}
+.pm-node.current .pm-circle{border-color:var(--accent-cyan);background:rgba(0,212,255,.15);color:var(--accent-cyan);box-shadow:0 0 15px rgba(0,212,255,.3)}
+.pm-label{font-size:.58rem;color:var(--text-muted);max-width:55px;text-align:center;line-height:1.2}
+.pm-line{width:20px;height:2px;background:var(--border);margin-bottom:1.4rem}
+.pm-line.done{background:var(--accent-green)}
+
+/* Sections */
+.section{padding:3rem 3rem 4rem;max-width:920px;margin:0 auto}
+.section-tag{display:inline-flex;align-items:center;gap:.4rem;font-size:.78rem;text-transform:uppercase;letter-spacing:.1em;font-weight:700;margin-bottom:.75rem;padding:.35rem .9rem;border-radius:6px}
+.tag-basico{background:rgba(16,185,129,.1);color:var(--accent-green)}
+.tag-intermedio{background:rgba(245,158,11,.1);color:var(--accent-orange)}
+.tag-avanzado{background:rgba(239,68,68,.1);color:var(--accent-red)}
+.tag-extra{background:rgba(167,139,250,.1);color:var(--accent-purple)}
+.section h2{font-size:2.1rem;font-weight:800;letter-spacing:-.02em;margin-bottom:1.5rem;line-height:1.2}
+.section h3{font-size:1.4rem;font-weight:700;margin:2.5rem 0 1rem;color:var(--accent-cyan)}
+.section h4{font-size:1.1rem;font-weight:600;margin:1.8rem 0 .8rem;color:var(--accent-purple)}
+.section p{margin-bottom:1rem;color:var(--text-secondary);font-size:1.05rem;line-height:1.8}
+.section strong{color:var(--text-primary);font-weight:600}
+.section ul,.section ol{margin:.5rem 0 1.2rem 1.5rem;color:var(--text-secondary);font-size:1.05rem}
+.section li{margin-bottom:.5rem;line-height:1.7}
+.divider{height:1px;background:linear-gradient(90deg,transparent,var(--border),transparent);margin:0 3rem}
+
+/* Code */
+.code-block{background:var(--bg-code);border:1px solid var(--border);border-radius:12px;margin:1.2rem 0 1.5rem;overflow:hidden}
+.code-header{display:flex;align-items:center;justify-content:space-between;padding:.6rem 1rem;background:var(--bg-code-header);border-bottom:1px solid var(--border);font-size:.75rem;color:var(--text-muted)}
+.code-header .dots{display:flex;gap:6px}
+.code-header .dots span{width:10px;height:10px;border-radius:50%}
+.code-header .dots span:nth-child(1){background:#ef4444}
+.code-header .dots span:nth-child(2){background:#f59e0b}
+.code-header .dots span:nth-child(3){background:#10b981}
+.code-header .copy-btn{background:none;border:1px solid var(--border);color:var(--text-muted);padding:.25rem .6rem;border-radius:5px;cursor:pointer;font-size:.7rem;font-family:'Outfit',sans-serif;transition:all .2s}
+.code-header .copy-btn:hover{border-color:var(--accent-cyan);color:var(--accent-cyan)}
+.code-block pre{padding:1.1rem 1.3rem;overflow-x:auto;font-family:'JetBrains Mono',monospace;font-size:.9rem;line-height:1.8;color:#c9d1d9}
+.kw{color:#ff7b72}.fn{color:#d2a8ff}.str{color:#a5d6ff}.cm{color:#8b949e;font-style:italic}.num{color:#79c0ff}.var{color:#ffa657}.cls{color:#7ee787}.bi{color:#d2a8ff}
+
+/* Boxes */
+.info-box{border-radius:12px;padding:1.3rem 1.5rem;margin:1.2rem 0;font-size:1rem;line-height:1.8;border-left:4px solid}
+.info-box.tip{background:rgba(16,185,129,.06);border-color:var(--accent-green)}
+.info-box.warning{background:rgba(245,158,11,.06);border-color:var(--accent-orange)}
+.info-box.concept{background:rgba(167,139,250,.06);border-color:var(--accent-purple)}
+.info-box.important{background:rgba(0,212,255,.06);border-color:var(--accent-cyan)}
+.info-box.error{background:rgba(239,68,68,.05);border-color:var(--accent-red)}
+.info-box .ib-title{font-weight:700;margin-bottom:.3rem;display:flex;align-items:center;gap:.5rem;color:var(--text-primary)}
+.ib-title.green{color:var(--accent-green)}.ib-title.orange{color:var(--accent-orange)}.ib-title.purple{color:var(--accent-purple)}.ib-title.cyan{color:var(--accent-cyan)}.ib-title.red{color:var(--accent-red)}
+
+/* OS Tabs */
+.os-tabs{display:flex;gap:.5rem;margin:1rem 0}
+.os-tab{padding:.5rem 1rem;border-radius:8px;border:1px solid var(--border);background:transparent;color:var(--text-muted);cursor:pointer;font-family:'Outfit',sans-serif;font-size:.85rem;font-weight:500;transition:all .2s}
+.os-tab:hover{border-color:var(--accent-cyan);color:var(--text-secondary)}
+.os-tab.active{background:rgba(0,212,255,.1);border-color:var(--accent-cyan);color:var(--accent-cyan)}
+.os-content{display:none}.os-content.active{display:block}
+
+/* Explain */
+.explain{display:flex;gap:1rem;margin:1rem 0;padding:1.1rem;background:rgba(167,139,250,.04);border-radius:10px;border:1px solid rgba(167,139,250,.1)}
+.explain .line-ref{flex-shrink:0;font-family:'JetBrains Mono',monospace;font-size:.8rem;color:var(--accent-purple);background:rgba(167,139,250,.1);padding:.25rem .7rem;border-radius:5px;height:fit-content;margin-top:.1rem}
+.explain .explain-text{font-size:.98rem;color:var(--text-secondary);line-height:1.75}
+
+/* Exercises */
+.exercise-box{background:linear-gradient(135deg,rgba(0,212,255,.04),rgba(167,139,250,.04));border:1px solid rgba(0,212,255,.15);border-radius:14px;padding:1.5rem;margin:2rem 0}
+.exercise-box .ex-header{display:flex;align-items:center;gap:.6rem;font-weight:700;font-size:1.05rem;color:var(--accent-cyan);margin-bottom:.8rem}
+.exercise-box .ex-header .ex-icon{width:28px;height:28px;background:rgba(0,212,255,.15);border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:.85rem}
+.exercise-box p{color:var(--text-secondary);font-size:1rem;margin-bottom:.8rem}
+.exercise-box .hint{font-size:.9rem;color:var(--text-muted);font-style:italic;margin-top:.5rem}
+
+/* Collapsible */
+details{margin:.8rem 0}
+details summary{cursor:pointer;padding:.65rem 1.1rem;background:rgba(16,185,129,.08);border:1px solid rgba(16,185,129,.15);border-radius:8px;font-size:.95rem;color:var(--accent-green);font-weight:600;font-family:'Outfit',sans-serif;transition:all .2s;list-style:none}
+details summary::before{content:'▶ ';font-size:.7rem}
+details[open] summary::before{content:'▼ '}
+details[open] summary{border-radius:8px 8px 0 0}
+details summary:hover{background:rgba(16,185,129,.12)}
+details .solution-content{border:1px solid rgba(16,185,129,.15);border-top:none;border-radius:0 0 8px 8px;padding:.2rem 0;background:rgba(16,185,129,.03)}
+
+/* Quiz */
+.quiz-box{background:var(--bg-card);border:1px solid var(--border);border-radius:14px;padding:1.5rem;margin:2rem 0}
+.quiz-box .quiz-title{font-weight:700;font-size:1.1rem;color:var(--accent-orange);margin-bottom:1rem;display:flex;align-items:center;gap:.5rem}
+.quiz-question{margin-bottom:1.4rem}
+.quiz-question p{font-weight:600;color:var(--text-primary);font-size:1rem;margin-bottom:.6rem}
+.quiz-option{display:block;padding:.6rem 1rem;margin:.35rem 0;border-radius:8px;border:1px solid var(--border);font-size:.95rem;color:var(--text-secondary);cursor:pointer;transition:all .2s;font-family:'Outfit',sans-serif;background:transparent;width:100%;text-align:left}
+.quiz-option:hover{border-color:var(--accent-cyan);color:var(--text-primary)}
+.quiz-option.correct{border-color:var(--accent-green);background:rgba(16,185,129,.1);color:var(--accent-green)}
+.quiz-option.wrong{border-color:var(--accent-red);background:rgba(239,68,68,.1);color:var(--accent-red)}
+.quiz-option.disabled{pointer-events:none;opacity:.6}
+.quiz-feedback{display:none;margin-top:.5rem;font-size:.92rem;padding:.6rem .9rem;border-radius:6px}
+.quiz-feedback.show{display:block}
+.quiz-feedback.ok{background:rgba(16,185,129,.1);color:var(--accent-green)}
+.quiz-feedback.fail{background:rgba(239,68,68,.1);color:var(--accent-red)}
+
+/* Flow Diagram */
+.flow-diagram{display:flex;align-items:center;justify-content:center;gap:0;flex-wrap:wrap;margin:1.5rem 0;padding:1.2rem;background:rgba(0,212,255,.03);border:1px solid rgba(0,212,255,.08);border-radius:14px}
+.flow-step{text-align:center;padding:.8rem 1rem;background:var(--bg-card);border:1px solid var(--border);border-radius:10px;min-width:95px}
+.flow-step .fs-icon{font-size:1.4rem;margin-bottom:.2rem}
+.flow-step .fs-label{font-size:.82rem;color:var(--text-secondary);font-weight:500}
+.flow-step .fs-detail{font-size:.7rem;color:var(--text-muted)}
+.flow-arrow{font-size:1.1rem;color:var(--accent-cyan);padding:0 .3rem}
+
+/* Glossary */
+.glossary-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:1rem;margin:1.5rem 0}
+.glossary-card{background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:1rem 1.2rem;transition:border-color .2s}
+.glossary-card:hover{border-color:rgba(0,212,255,.3)}
+.glossary-card .gc-term{font-family:'JetBrains Mono',monospace;font-size:.92rem;font-weight:600;color:var(--accent-cyan);margin-bottom:.3rem}
+.glossary-card .gc-emoji{font-size:1.3rem;float:right}
+.glossary-card .gc-def{font-size:.88rem;color:var(--text-secondary);line-height:1.6}
+
+/* Error Table */
+.error-table{width:100%;border-collapse:separate;border-spacing:0;border:1px solid var(--border);border-radius:12px;overflow:hidden;margin:1.5rem 0;font-size:.92rem}
+.error-table th{background:var(--bg-code-header);color:var(--text-primary);font-weight:600;padding:.8rem 1rem;text-align:left;font-size:.8rem;text-transform:uppercase;letter-spacing:.05em}
+.error-table td{padding:.75rem 1rem;border-top:1px solid var(--border);color:var(--text-secondary);vertical-align:top}
+.error-table tr:hover td{background:rgba(0,212,255,.03)}
+.error-table code{background:rgba(0,212,255,.08);padding:.15rem .4rem;border-radius:4px;font-family:'JetBrains Mono',monospace;font-size:.78rem;color:var(--accent-cyan)}
+
+/* Level Bar */
+.level-bar{display:flex;gap:4px;margin:2rem 0}.level-bar .lb-seg{height:4px;border-radius:2px;flex:1}
+
+/* Folder Tree */
+.folder-tree{background:var(--bg-code);border:1px solid var(--border);border-radius:12px;padding:1.2rem 1.5rem;margin:1rem 0;font-family:'JetBrains Mono',monospace;font-size:.82rem;line-height:1.9;color:var(--text-secondary)}
+.folder-tree .folder{color:var(--accent-orange)}.folder-tree .file{color:var(--accent-cyan)}.folder-tree .comment{color:var(--text-muted);font-style:italic}
+
+/* ── NEW: Curiosity Cards ── */
+.curiosity-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:1rem;margin:1.5rem 0}
+.curiosity-card{background:var(--bg-card);border:1px solid var(--border);border-radius:14px;padding:1.3rem;transition:transform .2s,border-color .2s;position:relative;overflow:hidden}
+.curiosity-card:hover{transform:translateY(-3px);border-color:rgba(0,212,255,.3)}
+.curiosity-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;border-radius:14px 14px 0 0}
+.curiosity-card:nth-child(1)::before{background:var(--accent-cyan)}
+.curiosity-card:nth-child(2)::before{background:var(--accent-green)}
+.curiosity-card:nth-child(3)::before{background:var(--accent-purple)}
+.curiosity-card:nth-child(4)::before{background:var(--accent-orange)}
+.curiosity-card:nth-child(5)::before{background:var(--accent-pink)}
+.curiosity-card .cc-num{font-size:2.5rem;font-weight:900;color:rgba(255,255,255,.06);position:absolute;top:.3rem;right:.8rem;line-height:1}
+.curiosity-card .cc-emoji{font-size:1.8rem;margin-bottom:.5rem}
+.curiosity-card .cc-title{font-weight:700;font-size:1.05rem;color:var(--text-primary);margin-bottom:.4rem}
+.curiosity-card .cc-text{font-size:.92rem;color:var(--text-secondary);line-height:1.7}
+
+/* ── NEW: Simulator ── */
+.simulator-container{background:var(--bg-card);border:1px solid var(--border);border-radius:16px;padding:1.5rem;margin:1.5rem 0}
+.sim-title{font-weight:700;font-size:1rem;margin-bottom:1rem;display:flex;align-items:center;gap:.5rem}
+.sim-row{display:flex;gap:1.5rem;align-items:center;flex-wrap:wrap}
+.sim-controls{flex:1;min-width:200px}
+.sim-preview{flex-shrink:0;display:flex;flex-direction:column;align-items:center;gap:.5rem}
+.sim-slider-group{margin-bottom:.8rem}
+.sim-slider-group label{display:flex;justify-content:space-between;font-size:.8rem;color:var(--text-secondary);margin-bottom:.3rem}
+.sim-slider-group label span{font-family:'JetBrains Mono',monospace;font-weight:600}
+.sim-slider{width:100%;height:8px;-webkit-appearance:none;appearance:none;border-radius:4px;outline:none;cursor:pointer;background:#1e293b}
+.sim-slider::-webkit-slider-thumb{-webkit-appearance:none;width:18px;height:18px;border-radius:50%;cursor:pointer;border:2px solid #fff}
+.sim-slider.red-sl::-webkit-slider-thumb{background:#ef4444}
+.sim-slider.green-sl::-webkit-slider-thumb{background:#10b981}
+.sim-slider.blue-sl::-webkit-slider-thumb{background:#3b82f6}
+.sim-color-box{width:120px;height:120px;border-radius:16px;border:3px solid var(--border);transition:background .15s}
+.sim-color-label{font-family:'JetBrains Mono',monospace;font-size:.75rem;color:var(--text-muted)}
+.sim-swap-btn{margin-top:.8rem;padding:.5rem 1rem;background:rgba(0,212,255,.1);border:1px solid rgba(0,212,255,.2);border-radius:8px;color:var(--accent-cyan);font-family:'Outfit',sans-serif;font-size:.82rem;font-weight:600;cursor:pointer;transition:all .2s;width:100%}
+.sim-swap-btn:hover{background:rgba(0,212,255,.2)}
+
+/* ── NEW: Distance Visualizer ── */
+.dist-viz{background:var(--bg-card);border:1px solid var(--border);border-radius:16px;padding:1.5rem;margin:1.5rem 0}
+.dist-viz .dv-bar-container{position:relative;height:50px;background:linear-gradient(90deg,#10b981 0%,#f59e0b 50%,#ef4444 100%);border-radius:10px;margin:1rem 0 .5rem;overflow:visible}
+.dist-viz .dv-marker{position:absolute;top:-8px;width:4px;height:66px;background:#fff;border-radius:2px;transition:left .4s ease;z-index:2}
+.dist-viz .dv-marker::after{content:attr(data-val);position:absolute;bottom:-22px;left:50%;transform:translateX(-50%);font-family:'JetBrains Mono',monospace;font-size:.72rem;color:#fff;white-space:nowrap;font-weight:600}
+.dist-viz .dv-labels{display:flex;justify-content:space-between;font-size:.7rem;color:var(--text-muted);margin-bottom:.3rem}
+.dist-viz .dv-scale{display:flex;justify-content:space-between;font-family:'JetBrains Mono',monospace;font-size:.68rem;color:var(--text-muted)}
+.dist-viz .dv-result{text-align:center;margin-top:.8rem;font-size:1rem;font-weight:700}
+.dist-viz .dv-result.same{color:var(--accent-green)}.dist-viz .dv-result.maybe{color:var(--accent-orange)}.dist-viz .dv-result.diff{color:var(--accent-red)}
+.dist-slider{width:100%;margin:1rem 0 0;-webkit-appearance:none;appearance:none;height:8px;background:transparent;cursor:pointer;outline:none}
+.dist-slider::-webkit-slider-thumb{-webkit-appearance:none;width:22px;height:22px;border-radius:50%;background:var(--accent-cyan);border:3px solid #fff;cursor:pointer}
+
+/* ── NEW: Case Study Cards ── */
+.case-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:1.2rem;margin:1.5rem 0}
+.case-card{background:var(--bg-card);border:1px solid var(--border);border-radius:14px;overflow:hidden;transition:transform .2s,border-color .2s}
+.case-card:hover{transform:translateY(-3px);border-color:rgba(0,212,255,.2)}
+.case-card .cc-banner{height:8px}
+.case-card .cc-body{padding:1.3rem}
+.case-card .cc-icon{font-size:2rem;margin-bottom:.6rem}
+.case-card .cc-name{font-weight:700;font-size:1rem;color:var(--text-primary);margin-bottom:.3rem}
+.case-card .cc-org{font-size:.72rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:.6rem}
+.case-card .cc-desc{font-size:.92rem;color:var(--text-secondary);line-height:1.7;margin-bottom:.7rem}
+.case-card .cc-tag{display:inline-block;font-size:.68rem;padding:.2rem .5rem;border-radius:5px;font-weight:600}
+.cc-tag-good{background:rgba(16,185,129,.1);color:var(--accent-green)}
+.cc-tag-neutral{background:rgba(0,212,255,.1);color:var(--accent-cyan)}
+.cc-tag-bad{background:rgba(239,68,68,.1);color:var(--accent-red)}
+
+/* Debate Box */
+.debate-box{background:linear-gradient(135deg,rgba(245,158,11,.04),rgba(239,68,68,.04));border:1px solid rgba(245,158,11,.15);border-radius:14px;padding:1.3rem;margin:1.5rem 0}
+.debate-box .db-title{font-weight:700;font-size:.95rem;color:var(--accent-orange);margin-bottom:.8rem;display:flex;align-items:center;gap:.5rem}
+.debate-box .db-q{background:rgba(0,0,0,.2);padding:.6rem .9rem;border-radius:8px;margin:.4rem 0;font-size:.85rem;color:var(--text-secondary);border-left:3px solid var(--accent-orange)}
+
+.footer{text-align:center;padding:3rem;color:var(--text-muted);font-size:.8rem;border-top:1px solid var(--border)}
+
+/* Theme toggle */
+.theme-toggle{position:fixed;top:1rem;right:1rem;z-index:200;width:44px;height:44px;background:var(--bg-card);border:1px solid var(--border);border-radius:50%;color:var(--accent-orange);font-size:1.2rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .3s;box-shadow:0 2px 10px rgba(0,0,0,.2)}
+.theme-toggle:hover{transform:scale(1.1);border-color:var(--accent-orange)}
+
+/* Back to top */
+.back-top{position:fixed;bottom:1.5rem;right:1.5rem;z-index:200;width:44px;height:44px;background:var(--accent-cyan);border:none;border-radius:50%;color:#fff;font-size:1.1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;opacity:0;transform:translateY(20px);transition:all .3s;box-shadow:0 4px 15px rgba(0,212,255,.3)}
+.back-top.visible{opacity:1;transform:translateY(0)}
+.back-top:hover{transform:translateY(-3px);box-shadow:0 6px 20px rgba(0,212,255,.4)}
+
+/* Quiz scoreboard */
+.quiz-score-bar{position:fixed;bottom:1.5rem;left:50%;transform:translateX(-50%);z-index:200;background:var(--bg-card);border:1px solid var(--border);border-radius:50px;padding:.5rem 1.2rem;display:none;align-items:center;gap:.8rem;font-size:.82rem;box-shadow:0 4px 20px rgba(0,0,0,.3);backdrop-filter:blur(10px)}
+.quiz-score-bar.visible{display:flex}
+.qs-item{display:flex;align-items:center;gap:.3rem;font-weight:600}
+.qs-correct{color:var(--accent-green)}
+.qs-wrong{color:var(--accent-red)}
+.qs-total{color:var(--text-muted);font-weight:400}
+.qs-divider{width:1px;height:16px;background:var(--border)}
+.qs-pct{color:var(--accent-cyan);font-weight:700;font-family:'JetBrains Mono',monospace}
+
+/* Time badges in nav */
+.time-badge{font-size:.58rem;padding:.1rem .35rem;border-radius:4px;font-weight:500;color:var(--text-muted);background:rgba(255,255,255,.04);margin-left:auto;font-family:'JetBrains Mono',monospace;letter-spacing:0}
+[data-theme="light"] .time-badge{background:rgba(0,0,0,.04)}
+
+/* Detection Simulator */
+.det-sim{background:var(--bg-card);border:1px solid var(--border);border-radius:16px;padding:1.5rem;margin:1.5rem 0}
+.det-grid-wrap{display:flex;gap:1.5rem;align-items:flex-start;flex-wrap:wrap}
+.det-grid{display:grid;grid-template-columns:repeat(8,1fr);gap:2px;width:280px;flex-shrink:0}
+.det-cell{aspect-ratio:1;border-radius:4px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.04);transition:all .4s;font-size:.55rem;display:flex;align-items:center;justify-content:center;color:transparent}
+.det-cell.skin{background:rgba(245,158,11,.25);border-color:rgba(245,158,11,.3);color:var(--accent-orange)}
+.det-cell.scanning{background:rgba(0,212,255,.15);border-color:rgba(0,212,255,.4);box-shadow:0 0 8px rgba(0,212,255,.3)}
+.det-cell.detected{background:rgba(16,185,129,.2);border-color:var(--accent-green);color:var(--accent-green)}
+.det-cell.eye{background:rgba(96,165,250,.3);border-color:rgba(96,165,250,.5);color:#60a5fa}
+.det-cell.mouth{background:rgba(244,114,182,.3);border-color:rgba(244,114,182,.5);color:#f472b6}
+.det-info{flex:1;min-width:200px}
+.det-info .di-step{padding:.6rem .8rem;margin:.4rem 0;border-radius:8px;font-size:.85rem;color:var(--text-muted);border:1px solid var(--border);transition:all .3s}
+.det-info .di-step.active{border-color:var(--accent-cyan);color:var(--text-primary);background:rgba(0,212,255,.05)}
+.det-info .di-step.done{border-color:var(--accent-green);color:var(--accent-green);background:rgba(16,185,129,.05)}
+.det-controls{display:flex;gap:.5rem;margin-top:1rem}
+.det-btn{padding:.5rem 1.2rem;border-radius:8px;border:1px solid var(--border);background:transparent;color:var(--text-secondary);font-family:'Outfit',sans-serif;font-size:.85rem;cursor:pointer;transition:all .2s}
+.det-btn:hover{border-color:var(--accent-cyan);color:var(--accent-cyan)}
+.det-btn.primary{background:rgba(0,212,255,.1);border-color:var(--accent-cyan);color:var(--accent-cyan)}
+
+/* Cheat Sheets */
+.cheat-sheet{background:var(--bg-card);border:2px dashed var(--border);border-radius:14px;padding:1.5rem;margin:1.5rem 0;page-break-inside:avoid}
+.cheat-sheet .cs-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;padding-bottom:.8rem;border-bottom:1px solid var(--border)}
+.cheat-sheet .cs-title{font-weight:800;font-size:1.1rem}
+.cheat-sheet .cs-level{font-size:.7rem;padding:.2rem .6rem;border-radius:5px;font-weight:600;text-transform:uppercase;letter-spacing:.05em}
+.cs-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:.6rem}
+.cs-item{padding:.55rem .8rem;background:rgba(0,0,0,.15);border-radius:8px;font-size:.88rem}
+[data-theme="light"] .cs-item{background:rgba(0,0,0,.04)}
+.cs-item .cs-fn{font-family:'JetBrains Mono',monospace;font-weight:600;color:var(--accent-cyan);font-size:.84rem}
+.cs-item .cs-desc{color:var(--text-secondary);margin-top:.15rem;font-size:.82rem}
+.cs-print-btn{display:inline-flex;align-items:center;gap:.4rem;padding:.5rem 1rem;background:rgba(167,139,250,.1);border:1px solid rgba(167,139,250,.2);border-radius:8px;color:var(--accent-purple);font-family:'Outfit',sans-serif;font-size:.82rem;font-weight:600;cursor:pointer;transition:all .2s;margin-top:.5rem}
+.cs-print-btn:hover{background:rgba(167,139,250,.2)}
+
+/* Presentation Mode */
+.pres-toggle{position:fixed;top:1rem;right:4rem;z-index:200;width:44px;height:44px;background:var(--bg-card);border:1px solid var(--border);border-radius:50%;color:var(--accent-purple);font-size:1.1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .3s;box-shadow:0 2px 10px rgba(0,0,0,.2)}
+.pres-toggle:hover{transform:scale(1.1);border-color:var(--accent-purple)}
+body.pres-mode .sidebar{display:none!important}
+body.pres-mode .main{margin-left:0}
+body.pres-mode .menu-toggle{display:none!important}
+body.pres-mode .section{max-width:1100px;padding:3rem 4rem;min-height:100vh;display:flex;flex-direction:column;justify-content:center}
+body.pres-mode .hero{min-height:100vh;display:flex;flex-direction:column;justify-content:center}
+body.pres-mode .section h2{font-size:2.8rem}
+body.pres-mode .section h3{font-size:1.8rem}
+body.pres-mode .section p,body.pres-mode .section li{font-size:1.25rem}
+body.pres-mode .code-block pre{font-size:1.05rem}
+body.pres-mode .explain .explain-text{font-size:1.1rem}
+body.pres-mode .info-box{font-size:1.15rem}
+body.pres-mode .divider{margin:0}
+body.pres-mode .pres-nav{display:flex!important}
+.pres-nav{display:none;position:fixed;bottom:1.5rem;left:50%;transform:translateX(-50%);z-index:300;background:var(--bg-card);border:1px solid var(--border);border-radius:50px;padding:.4rem;gap:.3rem;box-shadow:0 4px 20px rgba(0,0,0,.4)}
+.pres-nav button{width:40px;height:40px;border-radius:50%;border:1px solid var(--border);background:transparent;color:var(--text-secondary);font-size:1rem;cursor:pointer;transition:all .2s;font-family:'Outfit',sans-serif}
+.pres-nav button:hover{background:rgba(0,212,255,.1);color:var(--accent-cyan);border-color:var(--accent-cyan)}
+.pres-nav .pn-counter{display:flex;align-items:center;padding:0 .8rem;font-size:.8rem;color:var(--text-muted);font-family:'JetBrains Mono',monospace}
+
+/* Translations Table */
+.trans-table{width:100%;border-collapse:separate;border-spacing:0;border:1px solid var(--border);border-radius:12px;overflow:hidden;margin:1.5rem 0;font-size:.92rem}
+.trans-table th{background:var(--bg-code-header);color:var(--text-primary);font-weight:600;padding:.75rem 1rem;text-align:left;font-size:.8rem;text-transform:uppercase;letter-spacing:.05em}
+.trans-table td{padding:.6rem 1rem;border-top:1px solid var(--border);color:var(--text-secondary);vertical-align:middle}
+.trans-table tr:hover td{background:rgba(0,212,255,.03)}
+.trans-table .tt-fn{font-family:'JetBrains Mono',monospace;font-weight:600;color:var(--accent-cyan);font-size:.88rem}
+.trans-table .tt-es{color:var(--text-primary);font-weight:500}
+.trans-table .tt-lib{font-size:.7rem;padding:.1rem .4rem;border-radius:4px;font-weight:600}
+.tt-cv{background:rgba(16,185,129,.1);color:var(--accent-green)}
+.tt-fr{background:rgba(167,139,250,.1);color:var(--accent-purple)}
+.tt-py{background:rgba(245,158,11,.1);color:var(--accent-orange)}
+
+@media print{.cheat-sheet{border:2px dashed #ccc;break-inside:avoid}.det-sim,.pres-toggle,.pres-nav,.back-top,.theme-toggle,.quiz-score-bar{display:none!important}}
+
+/* Responsive */
+@media(max-width:900px){.sidebar{transform:translateX(-100%);z-index:300}.sidebar.open{transform:translateX(0)}.menu-toggle{display:flex}.main{margin-left:0}.section{padding:2rem 1.5rem 3rem}.hero{padding:4rem 1.5rem 3rem}.divider{margin:0 1.5rem}.glossary-grid,.curiosity-grid,.case-grid{grid-template-columns:1fr}}
+@media(max-width:600px){.hero h1{font-size:1.8rem}.hero-cards{flex-direction:column;align-items:center}.section h2{font-size:1.6rem}.code-block pre{font-size:.82rem}.pm-label{display:none}.sim-row{flex-direction:column}}
+.overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:250}.overlay.show{display:block}
+@media print{.sidebar,.menu-toggle{display:none!important}.main{margin-left:0!important}}
+</style>
+</head>
+<body>
+
+<button class="menu-toggle" id="menuToggle" aria-label="Menú">☰</button>
+<button class="theme-toggle" id="themeToggle" aria-label="Cambiar tema">🌙</button>
+<button class="pres-toggle" id="presToggle" aria-label="Modo presentación" title="Modo presentación">🖥️</button>
+<button class="back-top" id="backTop" aria-label="Volver arriba" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
+<div class="pres-nav" id="presNav">
+  <button onclick="presGo(-1)">◀</button>
+  <span class="pn-counter" id="presCounter">1 / 1</span>
+  <button onclick="presGo(1)">▶</button>
+  <button onclick="togglePres()" title="Salir">✕</button>
+</div>
+<div class="quiz-score-bar" id="quizScoreBar">
+  <span class="qs-item qs-correct">✅ <span id="qsCorrect">0</span></span>
+  <span class="qs-divider"></span>
+  <span class="qs-item qs-wrong">❌ <span id="qsWrong">0</span></span>
+  <span class="qs-divider"></span>
+  <span class="qs-total">de <span id="qsTotal">0</span></span>
+  <span class="qs-divider"></span>
+  <span class="qs-pct" id="qsPct">—</span>
+</div>
+<div class="overlay" id="overlay"></div>
+
+<!-- ═══════ SIDEBAR ═══════ -->
+<nav class="sidebar" id="sidebar">
+  <div class="sidebar-header">
+    <div class="sidebar-logo"><div class="icon">👁</div>Reconocimiento Facial</div>
+    <div class="sidebar-subtitle">Curso completo · Python · v5.0</div>
+  </div>
+  <div class="sidebar-progress">
+    <div class="progress-label"><span>Tu progreso</span><span id="progressPercent">0%</span></div>
+    <div class="progress-bar-bg"><div class="progress-bar-fill" id="progressFill"></div></div>
+  </div>
+
+  <div class="nav-section">
+    <div class="nav-section-title">🟢 Nivel Básico · 1º-2º ESO</div>
+    <a class="nav-link" href="#intro"><span class="nav-dot dot-green"></span>Introducción + Curiosidades<span class="time-badge">10 min</span></a>
+    <a class="nav-link" href="#instalacion"><span class="nav-dot dot-green"></span>Instalación paso a paso<span class="time-badge">20 min</span></a>
+    <a class="nav-link" href="#primer-programa"><span class="nav-dot dot-green"></span>Tu primer programa<span class="time-badge">10 min</span></a>
+    <a class="nav-link" href="#cargar-imagen"><span class="nav-dot dot-green"></span>Cargar y mostrar imágenes<span class="time-badge">15 min</span></a>
+    <a class="nav-link" href="#simulador-colores"><span class="nav-dot dot-green"></span>Simulador BGR / RGB<span class="time-badge">5 min</span></a>
+    <a class="nav-link" href="#detectar-caras"><span class="nav-dot dot-green"></span>Detectar caras en fotos<span class="time-badge">15 min</span></a>
+    <a class="nav-link" href="#dibujar-rectangulos"><span class="nav-dot dot-green"></span>Dibujar rectángulos<span class="time-badge">15 min</span></a>
+    <a class="nav-link" href="#quiz-basico"><span class="nav-dot dot-green"></span>Quiz Nivel Básico<span class="badge badge-basico">Test</span></a>
+  </div>
+  <div class="nav-section">
+    <div class="nav-section-title">🟡 Nivel Intermedio · 2º-3º ESO</div>
+    <a class="nav-link" href="#landmarks"><span class="nav-dot dot-orange"></span>Puntos faciales (landmarks)<span class="time-badge">20 min</span></a>
+    <a class="nav-link" href="#comparar-caras"><span class="nav-dot dot-orange"></span>Comparar dos caras<span class="time-badge">20 min</span></a>
+    <a class="nav-link" href="#simulador-distancia"><span class="nav-dot dot-orange"></span>Simulador de distancia<span class="time-badge">5 min</span></a>
+    <a class="nav-link" href="#webcam"><span class="nav-dot dot-orange"></span>Cámara en tiempo real<span class="time-badge">25 min</span></a>
+    <a class="nav-link" href="#registro"><span class="nav-dot dot-orange"></span>Registrar personas<span class="time-badge">20 min</span></a>
+    <a class="nav-link" href="#quiz-intermedio"><span class="nav-dot dot-orange"></span>Quiz Nivel Intermedio<span class="badge badge-intermedio">Test</span></a>
+  </div>
+  <div class="nav-section">
+    <div class="nav-section-title">🔴 Nivel Avanzado · 3º-4º ESO</div>
+    <a class="nav-link" href="#try-except"><span class="nav-dot dot-red"></span>Manejo de errores<span class="time-badge">20 min</span></a>
+    <a class="nav-link" href="#identificacion"><span class="nav-dot dot-red"></span>Identificar personas<span class="time-badge">30 min</span></a>
+    <a class="nav-link" href="#emociones"><span class="nav-dot dot-red"></span>Detectar emociones<span class="time-badge">25 min</span></a>
+    <a class="nav-link" href="#proyecto-final"><span class="nav-dot dot-red"></span>Proyecto final<span class="time-badge">40 min</span></a>
+    <a class="nav-link" href="#quiz-avanzado"><span class="nav-dot dot-red"></span>Quiz Nivel Avanzado<span class="badge badge-avanzado">Test</span></a>
+  </div>
+  <div class="nav-section">
+    <div class="nav-section-title">🟣 Extras</div>
+    <a class="nav-link" href="#casos-reales"><span class="nav-dot dot-purple"></span>Casos del mundo real<span class="time-badge">15 min</span></a>
+    <a class="nav-link" href="#organizacion"><span class="nav-dot dot-purple"></span>Organizar tu proyecto<span class="time-badge">5 min</span></a>
+    <a class="nav-link" href="#rendimiento"><span class="nav-dot dot-purple"></span>Tips de rendimiento<span class="time-badge">10 min</span></a>
+    <a class="nav-link" href="#errores-comunes"><span class="nav-dot dot-purple"></span>Errores comunes<span class="time-badge">10 min</span></a>
+    <a class="nav-link" href="#glosario"><span class="nav-dot dot-purple"></span>Glosario visual<span class="time-badge">5 min</span></a>
+    <a class="nav-link" href="#etica"><span class="nav-dot dot-purple"></span>Ética e IA responsable<span class="time-badge">15 min</span></a>
+    <a class="nav-link" href="#hog-explicado"><span class="nav-dot dot-cyan"></span>¿Cómo funciona HOG?<span class="badge badge-extra">Nuevo</span></a>
+    <a class="nav-link" href="#limitaciones"><span class="nav-dot dot-cyan"></span>Limitaciones del sistema<span class="badge badge-extra">Nuevo</span></a>
+    <a class="nav-link" href="#venv"><span class="nav-dot dot-cyan"></span>Entornos virtuales<span class="badge badge-extra">Nuevo</span></a>
+    <a class="nav-link" href="#retos"><span class="nav-dot dot-cyan"></span>Retos avanzados<span class="badge badge-extra">Nuevo</span></a>
+    <a class="nav-link" href="#mediapipe"><span class="nav-dot dot-cyan"></span>MediaPipe (alternativa)<span class="badge badge-extra">Nuevo</span></a>
+    <a class="nav-link" href="#simulador-deteccion"><span class="nav-dot dot-cyan"></span>Simulador detección</a>
+    <a class="nav-link" href="#traducciones"><span class="nav-dot dot-cyan"></span>Funciones → Español</a>
+    <a class="nav-link" href="#cheatsheets"><span class="nav-dot dot-cyan"></span>Fichas recortables</a>
+  </div>
+</nav>
+
+<!-- ═══════ MAIN ═══════ -->
+<div class="main">
+
+<!-- HERO -->
+<header class="hero" id="top">
+  <div class="hero-badge">🎓 Curso completo · ESO y Bachillerato · v5.0</div>
+  <h1>Reconocimiento Facial<br>con Python</h1>
+  <p>Aprende paso a paso cómo funciona la tecnología que reconoce caras. Desde instalar Python hasta construir tu propio sistema de identificación.</p>
+  <div class="hero-cards">
+    <div class="hero-card"><div class="hc-icon">📦</div><div class="hc-num">18</div><div class="hc-label">Lecciones</div></div>
+    <div class="hero-card"><div class="hc-icon">🧩</div><div class="hc-num">3</div><div class="hc-label">Niveles</div></div>
+    <div class="hero-card"><div class="hc-icon">🧪</div><div class="hc-num">2</div><div class="hc-label">Simuladores</div></div>
+    <div class="hero-card"><div class="hc-icon">🌍</div><div class="hc-num">5</div><div class="hc-label">Casos reales</div></div>
+  </div>
+  <div class="progress-map" id="progressMap">
+    <div class="pm-node current" data-section="intro"><div class="pm-circle">1</div><div class="pm-label">Intro</div></div><div class="pm-line"></div>
+    <div class="pm-node" data-section="instalacion"><div class="pm-circle">2</div><div class="pm-label">Instalar</div></div><div class="pm-line"></div>
+    <div class="pm-node" data-section="primer-programa"><div class="pm-circle">3</div><div class="pm-label">1er prog</div></div><div class="pm-line"></div>
+    <div class="pm-node" data-section="cargar-imagen"><div class="pm-circle">4</div><div class="pm-label">Imágenes</div></div><div class="pm-line"></div>
+    <div class="pm-node" data-section="detectar-caras"><div class="pm-circle">5</div><div class="pm-label">Detectar</div></div><div class="pm-line"></div>
+    <div class="pm-node" data-section="landmarks"><div class="pm-circle">6</div><div class="pm-label">Landmarks</div></div><div class="pm-line"></div>
+    <div class="pm-node" data-section="comparar-caras"><div class="pm-circle">7</div><div class="pm-label">Comparar</div></div><div class="pm-line"></div>
+    <div class="pm-node" data-section="webcam"><div class="pm-circle">8</div><div class="pm-label">Webcam</div></div><div class="pm-line"></div>
+    <div class="pm-node" data-section="identificacion"><div class="pm-circle">9</div><div class="pm-label">Identificar</div></div><div class="pm-line"></div>
+    <div class="pm-node" data-section="proyecto-final"><div class="pm-circle">10</div><div class="pm-label">Proyecto</div></div>
+  </div>
+</header>
+
+<div class="divider"></div>
+
+<!-- ═══════════════════════════════════════════════════════════ -->
+<!-- SECCIÓN 1: INTRO + 5 CURIOSIDADES DE PYTHON                -->
+<!-- ═══════════════════════════════════════════════════════════ -->
+<section class="section" id="intro">
+  <div class="section-tag tag-basico">🟢 Nivel Básico</div>
+  <h2>1. ¿Qué es el reconocimiento facial?</h2>
+
+  <p>Imagina que tu móvil se desbloquea al mirarte, o que una cámara sabe quién entra en un edificio. Eso es <strong>reconocimiento facial</strong>: la capacidad de un ordenador para detectar e identificar caras humanas.</p>
+
+  <div class="info-box concept">
+    <div class="ib-title purple">🧠 Funciona en 3 pasos</div>
+    <p><strong>1. Detección:</strong> Encontrar dónde hay una cara.</p>
+    <p><strong>2. Análisis:</strong> Medir sus características (distancia entre ojos, forma de nariz…).</p>
+    <p><strong>3. Reconocimiento:</strong> Comparar con caras conocidas.</p>
+  </div>
+
+  <div class="flow-diagram">
+    <div class="flow-step"><div class="fs-icon">📷</div><div class="fs-label">Foto/Vídeo</div></div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step"><div class="fs-icon">🔍</div><div class="fs-label">Detección</div></div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step"><div class="fs-icon">📐</div><div class="fs-label">128 números</div></div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step"><div class="fs-icon">🧠</div><div class="fs-label">Comparar</div></div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step"><div class="fs-icon">✅</div><div class="fs-label">¡Identificado!</div></div>
+  </div>
+
+  <h3>¿Por qué usamos Python? — 5 curiosidades que fliparás</h3>
+
+  <p>Python es el lenguaje que usaremos en todo el curso. Pero antes de escribir ni una línea de código, descubre por qué es tan especial:</p>
+
+  <div class="curiosity-grid">
+    <div class="curiosity-card">
+      <div class="cc-num">01</div>
+      <div class="cc-emoji">🐍</div>
+      <div class="cc-title">No viene de una serpiente</div>
+      <div class="cc-text">Guido van Rossum, su creador, lo nombró así porque era fan de <strong>Monty Python</strong>, un grupo de comediantes británicos. Lo creó en 1991 durante las vacaciones de Navidad porque se aburría. ¡Un proyecto de vacaciones que cambió el mundo!</div>
+    </div>
+    <div class="curiosity-card">
+      <div class="cc-num">02</div>
+      <div class="cc-emoji">🚀</div>
+      <div class="cc-title">La NASA y el espacio usan Python</div>
+      <div class="cc-text">La NASA usa Python para controlar sus misiones espaciales. La primera foto de un <strong>agujero negro</strong> (2019) se procesó con Python. SpaceX de Elon Musk lo usa para programar los cohetes que aterrizan solos. ¡Python vuela al espacio literalmente!</div>
+    </div>
+    <div class="curiosity-card">
+      <div class="cc-num">03</div>
+      <div class="cc-emoji">🎮</div>
+      <div class="cc-title">Instagram y YouTube funcionan con Python</div>
+      <div class="cc-text"><strong>Instagram</strong> procesa millones de fotos al día con Python. <strong>YouTube</strong> fue programado originalmente en Python. <strong>Spotify</strong> lo usa para recomendarte canciones. Cada vez que abres estas apps, Python está trabajando detrás.</div>
+    </div>
+    <div class="curiosity-card">
+      <div class="cc-num">04</div>
+      <div class="cc-emoji">🧠</div>
+      <div class="cc-title">ChatGPT y las IAs se entrenan con Python</div>
+      <div class="cc-text">Casi <strong>toda la inteligencia artificial</strong> del mundo (ChatGPT, reconocimiento facial, coches autónomos de Tesla, filtros de TikTok) está programada en Python. Es el idioma oficial de la IA. Si quieres trabajar con IA, Python es obligatorio.</div>
+    </div>
+    <div class="curiosity-card">
+      <div class="cc-num">05</div>
+      <div class="cc-emoji">📖</div>
+      <div class="cc-title">Se puede aprender en un fin de semana</div>
+      <div class="cc-text">Python fue diseñado para que su código sea <strong>legible como el inglés</strong>. Mientras en otros lenguajes escribes <code>System.out.println("Hola")</code> (Java), en Python simplemente pones <code>print("Hola")</code>. Es el lenguaje más enseñado en universidades del mundo.</div>
+    </div>
+  </div>
+
+  <h3>Las herramientas del curso</h3>
+  <ul>
+    <li><strong>OpenCV (cv2)</strong> — Para trabajar con imágenes y vídeo. Es el "Photoshop" de Python.</li>
+    <li><strong>face_recognition</strong> — Detecta y compara caras automáticamente.</li>
+    <li><strong>NumPy</strong> — Trabaja con números y matrices (las imágenes son matrices de números).</li>
+  </ul>
+</section>
+
+<div class="divider"></div>
+
+<!-- SECCIÓN 2: INSTALACIÓN (compacta) -->
+<section class="section" id="instalacion">
+  <div class="section-tag tag-basico">🟢 Nivel Básico</div>
+  <h2>2. Instalación paso a paso</h2>
+  <div class="os-tabs">
+    <button class="os-tab active" onclick="switchOS('windows')">🪟 Windows</button>
+    <button class="os-tab" onclick="switchOS('mac')">🍎 macOS</button>
+    <button class="os-tab" onclick="switchOS('linux')">🐧 Linux</button>
+  </div>
+  <div class="os-content active" id="os-windows">
+    <p><strong>1.</strong> Descarga Python 3.11+ de python.org. ¡Marca "Add Python to PATH"!</p>
+    <p><strong>2.</strong> Instala Visual Studio Build Tools (componente C++).</p>
+    <div class="code-block"><div class="code-header"><div class="dots"><span></span><span></span><span></span></div><span>CMD / PowerShell</span><button class="copy-btn" onclick="copyCode(this)">Copiar</button></div>
+<pre>pip install cmake
+pip install opencv-python face_recognition numpy</pre></div>
+  </div>
+  <div class="os-content" id="os-mac">
+    <div class="code-block"><div class="code-header"><div class="dots"><span></span><span></span><span></span></div><span>Terminal</span><button class="copy-btn" onclick="copyCode(this)">Copiar</button></div>
+<pre>/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+brew install python3 cmake
+pip3 install opencv-python face_recognition numpy</pre></div>
+  </div>
+  <div class="os-content" id="os-linux">
+    <div class="code-block"><div class="code-header"><div class="dots"><span></span><span></span><span></span></div><span>Terminal</span><button class="copy-btn" onclick="copyCode(this)">Copiar</button></div>
+<pre>sudo apt update
+sudo apt install python3 python3-pip cmake build-essential libopenblas-dev liblapack-dev
+pip3 install opencv-python face_recognition numpy</pre></div>
+  </div>
+  <h3>Verificar</h3>
+  <div class="code-block"><div class="code-header"><div class="dots"><span></span><span></span><span></span></div><span>Terminal</span><button class="copy-btn" onclick="copyCode(this)">Copiar</button></div>
+<pre>python3
+>>> <span class="kw">import</span> cv2
+>>> <span class="kw">import</span> face_recognition
+>>> <span class="bi">print</span>(<span class="str">"¡Todo instalado!"</span>)</pre></div>
+</section>
+
+<div class="divider"></div>
+
+<!-- SECCIÓN 3: PRIMER PROGRAMA -->
+<section class="section" id="primer-programa">
+  <div class="section-tag tag-basico">🟢 Nivel Básico</div>
+  <h2>3. Tu primer programa</h2>
+  <div class="code-block"><div class="code-header"><div class="dots"><span></span><span></span><span></span></div><span>hola_cara.py</span><button class="copy-btn" onclick="copyCode(this)">Copiar</button></div>
+<pre><span class="kw">import</span> cv2                    <span class="cm"># Para imágenes</span>
+<span class="kw">import</span> face_recognition       <span class="cm"># Para caras</span>
+
+<span class="bi">print</span>(<span class="str">"¡Hola! Soy tu detector de caras."</span>)
+<span class="bi">print</span>(<span class="str">f"OpenCV versión: <span class="kw">{</span>cv2.__version__<span class="kw">}</span>"</span>)</pre></div>
+  <div class="explain"><span class="line-ref">import</span><div class="explain-text">Carga una biblioteca (módulo) en memoria para poder usar sus funciones. Python no carga todas las bibliotecas automáticamente: solo las que tú le pides con <code>import</code>. Esto ahorra memoria y evita conflictos de nombres.</div></div>
+  <div class="explain"><span class="line-ref">print()</span><div class="explain-text">Muestra texto en pantalla. Lo que va entre comillas aparece en el terminal.</div></div>
+  <div class="explain"><span class="line-ref">f"..."</span><div class="explain-text"><strong>F-string:</strong> permite meter variables dentro del texto usando <code>{llaves}</code>.</div></div>
+  <div class="exercise-box">
+    <div class="ex-header"><div class="ex-icon">✏️</div> Ejercicio 3.1 — Personalízalo</div>
+    <p>Haz que muestre tu nombre y la fecha de hoy. Pista: <code>from datetime import date</code> y <code>date.today()</code>.</p>
+    <details><summary>Ver solución</summary><div class="solution-content"><div class="code-block"><div class="code-header"><div class="dots"><span></span><span></span><span></span></div><span>solución</span></div>
+<pre><span class="kw">from</span> datetime <span class="kw">import</span> date
+<span class="bi">print</span>(<span class="str">f"¡Hola, Tu Nombre! Hoy es {date.<span class="fn">today</span>()}"</span>)</pre></div></div></details>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- SECCIÓN 4: CARGAR IMAGEN -->
+<section class="section" id="cargar-imagen">
+  <div class="section-tag tag-basico">🟢 Nivel Básico</div>
+  <h2>4. Cargar y mostrar imágenes</h2>
+  <div class="flow-diagram">
+    <div class="flow-step"><div class="fs-icon">💾</div><div class="fs-label">foto.jpg</div></div><div class="flow-arrow">→</div>
+    <div class="flow-step"><div class="fs-icon">📥</div><div class="fs-label">imread()</div></div><div class="flow-arrow">→</div>
+    <div class="flow-step"><div class="fs-icon">🔢</div><div class="fs-label">Matriz [B,G,R]</div></div><div class="flow-arrow">→</div>
+    <div class="flow-step"><div class="fs-icon">🖥️</div><div class="fs-label">imshow()</div></div>
+  </div>
+  <div class="code-block"><div class="code-header"><div class="dots"><span></span><span></span><span></span></div><span>mostrar_imagen.py</span><button class="copy-btn" onclick="copyCode(this)">Copiar</button></div>
+<pre><span class="kw">import</span> cv2
+
+imagen = cv2.<span class="fn">imread</span>(<span class="str">"foto.jpg"</span>)
+
+<span class="kw">if</span> imagen <span class="kw">is</span> <span class="kw">None</span>:
+    <span class="bi">print</span>(<span class="str">"❌ No se encontró 'foto.jpg'"</span>)
+<span class="kw">else</span>:
+    alto, ancho, canales = imagen.<span class="var">shape</span>
+    <span class="bi">print</span>(<span class="str">f"✅ Imagen: <span class="kw">{</span>ancho<span class="kw">}</span>x<span class="kw">{</span>alto<span class="kw">}</span> px, <span class="kw">{</span>canales<span class="kw">}</span> canales"</span>)
+    cv2.<span class="fn">imshow</span>(<span class="str">"Mi imagen"</span>, imagen)
+    cv2.<span class="fn">waitKey</span>(<span class="num">0</span>)
+    cv2.<span class="fn">destroyAllWindows</span>()</pre></div>
+  <div class="explain"><span class="line-ref">imread()</span><div class="explain-text">"Image read" — carga la foto como matriz NumPy. Cada píxel = <code>[Azul, Verde, Rojo]</code>. Si no existe, devuelve <code>None</code>.</div></div>
+  <div class="explain"><span class="line-ref">.shape</span><div class="explain-text">Dimensiones: <code>(alto, ancho, canales)</code>. Una foto 1920×1080 = <code>(1080, 1920, 3)</code>.</div></div>
+  <div class="explain"><span class="line-ref">waitKey(0)</span><div class="explain-text">Pausa hasta que pulses una tecla. Sin esto, la ventana se cierra al instante.</div></div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ═══ SECCIÓN NUEVA: SIMULADOR BGR/RGB ═══ -->
+<section class="section" id="simulador-colores">
+  <div class="section-tag tag-basico">🟢 Nivel Básico · Interactivo</div>
+  <h2>🧪 Simulador de colores BGR vs RGB</h2>
+
+  <p>OpenCV usa <strong>BGR</strong> (Azul-Verde-Rojo) pero <code>face_recognition</code> usa <strong>RGB</strong> (Rojo-Verde-Azul). Mueve los deslizadores para ver la diferencia. ¡Fíjate cómo cambia el color al intercambiar los canales!</p>
+
+  <div class="simulator-container">
+    <div class="sim-title">🎨 Mezcla tus colores</div>
+    <div class="sim-row">
+      <div class="sim-controls">
+        <div class="sim-slider-group">
+          <label>Rojo (R) <span id="rVal">120</span></label>
+          <input type="range" min="0" max="255" value="120" class="sim-slider red-sl" id="sliderR" oninput="updateColor()">
+        </div>
+        <div class="sim-slider-group">
+          <label>Verde (G) <span id="gVal">200</span></label>
+          <input type="range" min="0" max="255" value="200" class="sim-slider green-sl" id="sliderG" oninput="updateColor()">
+        </div>
+        <div class="sim-slider-group">
+          <label>Azul (B) <span id="bVal">60</span></label>
+          <input type="range" min="0" max="255" value="60" class="sim-slider blue-sl" id="sliderB" oninput="updateColor()">
+        </div>
+        <button class="sim-swap-btn" onclick="swapChannels()">🔄 Intercambiar BGR ↔ RGB</button>
+      </div>
+      <div class="sim-preview">
+        <div class="sim-color-box" id="colorRGB" style="background:rgb(120,200,60)"></div>
+        <div class="sim-color-label" id="labelRGB">RGB(120, 200, 60)</div>
+        <div style="font-size:.7rem;color:var(--accent-cyan);font-weight:600;margin-top:.3rem">↑ face_recognition ve ESTO</div>
+      </div>
+      <div class="sim-preview">
+        <div class="sim-color-box" id="colorBGR" style="background:rgb(60,200,120)"></div>
+        <div class="sim-color-label" id="labelBGR">BGR(60, 200, 120)</div>
+        <div style="font-size:.7rem;color:var(--accent-orange);font-weight:600;margin-top:.3rem">↑ OpenCV ve ESTO</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="info-box concept">
+    <div class="ib-title purple">🧠 ¿Por qué importa?</div>
+    <p>Si cargas una imagen con <code>cv2.imread()</code> (BGR) y la pasas directamente a <code>face_recognition</code> (que espera RGB), los colores estarán invertidos. Por eso usamos <code>cv2.cvtColor(img, cv2.COLOR_BGR2RGB)</code> para convertir.</p>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- SECCIÓN 5: DETECTAR CARAS -->
+<section class="section" id="detectar-caras">
+  <div class="section-tag tag-basico">🟢 Nivel Básico</div>
+  <h2>5. Detectar caras en fotos</h2>
+  <div class="code-block"><div class="code-header"><div class="dots"><span></span><span></span><span></span></div><span>detectar_caras.py</span><button class="copy-btn" onclick="copyCode(this)">Copiar</button></div>
+<pre><span class="kw">import</span> face_recognition
+
+imagen = face_recognition.<span class="fn">load_image_file</span>(<span class="str">"foto.jpg"</span>)
+ubicaciones = face_recognition.<span class="fn">face_locations</span>(imagen)
+
+<span class="bi">print</span>(<span class="str">f"🔍 Se encontraron <span class="kw">{</span><span class="bi">len</span>(ubicaciones)<span class="kw">}</span> cara(s)"</span>)
+
+<span class="kw">for</span> i, (arriba, derecha, abajo, izquierda) <span class="kw">in</span> <span class="bi">enumerate</span>(ubicaciones):
+    <span class="bi">print</span>(<span class="str">f"  Cara <span class="kw">{</span>i+<span class="num">1</span><span class="kw">}</span>: ({izquierda},{arriba}) → ({derecha},{abajo})"</span>)</pre></div>
+  <div class="explain"><span class="line-ref">face_locations()</span><div class="explain-text">Usa <strong>HOG</strong> (Histogram of Oriented Gradients) para buscar patrones faciales. Devuelve coordenadas <code>(arriba, derecha, abajo, izquierda)</code> de cada cara.</div></div>
+</section>
+
+<div class="divider"></div>
+
+<!-- SECCIÓN 6: DIBUJAR -->
+<section class="section" id="dibujar-rectangulos">
+  <div class="section-tag tag-basico">🟢 Nivel Básico</div>
+  <h2>6. Dibujar rectángulos sobre las caras</h2>
+  <div class="code-block"><div class="code-header"><div class="dots"><span></span><span></span><span></span></div><span>dibujar_caras.py</span><button class="copy-btn" onclick="copyCode(this)">Copiar</button></div>
+<pre><span class="kw">import</span> cv2, face_recognition
+
+imagen_rgb = face_recognition.<span class="fn">load_image_file</span>(<span class="str">"foto.jpg"</span>)
+ubicaciones = face_recognition.<span class="fn">face_locations</span>(imagen_rgb)
+imagen_bgr = cv2.<span class="fn">cvtColor</span>(imagen_rgb, cv2.<span class="var">COLOR_RGB2BGR</span>)
+
+<span class="kw">for</span> (arriba, derecha, abajo, izquierda) <span class="kw">in</span> ubicaciones:
+    cv2.<span class="fn">rectangle</span>(imagen_bgr, (izquierda, arriba), (derecha, abajo), (<span class="num">0</span>,<span class="num">255</span>,<span class="num">0</span>), <span class="num">3</span>)
+
+cv2.<span class="fn">imshow</span>(<span class="str">"Caras"</span>, imagen_bgr)
+cv2.<span class="fn">waitKey</span>(<span class="num">0</span>)
+cv2.<span class="fn">destroyAllWindows</span>()
+cv2.<span class="fn">imwrite</span>(<span class="str">"resultado.jpg"</span>, imagen_bgr)</pre></div>
+  <div class="explain"><span class="line-ref">rectangle()</span><div class="explain-text">Dibuja un rectángulo sobre la imagen. Color <code>(0,255,0)</code> = verde en BGR. Grosor <code>3</code> píxeles.</div></div>
+</section>
+
+<div class="divider"></div>
+
+<!-- QUIZ BÁSICO -->
+<section class="section" id="quiz-basico">
+  <div class="section-tag tag-basico">🟢 Test</div>
+  <h2>Quiz — Nivel Básico</h2>
+  <div class="quiz-box"><div class="quiz-title">📝 Autoevaluación</div>
+    <div class="quiz-question" id="q1"><p>1. ¿Qué hace <code>import cv2</code>?</p>
+      <button class="quiz-option" onclick="checkQuiz('q1',this,false)">Instala OpenCV</button>
+      <button class="quiz-option" onclick="checkQuiz('q1',this,true)">Carga la biblioteca OpenCV para usarla</button>
+      <button class="quiz-option" onclick="checkQuiz('q1',this,false)">Abre la cámara web</button>
+      <div class="quiz-feedback" id="q1-fb"></div></div>
+    <div class="quiz-question" id="q2"><p>2. ¿Qué devuelve <code>imread()</code> si el archivo no existe?</p>
+      <button class="quiz-option" onclick="checkQuiz('q2',this,false)">Un error que cierra el programa</button>
+      <button class="quiz-option" onclick="checkQuiz('q2',this,true)">None (nada)</button>
+      <button class="quiz-option" onclick="checkQuiz('q2',this,false)">Una imagen en negro</button>
+      <div class="quiz-feedback" id="q2-fb"></div></div>
+    <div class="quiz-question" id="q3"><p>3. ¿Qué formato de color usa OpenCV?</p>
+      <button class="quiz-option" onclick="checkQuiz('q3',this,true)">BGR (Azul, Verde, Rojo)</button>
+      <button class="quiz-option" onclick="checkQuiz('q3',this,false)">RGB (Rojo, Verde, Azul)</button>
+      <button class="quiz-option" onclick="checkQuiz('q3',this,false)">CMYK</button>
+      <div class="quiz-feedback" id="q3-fb"></div></div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ═══════════════════════════ NIVEL INTERMEDIO ═══════════════════════════ -->
+<div class="level-bar"><div class="lb-seg" style="background:var(--accent-green);opacity:.3"></div><div class="lb-seg" style="background:var(--accent-orange)"></div><div class="lb-seg" style="background:var(--accent-red);opacity:.3"></div></div>
+
+<!-- LANDMARKS -->
+<section class="section" id="landmarks">
+  <div class="section-tag tag-intermedio">🟡 Nivel Intermedio</div>
+  <h2>7. Puntos faciales (Landmarks)</h2>
+
+  <p>Los <strong>landmarks</strong> (puntos de referencia) son <strong>68 puntos</strong> distribuidos por la cara que mapean su estructura: contorno de la mandíbula (17 puntos), cejas (5+5), nariz (9), ojos (6+6) y boca (20). Son la base para que el ordenador "entienda" la geometría de un rostro.</p>
+
+  <div class="flow-diagram">
+    <div class="flow-step"><div class="fs-icon">📷</div><div class="fs-label">Imagen</div></div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step"><div class="fs-icon">🔍</div><div class="fs-label">Detectar cara</div></div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step"><div class="fs-icon">📍</div><div class="fs-label">68 puntos (x,y)</div></div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step"><div class="fs-icon">🎨</div><div class="fs-label">Dibujar por partes</div></div>
+  </div>
+  <div class="code-block"><div class="code-header"><div class="dots"><span></span><span></span><span></span></div><span>landmarks.py</span><button class="copy-btn" onclick="copyCode(this)">Copiar</button></div>
+<pre><span class="kw">import</span> cv2, face_recognition
+
+imagen = face_recognition.<span class="fn">load_image_file</span>(<span class="str">"foto.jpg"</span>)
+lista_landmarks = face_recognition.<span class="fn">face_landmarks</span>(imagen)
+imagen_bgr = cv2.<span class="fn">cvtColor</span>(imagen, cv2.<span class="var">COLOR_RGB2BGR</span>)
+
+colores = {<span class="str">"chin"</span>:(<span class="num">255</span>,<span class="num">255</span>,<span class="num">255</span>), <span class="str">"left_eyebrow"</span>:(<span class="num">0</span>,<span class="num">255</span>,<span class="num">255</span>), <span class="str">"right_eyebrow"</span>:(<span class="num">0</span>,<span class="num">255</span>,<span class="num">255</span>),
+           <span class="str">"nose_bridge"</span>:(<span class="num">0</span>,<span class="num">255</span>,<span class="num">0</span>), <span class="str">"nose_tip"</span>:(<span class="num">0</span>,<span class="num">255</span>,<span class="num">0</span>), <span class="str">"left_eye"</span>:(<span class="num">255</span>,<span class="num">0</span>,<span class="num">0</span>),
+           <span class="str">"right_eye"</span>:(<span class="num">255</span>,<span class="num">0</span>,<span class="num">0</span>), <span class="str">"top_lip"</span>:(<span class="num">0</span>,<span class="num">0</span>,<span class="num">255</span>), <span class="str">"bottom_lip"</span>:(<span class="num">0</span>,<span class="num">0</span>,<span class="num">255</span>)}
+
+<span class="kw">for</span> landmarks <span class="kw">in</span> lista_landmarks:
+    <span class="kw">for</span> parte, puntos <span class="kw">in</span> landmarks.<span class="fn">items</span>():
+        color = colores.<span class="fn">get</span>(parte, (<span class="num">255</span>,<span class="num">255</span>,<span class="num">255</span>))
+        <span class="kw">for</span> (x, y) <span class="kw">in</span> puntos:
+            cv2.<span class="fn">circle</span>(imagen_bgr, (x, y), <span class="num">2</span>, color, -<span class="num">1</span>)
+
+cv2.<span class="fn">imshow</span>(<span class="str">"Landmarks"</span>, imagen_bgr)
+cv2.<span class="fn">waitKey</span>(<span class="num">0</span>); cv2.<span class="fn">destroyAllWindows</span>()</pre></div>
+  <div class="explain"><span class="line-ref">face_landmarks()</span><div class="explain-text">Devuelve un <strong>diccionario</strong> por cara. Clave = parte (<code>"left_eye"</code>), valor = lista de puntos <code>(x,y)</code>.</div></div>
+</section>
+
+<div class="divider"></div>
+
+<!-- COMPARAR CARAS -->
+<section class="section" id="comparar-caras">
+  <div class="section-tag tag-intermedio">🟡 Nivel Intermedio</div>
+  <h2>8. Comparar dos caras</h2>
+  <div class="info-box concept"><div class="ib-title purple">🧠 Encoding = huella digital numérica de la cara</div>
+    <p>El sistema usa una <strong>red neuronal convolucional</strong> (CNN) entrenada con millones de rostros para convertir cada cara en un vector de <strong>128 números decimales</strong>. Estos números codifican características abstractas aprendidas automáticamente: proporciones faciales, distancia entre ojos, forma de la mandíbula, etc. Dos fotos de la misma persona, incluso con diferente iluminación o ángulo, producen vectores cercanos. Personas distintas producen vectores lejanos. La "distancia" entre vectores se mide con la <strong>distancia euclidiana</strong>.</p></div>
+  <div class="code-block"><div class="code-header"><div class="dots"><span></span><span></span><span></span></div><span>comparar_caras.py</span><button class="copy-btn" onclick="copyCode(this)">Copiar</button></div>
+<pre><span class="kw">import</span> face_recognition
+
+img_a = face_recognition.<span class="fn">load_image_file</span>(<span class="str">"persona_a.jpg"</span>)
+img_b = face_recognition.<span class="fn">load_image_file</span>(<span class="str">"persona_b.jpg"</span>)
+
+enc_a = face_recognition.<span class="fn">face_encodings</span>(img_a)[<span class="num">0</span>]
+enc_b = face_recognition.<span class="fn">face_encodings</span>(img_b)[<span class="num">0</span>]
+
+resultado = face_recognition.<span class="fn">compare_faces</span>([enc_a], enc_b)
+distancia = face_recognition.<span class="fn">face_distance</span>([enc_a], enc_b)
+
+<span class="kw">if</span> resultado[<span class="num">0</span>]:
+    <span class="bi">print</span>(<span class="str">"✅ ¡Misma persona!"</span>)
+<span class="kw">else</span>:
+    <span class="bi">print</span>(<span class="str">"❌ Personas diferentes."</span>)
+<span class="bi">print</span>(<span class="str">f"📏 Distancia: <span class="kw">{</span>distancia[<span class="num">0</span>]<span class="kw">:</span>.4f<span class="kw">}</span>"</span>)</pre></div>
+  <div class="explain"><span class="line-ref">face_distance()</span><div class="explain-text">Calcula la <strong>distancia euclidiana</strong> entre dos encodings. <strong>0.0</strong> = caras idénticas. <strong>&lt; 0.4</strong> = casi seguro la misma persona. <strong>0.4–0.6</strong> = zona dudosa. <strong>&gt; 0.6</strong> = personas distintas. El umbral por defecto de <code>compare_faces()</code> es 0.6, pero en nuestro proyecto usaremos <strong>0.5</strong> para reducir falsos positivos.</div></div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ═══ SIMULADOR DE DISTANCIA ═══ -->
+<section class="section" id="simulador-distancia">
+  <div class="section-tag tag-intermedio">🟡 Nivel Intermedio · Interactivo</div>
+  <h2>🧪 Simulador de distancia facial</h2>
+
+  <p>Mueve el deslizador para ver qué significan los diferentes valores de <strong>distancia entre encodings</strong>. Así entenderás cuándo el sistema decide que dos caras son de la misma persona.</p>
+
+  <div class="dist-viz">
+    <div class="dv-labels"><span>✅ Misma persona</span><span>🤔 Dudoso</span><span>❌ Diferentes</span></div>
+    <div class="dv-bar-container">
+      <div class="dv-marker" id="distMarker" data-val="0.35" style="left:35%"></div>
+    </div>
+    <div class="dv-scale"><span>0.0</span><span>0.2</span><span>0.4</span><span>0.6</span><span>0.8</span><span>1.0</span></div>
+    <input type="range" min="0" max="100" value="35" class="dist-slider" id="distSlider" oninput="updateDist()">
+    <div class="dv-result same" id="distResult">✅ Distancia 0.35 — ¡Muy probablemente la misma persona!</div>
+  </div>
+
+  <div class="info-box tip">
+    <div class="ib-title green">💡 Umbrales en la práctica</div>
+    <p><strong>&lt; 0.4</strong> → Casi seguro la misma persona. <strong>0.4 – 0.6</strong> → Zona dudosa (puede ser la misma o no). <strong>&gt; 0.6</strong> → Personas diferentes. El umbral por defecto de <code>compare_faces()</code> es 0.6, pero en nuestro proyecto usamos 0.5 para mayor seguridad.</p>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- WEBCAM -->
+<section class="section" id="webcam">
+  <div class="section-tag tag-intermedio">🟡 Nivel Intermedio</div>
+  <h2>9. Cámara en tiempo real</h2>
+  <div class="flow-diagram">
+    <div class="flow-step"><div class="fs-icon">📷</div><div class="fs-label">Webcam</div><div class="fs-detail">30 fps</div></div><div class="flow-arrow">→</div>
+    <div class="flow-step"><div class="fs-icon">🔽</div><div class="fs-label">Reducir 25%</div></div><div class="flow-arrow">→</div>
+    <div class="flow-step"><div class="fs-icon">🔍</div><div class="fs-label">Detectar</div></div><div class="flow-arrow">→</div>
+    <div class="flow-step"><div class="fs-icon">✖️4</div><div class="fs-label">Escalar</div></div><div class="flow-arrow">→</div>
+    <div class="flow-step"><div class="fs-icon">🖥️</div><div class="fs-label">Mostrar</div></div>
+  </div>
+  <div class="code-block"><div class="code-header"><div class="dots"><span></span><span></span><span></span></div><span>webcam_caras.py</span><button class="copy-btn" onclick="copyCode(this)">Copiar</button></div>
+<pre><span class="kw">import</span> cv2
+<span class="kw">import</span> face_recognition
+
+camara = cv2.<span class="fn">VideoCapture</span>(<span class="num">0</span>)
+<span class="bi">print</span>(<span class="str">"📷 Pulsa 'q' para salir."</span>)
+
+<span class="kw">while</span> <span class="kw">True</span>:
+    ret, frame = camara.<span class="fn">read</span>()
+    <span class="kw">if not</span> ret: <span class="kw">break</span>
+
+    <span class="cm"># Reducir al 25% para mayor velocidad de detección</span>
+    pequeno = cv2.<span class="fn">resize</span>(frame, (<span class="num">0</span>,<span class="num">0</span>), fx=<span class="num">0.25</span>, fy=<span class="num">0.25</span>)
+    rgb = cv2.<span class="fn">cvtColor</span>(pequeno, cv2.<span class="var">COLOR_BGR2RGB</span>)
+
+    <span class="cm"># Detectar caras en la imagen reducida</span>
+    ubicaciones = face_recognition.<span class="fn">face_locations</span>(rgb)
+
+    <span class="cm"># Dibujar rectángulos (coordenadas × 4 porque redujimos)</span>
+    <span class="kw">for</span> (arriba, derecha, abajo, izquierda) <span class="kw">in</span> ubicaciones:
+        arriba *= <span class="num">4</span>
+        derecha *= <span class="num">4</span>
+        abajo *= <span class="num">4</span>
+        izquierda *= <span class="num">4</span>
+        cv2.<span class="fn">rectangle</span>(frame, (izquierda, arriba), (derecha, abajo), (<span class="num">0</span>,<span class="num">255</span>,<span class="num">0</span>), <span class="num">2</span>)
+
+    cv2.<span class="fn">imshow</span>(<span class="str">"Webcam - Detección facial"</span>, frame)
+    <span class="kw">if</span> cv2.<span class="fn">waitKey</span>(<span class="num">1</span>) & <span class="num">0xFF</span> == <span class="bi">ord</span>(<span class="str">"q"</span>):
+        <span class="kw">break</span>
+
+camara.<span class="fn">release</span>()
+cv2.<span class="fn">destroyAllWindows</span>()</pre></div>
+  <div class="explain"><span class="line-ref">while True</span><div class="explain-text"><strong>Bucle infinito.</strong> Se repite continuamente: captura un fotograma, busca caras y muestra el resultado. Un vídeo no es más que una sucesión de fotos (fotogramas o <em>frames</em>) mostradas muy rápido, unas ~30 por segundo.</div></div>
+  <div class="explain"><span class="line-ref">resize(fx=0.25)</span><div class="explain-text">Reduce la imagen al 25% de su tamaño original. La detección facial es computacionalmente costosa: al trabajar con una imagen 16 veces más pequeña (4×4), el proceso se acelera drásticamente. Luego multiplicamos las coordenadas ×4 para dibujar en la posición correcta sobre el frame original.</div></div>
+  <div class="explain"><span class="line-ref">& 0xFF</span><div class="explain-text">Operación <strong>AND a nivel de bits</strong> que asegura compatibilidad entre sistemas operativos al leer el código de la tecla pulsada. <code>ord("q")</code> convierte el carácter "q" a su valor numérico ASCII (113).</div></div>
+</section>
+
+<div class="divider"></div>
+
+<!-- REGISTRO -->
+<section class="section" id="registro">
+  <div class="section-tag tag-intermedio">🟡 Nivel Intermedio</div>
+  <h2>10. Registrar personas conocidas</h2>
+  <div class="info-box tip"><div class="ib-title green">💡 Estructura</div><p>Carpeta <code>personas_conocidas/</code> con una foto por persona: <code>Ana.jpg</code>, <code>Carlos.jpg</code>…</p></div>
+  <div class="code-block"><div class="code-header"><div class="dots"><span></span><span></span><span></span></div><span>registrar.py</span><button class="copy-btn" onclick="copyCode(this)">Copiar</button></div>
+<pre><span class="kw">import</span> os, face_recognition
+
+<span class="kw">def</span> <span class="fn">cargar_personas</span>(carpeta):
+    nombres, encodings = [], []
+    <span class="kw">for</span> f <span class="kw">in</span> os.<span class="fn">listdir</span>(carpeta):
+        <span class="kw">if not</span> f.<span class="fn">lower</span>().<span class="fn">endswith</span>((<span class="str">".jpg"</span>,<span class="str">".jpeg"</span>,<span class="str">".png"</span>)): <span class="kw">continue</span>
+        nombre = os.path.<span class="fn">splitext</span>(f)[<span class="num">0</span>]
+        img = face_recognition.<span class="fn">load_image_file</span>(os.path.<span class="fn">join</span>(carpeta, f))
+        enc = face_recognition.<span class="fn">face_encodings</span>(img)
+        <span class="kw">if</span> enc:
+            encodings.<span class="fn">append</span>(enc[<span class="num">0</span>]); nombres.<span class="fn">append</span>(nombre)
+            <span class="bi">print</span>(<span class="str">f"  ✅ {nombre}"</span>)
+    <span class="kw">return</span> nombres, encodings
+
+nombres, encodings = <span class="fn">cargar_personas</span>(<span class="str">"personas_conocidas"</span>)
+<span class="bi">print</span>(<span class="str">f"🎉 {<span class="bi">len</span>(nombres)} registrada(s)"</span>)</pre></div>
+  <div class="explain"><span class="line-ref">def</span><div class="explain-text">Define una <strong>función</strong>: un bloque de código reutilizable con nombre y parámetros. Encapsulas la lógica una vez y la invocas tantas veces como necesites con <code>cargar_personas("carpeta")</code>. Esto es un principio fundamental de programación: <strong>no repitas código</strong> (DRY — Don't Repeat Yourself).</div></div>
+</section>
+
+<div class="divider"></div>
+
+<!-- QUIZ INTERMEDIO -->
+<section class="section" id="quiz-intermedio">
+  <div class="section-tag tag-intermedio">🟡 Test</div>
+  <h2>Quiz — Nivel Intermedio</h2>
+  <div class="quiz-box"><div class="quiz-title">📝 Autoevaluación</div>
+    <div class="quiz-question" id="q5"><p>1. ¿Cuántos landmarks tiene cada cara?</p>
+      <button class="quiz-option" onclick="checkQuiz('q5',this,false)">32</button>
+      <button class="quiz-option" onclick="checkQuiz('q5',this,true)">68</button>
+      <button class="quiz-option" onclick="checkQuiz('q5',this,false)">128</button>
+      <div class="quiz-feedback" id="q5-fb"></div></div>
+    <div class="quiz-question" id="q6"><p>2. Si la distancia entre encodings es 0.35, ¿son la misma persona?</p>
+      <button class="quiz-option" onclick="checkQuiz('q6',this,true)">Sí, muy probablemente</button>
+      <button class="quiz-option" onclick="checkQuiz('q6',this,false)">No, son diferentes</button>
+      <button class="quiz-option" onclick="checkQuiz('q6',this,false)">Es imposible saberlo</button>
+      <div class="quiz-feedback" id="q6-fb"></div></div>
+    <div class="quiz-question" id="q7"><p>3. ¿Por qué reducimos la imagen al 25% en la webcam?</p>
+      <button class="quiz-option" onclick="checkQuiz('q7',this,true)">Para que la detección sea más rápida</button>
+      <button class="quiz-option" onclick="checkQuiz('q7',this,false)">Para que se vea más pequeña</button>
+      <button class="quiz-option" onclick="checkQuiz('q7',this,false)">Para ahorrar disco</button>
+      <div class="quiz-feedback" id="q7-fb"></div></div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ═══════════════════════════ NIVEL AVANZADO ═══════════════════════════ -->
+<div class="level-bar"><div class="lb-seg" style="background:var(--accent-green);opacity:.3"></div><div class="lb-seg" style="background:var(--accent-orange);opacity:.3"></div><div class="lb-seg" style="background:var(--accent-red)"></div></div>
+
+<!-- TRY/EXCEPT -->
+<section class="section" id="try-except">
+  <div class="section-tag tag-avanzado">🔴 Nivel Avanzado</div>
+  <h2>11. Manejo de errores con try/except</h2>
+
+  <p>Hasta ahora, si algo falla (la foto no existe, la cámara está ocupada, no se detecta ninguna cara), nuestros programas se interrumpen con un error. Python ofrece un mecanismo llamado <strong>manejo de excepciones</strong> que permite capturar estos errores y reaccionar de forma controlada.</p>
+
+  <div class="info-box concept"><div class="ib-title purple">🧠 try / except / finally</div>
+    <p><code>try</code> ejecuta un bloque de código que podría fallar. Si se produce una excepción (error), Python salta al bloque <code>except</code> correspondiente en vez de detenerse. Opcionalmente, <code>finally</code> se ejecuta siempre, haya error o no (útil para liberar recursos como archivos o la cámara).</p></div>
+  <div class="code-block"><div class="code-header"><div class="dots"><span></span><span></span><span></span></div><span>errores_controlados.py</span><button class="copy-btn" onclick="copyCode(this)">Copiar</button></div>
+<pre><span class="kw">import</span> cv2, face_recognition
+
+<span class="kw">def</span> <span class="fn">cargar_imagen_segura</span>(ruta):
+    <span class="kw">try</span>:
+        <span class="kw">return</span> face_recognition.<span class="fn">load_image_file</span>(ruta)
+    <span class="kw">except</span> <span class="cls">FileNotFoundError</span>:
+        <span class="bi">print</span>(<span class="str">f"❌ No existe: {ruta}"</span>)
+        <span class="kw">return</span> <span class="kw">None</span>
+    <span class="kw">except</span> <span class="cls">Exception</span> <span class="kw">as</span> e:
+        <span class="bi">print</span>(<span class="str">f"⚠️ Error: {e}"</span>)
+        <span class="kw">return</span> <span class="kw">None</span>
+
+<span class="kw">def</span> <span class="fn">encoding_seguro</span>(imagen):
+    <span class="kw">try</span>:
+        enc = face_recognition.<span class="fn">face_encodings</span>(imagen)
+        <span class="kw">if not</span> enc:
+            <span class="bi">print</span>(<span class="str">"⚠️ No se detectó cara"</span>)
+            <span class="kw">return</span> <span class="kw">None</span>
+        <span class="kw">return</span> enc[<span class="num">0</span>]
+    <span class="kw">except</span> <span class="cls">Exception</span> <span class="kw">as</span> e:
+        <span class="bi">print</span>(<span class="str">f"⚠️ Error: {e}"</span>)
+        <span class="kw">return</span> <span class="kw">None</span>
+
+<span class="kw">def</span> <span class="fn">abrir_camara_segura</span>():
+    cam = cv2.<span class="fn">VideoCapture</span>(<span class="num">0</span>)
+    <span class="kw">if not</span> cam.<span class="fn">isOpened</span>():
+        <span class="bi">print</span>(<span class="str">"❌ Cámara no disponible."</span>)
+        <span class="bi">print</span>(<span class="str">"   Cierra Zoom/Meet y reintenta."</span>)
+        <span class="kw">return</span> <span class="kw">None</span>
+    <span class="kw">return</span> cam</pre></div>
+  <div class="explain"><span class="line-ref">try</span><div class="explain-text">Bloque de código que <em>podría</em> fallar. Python lo "vigila".</div></div>
+  <div class="explain"><span class="line-ref">except</span><div class="explain-text">Si hay error, ejecuta este bloque en vez de romperse. Puedes capturar errores específicos (<code>FileNotFoundError</code>) o genéricos (<code>Exception</code>).</div></div>
+</section>
+
+<div class="divider"></div>
+
+<!-- IDENTIFICACIÓN -->
+<section class="section" id="identificacion">
+  <div class="section-tag tag-avanzado">🔴 Nivel Avanzado</div>
+  <h2>12. Identificar personas en la webcam</h2>
+  <p>Combinamos todo lo aprendido: cámara en tiempo real + base de datos de personas + manejo de errores = un sistema completo de reconocimiento facial.</p>
+
+  <div class="info-box concept"><div class="ib-title purple">🧠 Arquitectura del sistema</div>
+    <p>El programa se organiza en <strong>3 módulos</strong>: (1) <code>cargar_personas()</code> convierte las fotos de la carpeta en encodings; (2) el <strong>bucle principal</strong> captura frames, detecta caras y compara con la base de datos; (3) el <strong>dibujo</strong> muestra el resultado en pantalla. Los datos fluyen así:</p></div>
+
+  <div class="flow-diagram">
+    <div class="flow-step"><div class="fs-icon">📂</div><div class="fs-label">Carpeta fotos</div><div class="fs-detail">personas_conocidas/</div></div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step"><div class="fs-icon">🔢</div><div class="fs-label">Encodings BD</div><div class="fs-detail">128 nums × N personas</div></div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step"><div class="fs-icon">📷</div><div class="fs-label">Webcam frame</div><div class="fs-detail">Reducir 25%</div></div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step"><div class="fs-icon">📏</div><div class="fs-label">face_distance()</div><div class="fs-detail">¿Quién es?</div></div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step"><div class="fs-icon">🏷️</div><div class="fs-label">Nombre en pantalla</div></div>
+  </div>
+
+  <div class="code-block"><div class="code-header"><div class="dots"><span></span><span></span><span></span></div><span>identificar_webcam.py</span><button class="copy-btn" onclick="copyCode(this)">Copiar</button></div>
+<pre><span class="kw">import</span> cv2
+<span class="kw">import</span> face_recognition
+<span class="kw">import</span> os
+<span class="kw">import</span> numpy <span class="kw">as</span> np
+
+
+<span class="kw">def</span> <span class="fn">cargar_personas</span>(carpeta):
+    <span class="str">"""Carga fotos de una carpeta y genera encodings."""</span>
+    nombres = []
+    encodings = []
+
+    <span class="kw">if not</span> os.path.<span class="fn">exists</span>(carpeta):
+        <span class="bi">print</span>(<span class="str">f"❌ Carpeta '{carpeta}' no encontrada"</span>)
+        <span class="kw">return</span> nombres, encodings
+
+    <span class="kw">for</span> archivo <span class="kw">in</span> os.<span class="fn">listdir</span>(carpeta):
+        <span class="kw">if not</span> archivo.<span class="fn">lower</span>().<span class="fn">endswith</span>((<span class="str">".jpg"</span>, <span class="str">".jpeg"</span>, <span class="str">".png"</span>)):
+            <span class="kw">continue</span>
+        <span class="kw">try</span>:
+            ruta = os.path.<span class="fn">join</span>(carpeta, archivo)
+            imagen = face_recognition.<span class="fn">load_image_file</span>(ruta)
+            lista_enc = face_recognition.<span class="fn">face_encodings</span>(imagen)
+            <span class="kw">if</span> lista_enc:
+                encodings.<span class="fn">append</span>(lista_enc[<span class="num">0</span>])
+                nombre = os.path.<span class="fn">splitext</span>(archivo)[<span class="num">0</span>]
+                nombres.<span class="fn">append</span>(nombre)
+                <span class="bi">print</span>(<span class="str">f"  ✅ {nombre}"</span>)
+        <span class="kw">except</span> <span class="cls">Exception</span> <span class="kw">as</span> error:
+            <span class="bi">print</span>(<span class="str">f"  ⚠️ Error con {archivo}: {error}"</span>)
+
+    <span class="kw">return</span> nombres, encodings
+
+
+<span class="cm"># ─── Cargar base de datos ───</span>
+nombres_bd, encodings_bd = <span class="fn">cargar_personas</span>(<span class="str">"personas_conocidas"</span>)
+<span class="bi">print</span>(<span class="str">f"🎉 {<span class="bi">len</span>(nombres_bd)} persona(s) cargada(s)\n"</span>)
+
+<span class="cm"># ─── Abrir cámara ───</span>
+camara = cv2.<span class="fn">VideoCapture</span>(<span class="num">0</span>)
+<span class="bi">print</span>(<span class="str">"📷 Pulsa 'q' para salir."</span>)
+
+contador_frames = <span class="num">0</span>
+nombres_actuales = []
+ubicaciones_actuales = []
+
+<span class="kw">while</span> <span class="kw">True</span>:
+    ret, frame = camara.<span class="fn">read</span>()
+    <span class="kw">if not</span> ret:
+        <span class="kw">break</span>
+
+    contador_frames += <span class="num">1</span>
+
+    <span class="cm"># Solo procesar cada 3 frames (optimización)</span>
+    <span class="kw">if</span> contador_frames % <span class="num">3</span> == <span class="num">0</span>:
+        pequeno = cv2.<span class="fn">resize</span>(frame, (<span class="num">0</span>, <span class="num">0</span>), fx=<span class="num">0.25</span>, fy=<span class="num">0.25</span>)
+        rgb = cv2.<span class="fn">cvtColor</span>(pequeno, cv2.<span class="var">COLOR_BGR2RGB</span>)
+
+        ubicaciones_actuales = face_recognition.<span class="fn">face_locations</span>(rgb)
+        encodings_frame = face_recognition.<span class="fn">face_encodings</span>(rgb, ubicaciones_actuales)
+
+        nombres_actuales = []
+        <span class="kw">for</span> encoding <span class="kw">in</span> encodings_frame:
+            <span class="kw">if</span> encodings_bd:
+                distancias = face_recognition.<span class="fn">face_distance</span>(encodings_bd, encoding)
+                indice_menor = np.<span class="fn">argmin</span>(distancias)
+                <span class="kw">if</span> distancias[indice_menor] &lt; <span class="num">0.5</span>:
+                    nombre = nombres_bd[indice_menor]
+                <span class="kw">else</span>:
+                    nombre = <span class="str">"Desconocido"</span>
+            <span class="kw">else</span>:
+                nombre = <span class="str">"Sin datos"</span>
+            nombres_actuales.<span class="fn">append</span>(nombre)
+
+    <span class="cm"># Dibujar resultados (en cada frame para fluidez)</span>
+    <span class="kw">for</span> (arriba, derecha, abajo, izquierda), nombre <span class="kw">in</span> <span class="bi">zip</span>(ubicaciones_actuales, nombres_actuales):
+        <span class="cm"># Escalar coordenadas ×4</span>
+        arriba *= <span class="num">4</span>
+        derecha *= <span class="num">4</span>
+        abajo *= <span class="num">4</span>
+        izquierda *= <span class="num">4</span>
+
+        color = (<span class="num">0</span>, <span class="num">255</span>, <span class="num">0</span>) <span class="kw">if</span> nombre != <span class="str">"Desconocido"</span> <span class="kw">else</span> (<span class="num">0</span>, <span class="num">0</span>, <span class="num">255</span>)
+        cv2.<span class="fn">rectangle</span>(frame, (izquierda, arriba), (derecha, abajo), color, <span class="num">2</span>)
+        cv2.<span class="fn">rectangle</span>(frame, (izquierda, abajo - <span class="num">28</span>), (derecha, abajo), color, cv2.<span class="var">FILLED</span>)
+        cv2.<span class="fn">putText</span>(frame, nombre, (izquierda + <span class="num">6</span>, abajo - <span class="num">6</span>),
+                    cv2.<span class="var">FONT_HERSHEY_SIMPLEX</span>, <span class="num">0.6</span>, (<span class="num">255</span>, <span class="num">255</span>, <span class="num">255</span>), <span class="num">1</span>)
+
+    cv2.<span class="fn">imshow</span>(<span class="str">"Reconocimiento Facial"</span>, frame)
+    <span class="kw">if</span> cv2.<span class="fn">waitKey</span>(<span class="num">1</span>) & <span class="num">0xFF</span> == <span class="bi">ord</span>(<span class="str">"q"</span>):
+        <span class="kw">break</span>
+
+camara.<span class="fn">release</span>()
+cv2.<span class="fn">destroyAllWindows</span>()</pre></div>
+</section>
+
+<div class="divider"></div>
+
+<!-- EMOCIONES -->
+<section class="section" id="emociones">
+  <div class="section-tag tag-avanzado">🔴 Nivel Avanzado</div>
+  <h2>13. Detectar emociones (simplificado)</h2>
+
+  <p>Vamos a analizar la <strong>geometría de la boca</strong> para estimar si una persona sonríe. La idea es calcular el ratio entre el ancho y la altura de la boca: cuando sonreímos, la boca se ensancha más de lo que se abre.</p>
+
+  <div class="info-box important"><div class="ib-title cyan">ℹ️ Versión simplificada</div>
+    <p>Los sistemas profesionales (como <code>deepface</code> o <code>fer</code>) usan redes neuronales entrenadas con miles de expresiones faciales. Aquí usamos geometría básica para entender el concepto. Es una aproximación, no un sistema fiable.</p></div>
+
+  <div class="code-block"><div class="code-header"><div class="dots"><span></span><span></span><span></span></div><span>detectar_sonrisa.py</span><button class="copy-btn" onclick="copyCode(this)">Copiar</button></div>
+<pre><span class="kw">import</span> cv2
+<span class="kw">import</span> face_recognition
+<span class="kw">import</span> numpy <span class="kw">as</span> np
+
+
+<span class="kw">def</span> <span class="fn">analizar_sonrisa</span>(landmarks):
+    <span class="str">"""Estima si hay sonrisa según el ratio ancho/alto de la boca."""</span>
+    <span class="kw">try</span>:
+        puntos_labio_sup = np.<span class="fn">array</span>(landmarks[<span class="str">"top_lip"</span>])
+        puntos_labio_inf = np.<span class="fn">array</span>(landmarks[<span class="str">"bottom_lip"</span>])
+
+        <span class="cm"># Ancho: distancia entre comisuras izquierda y derecha</span>
+        ancho_boca = np.linalg.<span class="fn">norm</span>(puntos_labio_sup[<span class="num">6</span>] - puntos_labio_sup[<span class="num">0</span>])
+
+        <span class="cm"># Alto: distancia entre centro del labio superior e inferior</span>
+        alto_boca = np.linalg.<span class="fn">norm</span>(puntos_labio_inf[<span class="num">3</span>] - puntos_labio_sup[<span class="num">3</span>])
+
+        <span class="kw">if</span> alto_boca == <span class="num">0</span>:
+            <span class="kw">return</span> <span class="str">"😐 Neutro"</span>
+
+        ratio = ancho_boca / alto_boca
+
+        <span class="cm"># Ratio alto = boca ancha y poco abierta = sonrisa</span>
+        <span class="kw">if</span> ratio > <span class="num">3.0</span>:
+            <span class="kw">return</span> <span class="str">"😁 ¡Sonrisa!"</span>
+        <span class="kw">elif</span> ratio > <span class="num">2.0</span>:
+            <span class="kw">return</span> <span class="str">"🙂 Sonrisa leve"</span>
+        <span class="kw">else</span>:
+            <span class="kw">return</span> <span class="str">"😐 Neutro"</span>
+    <span class="kw">except</span> <span class="cls">Exception</span>:
+        <span class="kw">return</span> <span class="str">"❓ Sin datos"</span>
+
+
+camara = cv2.<span class="fn">VideoCapture</span>(<span class="num">0</span>)
+<span class="bi">print</span>(<span class="str">"📷 Detector de sonrisas. Pulsa 'q' para salir."</span>)
+
+<span class="kw">while</span> <span class="kw">True</span>:
+    ret, frame = camara.<span class="fn">read</span>()
+    <span class="kw">if not</span> ret:
+        <span class="kw">break</span>
+
+    <span class="cm"># Reducir al 50% (necesitamos más resolución para landmarks)</span>
+    pequeno = cv2.<span class="fn">resize</span>(frame, (<span class="num">0</span>, <span class="num">0</span>), fx=<span class="num">0.5</span>, fy=<span class="num">0.5</span>)
+    rgb = cv2.<span class="fn">cvtColor</span>(pequeno, cv2.<span class="var">COLOR_BGR2RGB</span>)
+
+    ubicaciones = face_recognition.<span class="fn">face_locations</span>(rgb)
+    lista_landmarks = face_recognition.<span class="fn">face_landmarks</span>(rgb, ubicaciones)
+
+    <span class="kw">for</span> (arriba, derecha, abajo, izquierda), landmarks <span class="kw">in</span> <span class="bi">zip</span>(ubicaciones, lista_landmarks):
+        emocion = <span class="fn">analizar_sonrisa</span>(landmarks)
+
+        <span class="cm"># Escalar ×2 (redujimos al 50%)</span>
+        arriba *= <span class="num">2</span>
+        derecha *= <span class="num">2</span>
+        abajo *= <span class="num">2</span>
+        izquierda *= <span class="num">2</span>
+
+        cv2.<span class="fn">rectangle</span>(frame, (izquierda, arriba), (derecha, abajo), (<span class="num">255</span>, <span class="num">200</span>, <span class="num">0</span>), <span class="num">2</span>)
+        cv2.<span class="fn">putText</span>(frame, emocion, (izquierda, arriba - <span class="num">10</span>),
+                    cv2.<span class="var">FONT_HERSHEY_SIMPLEX</span>, <span class="num">0.7</span>, (<span class="num">255</span>, <span class="num">200</span>, <span class="num">0</span>), <span class="num">2</span>)
+
+    cv2.<span class="fn">imshow</span>(<span class="str">"Detector de sonrisas"</span>, frame)
+    <span class="kw">if</span> cv2.<span class="fn">waitKey</span>(<span class="num">1</span>) & <span class="num">0xFF</span> == <span class="bi">ord</span>(<span class="str">"q"</span>):
+        <span class="kw">break</span>
+
+camara.<span class="fn">release</span>()
+cv2.<span class="fn">destroyAllWindows</span>()</pre></div>
+
+  <div class="explain"><span class="line-ref">np.linalg.norm()</span><div class="explain-text">Calcula la <strong>distancia euclidiana</strong> entre dos puntos (la fórmula del teorema de Pitágoras generalizada). <code>linalg</code> = álgebra lineal. <code>norm</code> = norma (longitud) de un vector. Al restar dos arrays NumPy se obtiene el vector entre ambos puntos.</div></div>
+  <div class="explain"><span class="line-ref">fx=0.5</span><div class="explain-text">Para los landmarks usamos <strong>50%</strong> en vez de 25% porque la detección de puntos faciales necesita más resolución que la simple detección de caras. Es un compromiso entre velocidad y precisión.</div></div>
+</section>
+
+<div class="divider"></div>
+
+<!-- PROYECTO FINAL -->
+<section class="section" id="proyecto-final">
+  <div class="section-tag tag-avanzado">🔴 Nivel Avanzado</div>
+  <h2>14. Proyecto final: Control de asistencia</h2>
+
+  <p>Este es el proyecto estrella: un sistema completo que reconoce personas por la webcam, registra su asistencia con fecha y hora en un archivo CSV, y guarda una captura fotográfica como evidencia.</p>
+
+  <div class="info-box concept"><div class="ib-title purple">🧠 Arquitectura del proyecto</div>
+    <p>El sistema se compone de <strong>4 módulos funcionales</strong>: (1) <code>cargar_personas()</code> lee la base de datos de fotos; (2) <code>registrar_asistencia()</code> escribe en el CSV evitando duplicados; (3) <code>guardar_captura()</code> almacena la foto como evidencia; (4) el <strong>bucle principal</strong> orquesta todo en tiempo real.</p></div>
+
+  <div class="flow-diagram">
+    <div class="flow-step"><div class="fs-icon">📂</div><div class="fs-label">Cargar BD</div><div class="fs-detail">Fotos → Encodings</div></div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step"><div class="fs-icon">📷</div><div class="fs-label">Webcam</div><div class="fs-detail">Cada 5 frames</div></div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step"><div class="fs-icon">🧠</div><div class="fs-label">Identificar</div><div class="fs-detail">face_distance</div></div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step"><div class="fs-icon">📋</div><div class="fs-label">CSV</div><div class="fs-detail">Nombre + hora</div></div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step"><div class="fs-icon">📸</div><div class="fs-label">Foto</div><div class="fs-detail">Evidencia</div></div>
+  </div>
+
+  <div class="code-block"><div class="code-header"><div class="dots"><span></span><span></span><span></span></div><span>control_asistencia.py</span><button class="copy-btn" onclick="copyCode(this)">Copiar</button></div>
+<pre><span class="kw">import</span> cv2
+<span class="kw">import</span> face_recognition
+<span class="kw">import</span> os
+<span class="kw">import</span> numpy <span class="kw">as</span> np
+<span class="kw">from</span> datetime <span class="kw">import</span> datetime
+
+
+<span class="kw">def</span> <span class="fn">cargar_personas</span>(carpeta):
+    <span class="str">"""Carga todas las fotos de la carpeta y genera encodings."""</span>
+    nombres = []
+    encodings = []
+
+    <span class="kw">if not</span> os.path.<span class="fn">exists</span>(carpeta):
+        <span class="bi">print</span>(<span class="str">f"❌ Carpeta '{carpeta}' no encontrada"</span>)
+        <span class="kw">return</span> nombres, encodings
+
+    <span class="kw">for</span> archivo <span class="kw">in</span> os.<span class="fn">listdir</span>(carpeta):
+        <span class="kw">if not</span> archivo.<span class="fn">lower</span>().<span class="fn">endswith</span>((<span class="str">".jpg"</span>, <span class="str">".jpeg"</span>, <span class="str">".png"</span>)):
+            <span class="kw">continue</span>
+        <span class="kw">try</span>:
+            ruta = os.path.<span class="fn">join</span>(carpeta, archivo)
+            imagen = face_recognition.<span class="fn">load_image_file</span>(ruta)
+            lista_enc = face_recognition.<span class="fn">face_encodings</span>(imagen)
+            <span class="kw">if</span> lista_enc:
+                encodings.<span class="fn">append</span>(lista_enc[<span class="num">0</span>])
+                nombres.<span class="fn">append</span>(os.path.<span class="fn">splitext</span>(archivo)[<span class="num">0</span>])
+                <span class="bi">print</span>(<span class="str">f"  ✅ {nombres[-<span class="num">1</span>]}"</span>)
+        <span class="kw">except</span> <span class="cls">Exception</span> <span class="kw">as</span> error:
+            <span class="bi">print</span>(<span class="str">f"  ⚠️ Error con {archivo}: {error}"</span>)
+
+    <span class="kw">return</span> nombres, encodings
+
+
+<span class="kw">def</span> <span class="fn">registrar_asistencia</span>(nombre, archivo_csv):
+    <span class="str">"""Registra asistencia en CSV evitando duplicados del mismo día."""</span>
+    ahora = datetime.<span class="fn">now</span>()
+    fecha = ahora.<span class="fn">strftime</span>(<span class="str">"%Y-%m-%d"</span>)
+    hora = ahora.<span class="fn">strftime</span>(<span class="str">"%H:%M:%S"</span>)
+
+    <span class="cm"># Comprobar si ya se registró hoy</span>
+    registrados_hoy = <span class="bi">set</span>()
+    <span class="kw">if</span> os.path.<span class="fn">exists</span>(archivo_csv):
+        <span class="kw">with</span> <span class="bi">open</span>(archivo_csv, <span class="str">"r"</span>) <span class="kw">as</span> fichero:
+            <span class="kw">for</span> linea <span class="kw">in</span> fichero:
+                partes = linea.<span class="fn">strip</span>().<span class="fn">split</span>(<span class="str">","</span>)
+                <span class="kw">if</span> <span class="bi">len</span>(partes) >= <span class="num">2</span> <span class="kw">and</span> partes[<span class="num">1</span>] == fecha:
+                    registrados_hoy.<span class="fn">add</span>(partes[<span class="num">0</span>])
+
+    <span class="kw">if</span> nombre <span class="kw">not in</span> registrados_hoy:
+        <span class="kw">with</span> <span class="bi">open</span>(archivo_csv, <span class="str">"a"</span>) <span class="kw">as</span> fichero:
+            fichero.<span class="fn">write</span>(<span class="str">f"{nombre},{fecha},{hora}\n"</span>)
+        <span class="bi">print</span>(<span class="str">f"📋 {nombre} registrado a las {hora}"</span>)
+        <span class="kw">return</span> <span class="kw">True</span>
+    <span class="kw">return</span> <span class="kw">False</span>
+
+
+<span class="kw">def</span> <span class="fn">guardar_captura</span>(frame, nombre, carpeta_capturas):
+    <span class="str">"""Guarda una captura de pantalla como evidencia."""</span>
+    os.<span class="fn">makedirs</span>(carpeta_capturas, exist_ok=<span class="kw">True</span>)
+    marca_tiempo = datetime.<span class="fn">now</span>().<span class="fn">strftime</span>(<span class="str">"%Y%m%d_%H%M%S"</span>)
+    nombre_archivo = <span class="str">f"{nombre}_{marca_tiempo}.jpg"</span>
+    ruta = os.path.<span class="fn">join</span>(carpeta_capturas, nombre_archivo)
+    cv2.<span class="fn">imwrite</span>(ruta, frame)
+    <span class="bi">print</span>(<span class="str">f"📸 Captura guardada: {nombre_archivo}"</span>)
+
+
+<span class="cm"># ═══════════ PROGRAMA PRINCIPAL ═══════════</span>
+<span class="bi">print</span>(<span class="str">"╔══════════════════════════════════════╗"</span>)
+<span class="bi">print</span>(<span class="str">"║   SISTEMA DE CONTROL DE ASISTENCIA   ║"</span>)
+<span class="bi">print</span>(<span class="str">"╚══════════════════════════════════════╝"</span>)
+
+<span class="cm"># Configuración</span>
+CARPETA_PERSONAS = <span class="str">"personas_conocidas"</span>
+ARCHIVO_CSV = <span class="str">"asistencia.csv"</span>
+CARPETA_CAPTURAS = <span class="str">"capturas"</span>
+UMBRAL_DISTANCIA = <span class="num">0.5</span>
+
+<span class="cm"># Cargar base de datos</span>
+nombres_bd, encodings_bd = <span class="fn">cargar_personas</span>(CARPETA_PERSONAS)
+<span class="bi">print</span>(<span class="str">f"\n🎉 {<span class="bi">len</span>(nombres_bd)} persona(s) en la base de datos.\n"</span>)
+
+<span class="cm"># Crear CSV con cabecera si no existe</span>
+<span class="kw">if not</span> os.path.<span class="fn">exists</span>(ARCHIVO_CSV):
+    <span class="kw">with</span> <span class="bi">open</span>(ARCHIVO_CSV, <span class="str">"w"</span>) <span class="kw">as</span> fichero:
+        fichero.<span class="fn">write</span>(<span class="str">"Nombre,Fecha,Hora\n"</span>)
+
+<span class="cm"># Abrir cámara</span>
+camara = cv2.<span class="fn">VideoCapture</span>(<span class="num">0</span>)
+<span class="kw">if not</span> camara.<span class="fn">isOpened</span>():
+    <span class="bi">print</span>(<span class="str">"❌ No se pudo abrir la cámara"</span>)
+    <span class="bi">exit</span>()
+
+<span class="bi">print</span>(<span class="str">"📷 Pulsa 'q' para salir.\n"</span>)
+contador_frames = <span class="num">0</span>
+nombres_actuales = []
+ubicaciones_actuales = []
+
+<span class="kw">while</span> <span class="kw">True</span>:
+    ret, frame = camara.<span class="fn">read</span>()
+    <span class="kw">if not</span> ret:
+        <span class="kw">break</span>
+
+    contador_frames += <span class="num">1</span>
+
+    <span class="cm"># Detectar e identificar cada 5 frames</span>
+    <span class="kw">if</span> contador_frames % <span class="num">5</span> == <span class="num">0</span>:
+        pequeno = cv2.<span class="fn">resize</span>(frame, (<span class="num">0</span>, <span class="num">0</span>), fx=<span class="num">0.25</span>, fy=<span class="num">0.25</span>)
+        rgb = cv2.<span class="fn">cvtColor</span>(pequeno, cv2.<span class="var">COLOR_BGR2RGB</span>)
+
+        ubicaciones_actuales = face_recognition.<span class="fn">face_locations</span>(rgb)
+        encodings_frame = face_recognition.<span class="fn">face_encodings</span>(rgb, ubicaciones_actuales)
+
+        nombres_actuales = []
+        <span class="kw">for</span> encoding <span class="kw">in</span> encodings_frame:
+            <span class="kw">if</span> encodings_bd:
+                distancias = face_recognition.<span class="fn">face_distance</span>(encodings_bd, encoding)
+                indice_menor = np.<span class="fn">argmin</span>(distancias)
+                <span class="kw">if</span> distancias[indice_menor] &lt; UMBRAL_DISTANCIA:
+                    nombre = nombres_bd[indice_menor]
+                    <span class="cm"># Registrar asistencia y guardar foto</span>
+                    <span class="kw">if</span> <span class="fn">registrar_asistencia</span>(nombre, ARCHIVO_CSV):
+                        <span class="fn">guardar_captura</span>(frame, nombre, CARPETA_CAPTURAS)
+                <span class="kw">else</span>:
+                    nombre = <span class="str">"Desconocido"</span>
+            <span class="kw">else</span>:
+                nombre = <span class="str">"Sin datos"</span>
+            nombres_actuales.<span class="fn">append</span>(nombre)
+
+    <span class="cm"># Dibujar resultados</span>
+    <span class="kw">for</span> (arriba, derecha, abajo, izquierda), nombre <span class="kw">in</span> <span class="bi">zip</span>(ubicaciones_actuales, nombres_actuales):
+        arriba *= <span class="num">4</span>
+        derecha *= <span class="num">4</span>
+        abajo *= <span class="num">4</span>
+        izquierda *= <span class="num">4</span>
+
+        color = (<span class="num">0</span>, <span class="num">200</span>, <span class="num">0</span>) <span class="kw">if</span> nombre != <span class="str">"Desconocido"</span> <span class="kw">else</span> (<span class="num">0</span>, <span class="num">0</span>, <span class="num">200</span>)
+        cv2.<span class="fn">rectangle</span>(frame, (izquierda, arriba), (derecha, abajo), color, <span class="num">2</span>)
+        cv2.<span class="fn">rectangle</span>(frame, (izquierda, abajo - <span class="num">28</span>), (derecha, abajo), color, cv2.<span class="var">FILLED</span>)
+        cv2.<span class="fn">putText</span>(frame, nombre, (izquierda + <span class="num">6</span>, abajo - <span class="num">6</span>),
+                    cv2.<span class="var">FONT_HERSHEY_SIMPLEX</span>, <span class="num">0.6</span>, (<span class="num">255</span>, <span class="num">255</span>, <span class="num">255</span>), <span class="num">1</span>)
+
+    <span class="cm"># Fecha y hora en pantalla</span>
+    texto_hora = datetime.<span class="fn">now</span>().<span class="fn">strftime</span>(<span class="str">"%d/%m/%Y  %H:%M:%S"</span>)
+    cv2.<span class="fn">putText</span>(frame, texto_hora, (<span class="num">10</span>, <span class="num">30</span>),
+                cv2.<span class="var">FONT_HERSHEY_SIMPLEX</span>, <span class="num">0.7</span>, (<span class="num">255</span>, <span class="num">255</span>, <span class="num">255</span>), <span class="num">2</span>)
+
+    cv2.<span class="fn">imshow</span>(<span class="str">"Control de Asistencia"</span>, frame)
+    <span class="kw">if</span> cv2.<span class="fn">waitKey</span>(<span class="num">1</span>) & <span class="num">0xFF</span> == <span class="bi">ord</span>(<span class="str">"q"</span>):
+        <span class="kw">break</span>
+
+camara.<span class="fn">release</span>()
+cv2.<span class="fn">destroyAllWindows</span>()
+<span class="bi">print</span>(<span class="str">f"\n✅ Asistencias guardadas en '{ARCHIVO_CSV}'"</span>)
+<span class="bi">print</span>(<span class="str">f"📸 Capturas guardadas en '{CARPETA_CAPTURAS}/'"</span>)</pre></div>
+
+  <div class="explain"><span class="line-ref">UMBRAL_DISTANCIA</span><div class="explain-text">Usamos una <strong>constante</strong> (nombre en mayúsculas, por convención) para definir el umbral de reconocimiento. Esto permite ajustarlo fácilmente en un solo lugar. Un valor de <strong>0.5</strong> es más estricto que el 0.6 por defecto, reduciendo falsos positivos.</div></div>
+  <div class="explain"><span class="line-ref">guardar_captura()</span><div class="explain-text">Guarda una foto como evidencia cada vez que se registra una nueva asistencia. <code>os.makedirs(exist_ok=True)</code> crea la carpeta si no existe, sin dar error si ya existe. La marca de tiempo en el nombre del archivo evita sobreescribir capturas anteriores.</div></div>
+  <div class="explain"><span class="line-ref">registrar_asistencia()</span><div class="explain-text">Devuelve <code>True</code> si la persona se registró por primera vez hoy, y <code>False</code> si ya estaba. Así solo guardamos la foto en el primer registro del día, evitando llenar el disco con capturas duplicadas.</div></div>
+</section>
+
+<div class="divider"></div>
+
+<!-- QUIZ AVANZADO -->
+<section class="section" id="quiz-avanzado">
+  <div class="section-tag tag-avanzado">🔴 Test</div>
+  <h2>Quiz — Nivel Avanzado</h2>
+  <div class="quiz-box"><div class="quiz-title">📝 Autoevaluación</div>
+    <div class="quiz-question" id="q9"><p>1. ¿Qué hace try/except?</p>
+      <button class="quiz-option" onclick="checkQuiz('q9',this,false)">Repite el código si falla</button>
+      <button class="quiz-option" onclick="checkQuiz('q9',this,true)">Captura errores para que el programa no se rompa</button>
+      <button class="quiz-option" onclick="checkQuiz('q9',this,false)">Acelera la ejecución</button>
+      <div class="quiz-feedback" id="q9-fb"></div></div>
+    <div class="quiz-question" id="q10"><p>2. ¿Qué modo de archivo usas para añadir sin borrar?</p>
+      <button class="quiz-option" onclick="checkQuiz('q10',this,false)"><code>"w"</code></button>
+      <button class="quiz-option" onclick="checkQuiz('q10',this,true)"><code>"a"</code> (append)</button>
+      <button class="quiz-option" onclick="checkQuiz('q10',this,false)"><code>"r"</code></button>
+      <div class="quiz-feedback" id="q10-fb"></div></div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ═══════════════════════════ EXTRAS ═══════════════════════════ -->
+<div class="level-bar"><div class="lb-seg" style="background:var(--accent-purple)"></div><div class="lb-seg" style="background:var(--accent-purple)"></div><div class="lb-seg" style="background:var(--accent-purple)"></div></div>
+
+<!-- ═══ SECCIÓN NUEVA: CASOS DEL MUNDO REAL ═══ -->
+<section class="section" id="casos-reales">
+  <div class="section-tag tag-extra">🟣 Mundo Real</div>
+  <h2>🌍 Reconocimiento facial en el mundo real</h2>
+
+  <p>La tecnología que estás aprendiendo se usa a escala masiva. Estos son <strong>5 casos reales</strong> para entender su impacto:</p>
+
+  <div class="case-grid">
+    <div class="case-card">
+      <div class="cc-banner" style="background:linear-gradient(90deg,#333,#666)"></div>
+      <div class="cc-body">
+        <div class="cc-icon">📱</div>
+        <div class="cc-name">Face ID de Apple</div>
+        <div class="cc-org">Apple · iPhone · Desde 2017</div>
+        <div class="cc-desc">Tu iPhone proyecta <strong>30.000 puntos infrarrojos</strong> sobre tu cara para crear un mapa 3D. Funciona en la oscuridad, con gafas e incluso si te dejas barba. La probabilidad de que otra persona lo desbloquee es de <strong>1 entre 1.000.000</strong> (el código PIN es 1 entre 10.000). Todos los datos se procesan dentro del teléfono; Apple dice que nunca salen del dispositivo.</div>
+        <div class="cc-tag cc-tag-good">Uso personal · Privacidad</div>
+      </div>
+    </div>
+
+    <div class="case-card">
+      <div class="cc-banner" style="background:linear-gradient(90deg,#1a5276,#2980b9)"></div>
+      <div class="cc-body">
+        <div class="cc-icon">✈️</div>
+        <div class="cc-name">Control de pasaportes en aeropuertos</div>
+        <div class="cc-org">AENA (España) · Frontex (UE) · TSA (EEUU)</div>
+        <div class="cc-desc">En aeropuertos como el de Madrid-Barajas ya puedes pasar el control de pasaportes <strong>sin hablar con nadie</strong>: una cámara compara tu cara con la foto de tu pasaporte. En <strong>Dubái</strong>, un túnel con 80 cámaras te identifica mientras caminas, sin que te detengas. Esto reduce colas de 45 minutos a 15 segundos.</div>
+        <div class="cc-tag cc-tag-neutral">Eficiencia · Seguridad</div>
+      </div>
+    </div>
+
+    <div class="case-card">
+      <div class="cc-banner" style="background:linear-gradient(90deg,#7d3c98,#a569bd)"></div>
+      <div class="cc-body">
+        <div class="cc-icon">🎵</div>
+        <div class="cc-name">Filtros de TikTok e Instagram</div>
+        <div class="cc-org">ByteDance · Meta</div>
+        <div class="cc-desc">Cada vez que usas un filtro que te pone orejas de gato o te cambia la cara, se ejecuta un sistema de <strong>landmarks faciales</strong> idéntico al que has programado en este curso (sección 7). El filtro detecta tus 68 puntos faciales en tiempo real y superpone gráficos 3D sobre ellos. Más de <strong>1.000 millones de personas</strong> usan esta tecnología a diario sin saberlo.</div>
+        <div class="cc-tag cc-tag-good">Entretenimiento</div>
+      </div>
+    </div>
+
+    <div class="case-card">
+      <div class="cc-banner" style="background:linear-gradient(90deg,#922b21,#e74c3c)"></div>
+      <div class="cc-body">
+        <div class="cc-icon">⚠️</div>
+        <div class="cc-name">Clearview AI — El caso polémico</div>
+        <div class="cc-org">Clearview AI · EEUU · Desde 2020</div>
+        <div class="cc-desc">Una empresa recogió <strong>más de 30.000 millones de fotos</strong> de internet (Facebook, Instagram, LinkedIn…) <strong>sin permiso</strong> y creó la mayor base de datos facial del mundo. La policía la usaba para identificar sospechosos. Varios países la han multado y prohibido. En 2024, la UE la multó con <strong>20 millones de euros</strong>. Es el ejemplo perfecto de cómo la misma tecnología puede cruzar la línea de lo ético.</div>
+        <div class="cc-tag cc-tag-bad">Vigilancia · Sin consentimiento</div>
+      </div>
+    </div>
+
+    <div class="case-card">
+      <div class="cc-banner" style="background:linear-gradient(90deg,#1e8449,#27ae60)"></div>
+      <div class="cc-body">
+        <div class="cc-icon">🐾</div>
+        <div class="cc-name">Reconocimiento de animales</div>
+        <div class="cc-org">WildMe · Conservation AI</div>
+        <div class="cc-desc">¡No solo funciona con humanos! Científicos usan la misma tecnología para identificar <strong>ballenas jorobadas</strong> por sus colas, <strong>tiburones</strong> por sus aletas, y <strong>tigres</strong> por sus rayas (cada uno tiene un patrón único, como nuestra huella dactilar). Esto ayuda a contar especies en peligro de extinción sin capturarlas ni molestarlas.</div>
+        <div class="cc-tag cc-tag-good">Conservación · Ciencia</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="debate-box">
+    <div class="db-title">💬 Debate en clase</div>
+    <div class="db-q">¿Debería permitirse que las tiendas identifiquen tu cara al entrar para ofrecerte publicidad personalizada?</div>
+    <div class="db-q">Si Clearview AI hubiera pedido permiso a cada persona, ¿sería aceptable su base de datos?</div>
+    <div class="db-q">¿Es justo que un sistema de IA pueda equivocarse al identificar a alguien y que eso tenga consecuencias legales?</div>
+    <div class="db-q">¿Deberían los filtros de TikTok avisar de que están mapeando tu cara?</div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ORGANIZACIÓN -->
+<section class="section" id="organizacion">
+  <div class="section-tag tag-extra">🟣 Extra</div>
+  <h2>Organizar tu proyecto</h2>
+  <div class="folder-tree">
+    <span class="folder">📁 mi_proyecto_facial/</span><br>
+    ├── <span class="folder">📁 personas_conocidas/</span> <span class="comment">← Ana.jpg, Carlos.jpg…</span><br>
+    ├── <span class="folder">📁 resultados/</span> <span class="comment">← Imágenes procesadas y CSV</span><br>
+    ├── <span class="file">📄 funciones.py</span> <span class="comment">← Funciones compartidas</span><br>
+    ├── <span class="file">📄 detectar_caras.py</span><br>
+    ├── <span class="file">📄 webcam_caras.py</span><br>
+    ├── <span class="file">📄 control_asistencia.py</span><br>
+    └── <span class="file">📄 README.md</span> <span class="comment">← Instrucciones</span>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- RENDIMIENTO -->
+<section class="section" id="rendimiento">
+  <div class="section-tag tag-extra">🟣 Extra</div>
+  <h2>Tips de rendimiento</h2>
+  <table class="error-table">
+    <thead><tr><th>Técnica</th><th>Qué hace</th><th>Mejora</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Reducir resolución</strong></td><td><code>cv2.resize(fx=0.25)</code></td><td>~16x más rápido</td></tr>
+      <tr><td><strong>Saltar frames</strong></td><td><code>if cont % 3 == 0</code></td><td>3-5x más rápido</td></tr>
+      <tr><td><strong>Pasar ubicaciones</strong></td><td><code>face_encodings(img, ubics)</code></td><td>Evita re-detectar</td></tr>
+      <tr><td><strong>HOG vs CNN</strong></td><td><code>model="hog"</code> (CPU) vs <code>"cnn"</code> (GPU)</td><td>CNN más preciso</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<div class="divider"></div>
+
+<!-- ERRORES COMUNES -->
+<section class="section" id="errores-comunes">
+  <div class="section-tag tag-extra">🟣 Extra</div>
+  <h2>Errores comunes y soluciones</h2>
+  <table class="error-table">
+    <thead><tr><th>Error</th><th>Causa</th><th>Solución</th></tr></thead>
+    <tbody>
+      <tr><td><code>ModuleNotFoundError: 'cv2'</code></td><td>OpenCV no instalado</td><td><code>pip install opencv-python</code></td></tr>
+      <tr><td><code>ModuleNotFoundError: 'face_recognition'</code></td><td>Falta cmake o Build Tools</td><td>Instala cmake + Build Tools primero</td></tr>
+      <tr><td><strong>imread devuelve None</strong></td><td>Ruta incorrecta</td><td>Verifica nombre y carpeta</td></tr>
+      <tr><td><strong>Colores invertidos</strong></td><td>Mezcla RGB/BGR</td><td>Usa <code>cvtColor()</code></td></tr>
+      <tr><td><strong>Ventana se cierra sola</strong></td><td>Falta waitKey</td><td>Añade <code>cv2.waitKey(0)</code></td></tr>
+      <tr><td><strong>Cámara no abre</strong></td><td>Otra app la usa</td><td>Cierra Zoom/Meet</td></tr>
+      <tr><td><code>IndexError: list index out of range</code></td><td>No encontró cara</td><td>Comprueba <code>if len(enc) > 0</code></td></tr>
+      <tr><td><strong>Muy lento</strong></td><td>Imagen grande</td><td>Reduce + salta frames</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<div class="divider"></div>
+
+<!-- GLOSARIO -->
+<section class="section" id="glosario">
+  <div class="section-tag tag-extra">🟣 Extra</div>
+  <h2>Glosario visual</h2>
+  <div class="glossary-grid">
+    <div class="glossary-card"><div class="gc-emoji">🖼️</div><div class="gc-term">Píxel</div><div class="gc-def">Punto mínimo de una imagen. 3 números (R,G,B) definen su color.</div></div>
+    <div class="glossary-card"><div class="gc-emoji">🔢</div><div class="gc-term">Matriz / Array</div><div class="gc-def">Cuadrícula de números. Una imagen es una matriz de píxeles.</div></div>
+    <div class="glossary-card"><div class="gc-emoji">📦</div><div class="gc-term">Biblioteca</div><div class="gc-def">Paquete de código reutilizable. Se instala con pip y se carga con import.</div></div>
+    <div class="glossary-card"><div class="gc-emoji">🎨</div><div class="gc-term">BGR / RGB</div><div class="gc-def">Formatos de color. OpenCV usa BGR, face_recognition usa RGB.</div></div>
+    <div class="glossary-card"><div class="gc-emoji">📍</div><div class="gc-term">Landmark</div><div class="gc-def">68 puntos que mapean ojos, nariz, boca, cejas y mandíbula.</div></div>
+    <div class="glossary-card"><div class="gc-emoji">🔐</div><div class="gc-term">Encoding</div><div class="gc-def">128 números = "DNI numérico" de una cara.</div></div>
+    <div class="glossary-card"><div class="gc-emoji">📏</div><div class="gc-term">Distancia euclidiana</div><div class="gc-def">Fórmula que mide lo "lejos" que están dos encodings.</div></div>
+    <div class="glossary-card"><div class="gc-emoji">🧠</div><div class="gc-term">HOG</div><div class="gc-def">Método rápido de detección facial que funciona en CPU.</div></div>
+    <div class="glossary-card"><div class="gc-emoji">🌐</div><div class="gc-term">CNN</div><div class="gc-def">Red neuronal más precisa. Necesita GPU (tarjeta gráfica).</div></div>
+    <div class="glossary-card"><div class="gc-emoji">🎬</div><div class="gc-term">Frame</div><div class="gc-def">Un fotograma de vídeo. La webcam captura ~30/segundo.</div></div>
+    <div class="glossary-card"><div class="gc-emoji">🔧</div><div class="gc-term">Función (def)</div><div class="gc-def">Bloque de código reutilizable con nombre.</div></div>
+    <div class="glossary-card"><div class="gc-emoji">🛡️</div><div class="gc-term">try / except</div><div class="gc-def">"Intenta esto, y si falla, haz aquello." Captura errores.</div></div>
+    <div class="glossary-card"><div class="gc-emoji">📖</div><div class="gc-term">Diccionario</div><div class="gc-def">Pares clave-valor: {"left_eye": [(x,y),…]}</div></div>
+    <div class="glossary-card"><div class="gc-emoji">📄</div><div class="gc-term">CSV</div><div class="gc-def">Archivo de texto con datos separados por comas. Se abre con Excel.</div></div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ÉTICA -->
+<section class="section" id="etica">
+  <div class="section-tag tag-extra">🟣 Reflexión</div>
+  <h2>Ética e IA responsable</h2>
+  <div class="info-box warning"><div class="ib-title orange">⚠️ Legal</div>
+    <p>En Europa, el <strong>RGPD</strong> protege los datos biométricos. Usar reconocimiento facial sin consentimiento puede ser <strong>ilegal</strong>.</p></div>
+
+  <p><strong>1. Privacidad:</strong> ¿Dónde ponemos el límite de las cámaras?</p>
+  <p><strong>2. Sesgos:</strong> Si el modelo se entrenó con mayoritariamente con caras de piel clara, falla con otras. No es solo técnico: es injusticia social.</p>
+  <p><strong>3. Consentimiento:</strong> ¿Quién decide si tu cara está en una base de datos?</p>
+
+  <div class="info-box concept"><div class="ib-title purple">🧠 Regla de oro</div>
+    <p><strong>¿Esta tecnología ayuda a las personas o les quita libertad?</strong></p></div>
+
+  <h3>📌 Resumen del curso</h3>
+  <p><strong>Básico</strong> — Instalación, imágenes, detección, dibujar. <strong>Intermedio</strong> — Landmarks, encodings, webcam, base de datos. <strong>Avanzado</strong> — Errores, identificación, emociones, control de asistencia.</p>
+
+  <div class="info-box tip"><div class="ib-title green">🚀 ¿Y ahora?</div>
+    <p>Investiga <strong>deepface</strong> (emociones), <strong>mediapipe</strong> (Google, ultrarrápido), <strong>dlib</strong> (modelos personalizados). Más abajo tienes un mini-ejemplo con MediaPipe.</p></div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ═══ HOG EXPLICADO ═══ -->
+<section class="section" id="hog-explicado">
+  <div class="section-tag tag-extra">🟣 Extra · Teoría</div>
+  <h2>🔬 ¿Cómo funciona HOG por dentro?</h2>
+
+  <p>Cuando llamamos a <code>face_locations()</code>, internamente se ejecuta el algoritmo <strong>HOG</strong> (Histogram of Oriented Gradients). Vamos a entender qué hace paso a paso:</p>
+
+  <h3>Paso 1: Convertir a escala de grises</h3>
+  <p>El color no aporta información útil para detectar formas. HOG trabaja solo con <strong>brillo</strong> (blanco y negro), lo que reduce los datos a un tercio.</p>
+
+  <h3>Paso 2: Calcular gradientes</h3>
+  <p>Un <strong>gradiente</strong> es la diferencia de brillo entre dos píxeles vecinos. Si un píxel es oscuro y su vecino es claro, hay un gradiente fuerte → eso es un <strong>borde</strong>. HOG calcula la dirección (horizontal, vertical, diagonal) y la magnitud de cada gradiente.</p>
+
+  <div class="info-box concept"><div class="ib-title purple">🧠 Analogía</div>
+    <p>Imagina que pasas la mano por una superficie con los ojos cerrados. Donde notas un cambio brusco (de liso a rugoso), hay un "borde". HOG hace exactamente eso, pero comparando números de brillo entre píxeles vecinos. Un cambio brusco de 20 a 200 = borde fuerte. Un cambio de 100 a 105 = zona uniforme.</p></div>
+
+  <h3>Paso 3: Histogramas por regiones</h3>
+  <p>La imagen se divide en celdas de 8×8 píxeles. En cada celda se crea un <strong>histograma</strong> (un gráfico de barras) que cuenta cuántos gradientes apuntan en cada dirección. Esto captura la "textura" de cada zona sin depender de la posición exacta de cada píxel.</p>
+
+  <h3>Paso 4: Comparar con el patrón "cara"</h3>
+  <p>El modelo HOG preentrenado sabe qué aspecto tiene una cara típica en gradientes: zona oscura en los ojos, bordes verticales en la nariz, bordes horizontales en la boca. Desliza una ventana por toda la imagen y compara cada región con ese patrón. Donde hay coincidencia → <strong>cara detectada</strong>.</p>
+
+  <div class="info-box tip"><div class="ib-title green">💡 HOG vs CNN</div>
+    <p><strong>HOG</strong> es rápido (funciona en CPU) pero menos preciso con caras de perfil o parcialmente ocultas. <strong>CNN</strong> (<code>model="cnn"</code>) usa una red neuronal: mucho más precisa pero necesita GPU. Para proyectos escolares, HOG es más que suficiente.</p></div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ═══ LIMITACIONES ═══ -->
+<section class="section" id="limitaciones">
+  <div class="section-tag tag-extra">🟣 Extra · Importante</div>
+  <h2>⚠️ Limitaciones: ¿cuándo falla el sistema?</h2>
+
+  <p>Ningún sistema de reconocimiento facial es perfecto. Es fundamental conocer sus <strong>puntos débiles</strong> para no confiar ciegamente en los resultados:</p>
+
+  <table class="error-table">
+    <thead><tr><th>Situación</th><th>¿Por qué falla?</th><th>Posible solución</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Caras de perfil</strong></td><td>HOG está entrenado con caras frontales. Un perfil tiene gradientes muy diferentes</td><td>Usar <code>model="cnn"</code> o pedir fotos frontales</td></tr>
+      <tr><td><strong>Iluminación extrema</strong></td><td>Sombras muy fuertes o contraluz alteran los gradientes y confunden al detector</td><td>Normalizar histograma con <code>cv2.equalizeHist()</code></td></tr>
+      <tr><td><strong>Mascarillas / gafas de sol</strong></td><td>Ocultan landmarks clave (boca, ojos). El encoding pierde información</td><td>Sistemas modernos usan la zona periocular (alrededor de los ojos)</td></tr>
+      <tr><td><strong>Fotos impresas (spoofing)</strong></td><td>El sistema no distingue una cara real de una foto impresa o pantalla</td><td>Anti-spoofing: análisis de textura, detección de parpadeo, sensores 3D</td></tr>
+      <tr><td><strong>Baja resolución</strong></td><td>Con pocos píxeles, no hay suficientes gradientes para detectar una cara</td><td>Usar imágenes de al menos 80×80 px por cara</td></tr>
+      <tr><td><strong>Múltiples caras cercanas</strong></td><td>Las caras se solapan y el detector puede fusionarlas o perder alguna</td><td>Ajustar el parámetro <code>number_of_times_to_upsample</code></td></tr>
+      <tr><td><strong>Cambios drásticos de apariencia</strong></td><td>Barba nueva, corte de pelo radical, envejecimiento → el encoding cambia</td><td>Registrar varias fotos por persona con distintas condiciones</td></tr>
+      <tr><td><strong>Sesgos raciales</strong></td><td>Si el modelo se entrenó con mayoría de caras de piel clara, es menos preciso con otras</td><td>Usar modelos entrenados con datasets diversos</td></tr>
+    </tbody>
+  </table>
+
+  <div class="info-box warning"><div class="ib-title orange">⚠️ Reflexión crítica</div>
+    <p>Estas limitaciones tienen consecuencias reales. Si un sistema de seguridad falla más con personas de cierto grupo étnico, eso no es solo un "bug técnico": es un problema de <strong>discriminación algorítmica</strong>. Como programadores, tenemos la responsabilidad de probar nuestros sistemas con datos diversos y ser transparentes sobre sus limitaciones.</p></div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ═══ ENTORNOS VIRTUALES ═══ -->
+<section class="section" id="venv">
+  <div class="section-tag tag-extra">🟣 Extra · Buenas prácticas</div>
+  <h2>📦 Entornos virtuales (venv)</h2>
+
+  <p>Hasta ahora hemos instalado las bibliotecas de forma global (para todo el sistema). En proyectos reales, cada proyecto tiene sus propias dependencias. Un <strong>entorno virtual</strong> es una carpeta aislada con su propia copia de Python y sus paquetes, sin afectar al resto del sistema.</p>
+
+  <div class="code-block"><div class="code-header"><div class="dots"><span></span><span></span><span></span></div><span>Terminal</span><button class="copy-btn" onclick="copyCode(this)">Copiar</button></div>
+<pre><span class="cm"># 1. Crear el entorno virtual (solo la primera vez)</span>
+python3 -m venv mi_entorno
+
+<span class="cm"># 2. Activarlo</span>
+<span class="cm"># En Windows:</span>
+mi_entorno\Scripts\activate
+<span class="cm"># En macOS/Linux:</span>
+source mi_entorno/bin/activate
+
+<span class="cm"># 3. Instalar las bibliotecas DENTRO del entorno</span>
+pip install opencv-python face_recognition numpy
+
+<span class="cm"># 4. Trabajar con normalidad (todo se instala aquí dentro)</span>
+python control_asistencia.py
+
+<span class="cm"># 5. Cuando termines, desactivar el entorno</span>
+deactivate</pre></div>
+
+  <div class="explain"><span class="line-ref">venv</span><div class="explain-text"><code>venv</code> (Virtual Environment) crea una carpeta con una copia aislada de Python. Cuando lo "activas", todos los <code>pip install</code> se instalan ahí dentro, no globalmente. Así cada proyecto puede tener versiones diferentes de las mismas bibliotecas sin conflictos.</div></div>
+
+  <div class="info-box tip"><div class="ib-title green">💡 ¿Cómo sabes que está activado?</div>
+    <p>Cuando el entorno está activo, verás <code>(mi_entorno)</code> al principio de la línea del terminal. Eso significa que Python y pip apuntan a la copia local del entorno, no a la global.</p></div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ═══ RETOS EXTRA ═══ -->
+<section class="section" id="retos">
+  <div class="section-tag tag-extra">🟣 Extra · Retos</div>
+  <h2>🏆 Retos para alumnos avanzados</h2>
+
+  <p>Si ya dominas el proyecto de asistencia, aquí tienes retos abiertos que te obligarán a investigar, diseñar y resolver problemas por tu cuenta:</p>
+
+  <div class="exercise-box">
+    <div class="ex-header"><div class="ex-icon">🔥</div> Reto 1 — Sistema anti-spoofing básico</div>
+    <p>Modifica el programa para que detecte si le están enseñando una <strong>foto impresa</strong> en vez de una cara real. Pista: una cara real parpadea. Usa los landmarks de los ojos para calcular el <strong>Eye Aspect Ratio (EAR)</strong> y detectar parpadeos. Si no hay parpadeo en 5 segundos, marca como "posible spoofing".</p>
+  </div>
+
+  <div class="exercise-box">
+    <div class="ex-header"><div class="ex-icon">🔥</div> Reto 2 — Log de accesos desconocidos</div>
+    <p>Crea un archivo <code>intrusos.csv</code> que registre cada vez que aparece una cara que NO está en la base de datos. Guarda la fecha, hora y una captura de esa cara recortada (<code>frame[arriba:abajo, izquierda:derecha]</code>). Así tendrás un registro de quién intentó acceder sin estar autorizado.</p>
+  </div>
+
+  <div class="exercise-box">
+    <div class="ex-header"><div class="ex-icon">🔥</div> Reto 3 — Múltiples fotos por persona</div>
+    <p>El sistema actual usa una sola foto por persona. Mejóralo para que acepte <strong>varias fotos</strong> (ej: <code>Ana_1.jpg</code>, <code>Ana_2.jpg</code>, <code>Ana_3.jpg</code>) y calcule la media de los encodings. Esto mejora la precisión significativamente, especialmente con variaciones de iluminación y ángulo.</p>
+  </div>
+
+  <div class="exercise-box">
+    <div class="ex-header"><div class="ex-icon">🔥</div> Reto 4 — Interfaz gráfica con tkinter</div>
+    <p>Crea una interfaz gráfica con <code>tkinter</code> que muestre la webcam en una ventana con botones para: "Registrar nueva persona" (captura foto y la guarda en la carpeta), "Ver asistencia de hoy" (lee el CSV y lo muestra en una tabla), y "Ajustar umbral" (un slider de 0.3 a 0.7).</p>
+  </div>
+
+  <div class="exercise-box">
+    <div class="ex-header"><div class="ex-icon">🔥</div> Reto 5 — Exportar estadísticas</div>
+    <p>Lee el archivo <code>asistencia.csv</code> con <code>pandas</code> y genera un informe: quién ha venido más días, quién falta más, gráfico de asistencia por día de la semana con <code>matplotlib</code>. Guarda el resultado como un PDF.</p>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ═══ MINI-EJEMPLO MEDIAPIPE ═══ -->
+<section class="section" id="mediapipe">
+  <div class="section-tag tag-extra">🟣 Extra · Futuro</div>
+  <h2>⚡ Alternativa moderna: MediaPipe</h2>
+
+  <p><strong>MediaPipe</strong> es la biblioteca de Google para visión por computador. Es <strong>mucho más rápida</strong> que face_recognition (funciona a 30+ FPS sin reducir la imagen) y detecta <strong>468 landmarks</strong> en vez de 68. Aquí tienes un ejemplo mínimo para que veas la diferencia:</p>
+
+  <div class="code-block"><div class="code-header"><div class="dots"><span></span><span></span><span></span></div><span>Terminal — Instalar</span><button class="copy-btn" onclick="copyCode(this)">Copiar</button></div>
+<pre>pip install mediapipe</pre></div>
+
+  <div class="code-block"><div class="code-header"><div class="dots"><span></span><span></span><span></span></div><span>mediapipe_ejemplo.py</span><button class="copy-btn" onclick="copyCode(this)">Copiar</button></div>
+<pre><span class="kw">import</span> cv2
+<span class="kw">import</span> mediapipe <span class="kw">as</span> mp
+
+<span class="cm"># Inicializar el detector de MediaPipe</span>
+mp_face = mp.solutions.<span class="var">face_mesh</span>
+mp_dibujo = mp.solutions.<span class="var">drawing_utils</span>
+
+detector = mp_face.<span class="fn">FaceMesh</span>(
+    max_num_faces=<span class="num">3</span>,           <span class="cm"># Detectar hasta 3 caras</span>
+    min_detection_confidence=<span class="num">0.5</span>
+)
+
+camara = cv2.<span class="fn">VideoCapture</span>(<span class="num">0</span>)
+<span class="bi">print</span>(<span class="str">"📷 MediaPipe FaceMesh · Pulsa 'q' para salir"</span>)
+
+<span class="kw">while</span> <span class="kw">True</span>:
+    ret, frame = camara.<span class="fn">read</span>()
+    <span class="kw">if not</span> ret:
+        <span class="kw">break</span>
+
+    <span class="cm"># MediaPipe necesita RGB (igual que face_recognition)</span>
+    rgb = cv2.<span class="fn">cvtColor</span>(frame, cv2.<span class="var">COLOR_BGR2RGB</span>)
+    resultados = detector.<span class="fn">process</span>(rgb)
+
+    <span class="cm"># Dibujar los 468 landmarks si se detectó cara</span>
+    <span class="kw">if</span> resultados.multi_face_landmarks:
+        <span class="kw">for</span> cara <span class="kw">in</span> resultados.multi_face_landmarks:
+            mp_dibujo.<span class="fn">draw_landmarks</span>(
+                frame, cara,
+                mp_face.<span class="var">FACEMESH_TESSELATION</span>,  <span class="cm"># Malla triangular</span>
+                landmark_drawing_spec=<span class="kw">None</span>,
+                connection_drawing_spec=mp_dibujo.<span class="fn">DrawingSpec</span>(
+                    color=(<span class="num">0</span>, <span class="num">255</span>, <span class="num">0</span>), thickness=<span class="num">1</span>
+                )
+            )
+
+    cv2.<span class="fn">imshow</span>(<span class="str">"MediaPipe FaceMesh"</span>, frame)
+    <span class="kw">if</span> cv2.<span class="fn">waitKey</span>(<span class="num">1</span>) & <span class="num">0xFF</span> == <span class="bi">ord</span>(<span class="str">"q"</span>):
+        <span class="kw">break</span>
+
+camara.<span class="fn">release</span>()
+cv2.<span class="fn">destroyAllWindows</span>()</pre></div>
+
+  <div class="info-box concept"><div class="ib-title purple">🧠 face_recognition vs MediaPipe</div>
+    <p><strong>face_recognition</strong> es ideal para aprender porque su API es simple y sus funciones son intuitivas. <strong>MediaPipe</strong> es lo que usarías en un proyecto real: 468 landmarks, detección de manos y pose corporal, funciona en móviles, y no necesita reducir la imagen. El paso natural después de este curso es migrar tu proyecto a MediaPipe.</p></div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ═══ SIMULADOR DE DETECCIÓN PASO A PASO ═══ -->
+<section class="section" id="simulador-deteccion">
+  <div class="section-tag tag-extra">🟣 Extra · Interactivo</div>
+  <h2>🔬 Simulador: ¿Cómo detecta una cara el ordenador?</h2>
+
+  <p>Pulsa <strong>"Iniciar escaneo"</strong> y observa paso a paso cómo el algoritmo recorre la imagen buscando patrones que parecen una cara humana. Así entenderás visualmente lo que hace <code>face_locations()</code> por dentro.</p>
+
+  <div class="det-sim">
+    <div class="sim-title">🧠 Simulación de detección HOG</div>
+    <div class="det-grid-wrap">
+      <div>
+        <div class="det-grid" id="detGrid"></div>
+        <div class="det-controls">
+          <button class="det-btn primary" id="detStart" onclick="startDetection()">▶ Iniciar escaneo</button>
+          <button class="det-btn" onclick="resetDetection()">↺ Reiniciar</button>
+        </div>
+      </div>
+      <div class="det-info">
+        <div class="di-step" id="ds1">📷 <strong>Paso 1:</strong> Cargar imagen (cuadrícula de píxeles)</div>
+        <div class="di-step" id="ds2">🔍 <strong>Paso 2:</strong> Escanear región por región buscando gradientes</div>
+        <div class="di-step" id="ds3">📐 <strong>Paso 3:</strong> Comparar patrones con modelo de "cara típica"</div>
+        <div class="di-step" id="ds4">👁️ <strong>Paso 4:</strong> Detectar ojos, nariz, boca (landmarks)</div>
+        <div class="di-step" id="ds5">✅ <strong>Paso 5:</strong> ¡Cara encontrada! Devolver coordenadas</div>
+        <div style="margin-top:1rem;padding:.6rem .8rem;background:rgba(0,0,0,.15);border-radius:8px;font-size:.78rem;color:var(--text-muted)" id="detLog">Pulsa "Iniciar escaneo" para comenzar...</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ═══ TABLA DE TRADUCCIONES ═══ -->
+<section class="section" id="traducciones">
+  <div class="section-tag tag-extra">🟣 Extra · Referencia</div>
+  <h2>🔤 Traducción de funciones al español</h2>
+
+  <p>Todas las funciones del curso están en inglés. Aquí tienes la traducción de cada una para que entiendas qué significa su nombre. ¡Así el código se lee casi como español!</p>
+
+  <table class="trans-table">
+    <thead><tr><th>Función</th><th>Significado en español</th><th>¿Qué hace?</th><th>Lib.</th></tr></thead>
+    <tbody>
+      <tr><td class="tt-fn">import</td><td class="tt-es">Importar</td><td>Cargar una biblioteca para usarla</td><td><span class="tt-lib tt-py">Python</span></td></tr>
+      <tr><td class="tt-fn">print()</td><td class="tt-es">Imprimir / Mostrar</td><td>Muestra texto en la pantalla</td><td><span class="tt-lib tt-py">Python</span></td></tr>
+      <tr><td class="tt-fn">len()</td><td class="tt-es">Longitud</td><td>Cuenta los elementos de una lista</td><td><span class="tt-lib tt-py">Python</span></td></tr>
+      <tr><td class="tt-fn">enumerate()</td><td class="tt-es">Enumerar</td><td>Numerar elementos: (0, elem), (1, elem)…</td><td><span class="tt-lib tt-py">Python</span></td></tr>
+      <tr><td class="tt-fn">append()</td><td class="tt-es">Añadir al final</td><td>Agrega un elemento al final de la lista</td><td><span class="tt-lib tt-py">Python</span></td></tr>
+      <tr><td class="tt-fn">imread()</td><td class="tt-es">Leer imagen</td><td>Carga una foto del disco como matriz</td><td><span class="tt-lib tt-cv">OpenCV</span></td></tr>
+      <tr><td class="tt-fn">imshow()</td><td class="tt-es">Mostrar imagen</td><td>Abre una ventana con la imagen</td><td><span class="tt-lib tt-cv">OpenCV</span></td></tr>
+      <tr><td class="tt-fn">imwrite()</td><td class="tt-es">Escribir imagen</td><td>Guarda la imagen en disco</td><td><span class="tt-lib tt-cv">OpenCV</span></td></tr>
+      <tr><td class="tt-fn">waitKey()</td><td class="tt-es">Esperar tecla</td><td>Pausa hasta que pulses una tecla</td><td><span class="tt-lib tt-cv">OpenCV</span></td></tr>
+      <tr><td class="tt-fn">destroyAllWindows()</td><td class="tt-es">Destruir todas las ventanas</td><td>Cierra todas las ventanas abiertas</td><td><span class="tt-lib tt-cv">OpenCV</span></td></tr>
+      <tr><td class="tt-fn">cvtColor()</td><td class="tt-es">Convertir color</td><td>Cambia formato de color (BGR↔RGB)</td><td><span class="tt-lib tt-cv">OpenCV</span></td></tr>
+      <tr><td class="tt-fn">rectangle()</td><td class="tt-es">Rectángulo</td><td>Dibuja un rectángulo sobre la imagen</td><td><span class="tt-lib tt-cv">OpenCV</span></td></tr>
+      <tr><td class="tt-fn">circle()</td><td class="tt-es">Círculo</td><td>Dibuja un círculo sobre la imagen</td><td><span class="tt-lib tt-cv">OpenCV</span></td></tr>
+      <tr><td class="tt-fn">putText()</td><td class="tt-es">Poner texto</td><td>Escribe texto sobre la imagen</td><td><span class="tt-lib tt-cv">OpenCV</span></td></tr>
+      <tr><td class="tt-fn">resize()</td><td class="tt-es">Redimensionar</td><td>Cambia el tamaño de la imagen</td><td><span class="tt-lib tt-cv">OpenCV</span></td></tr>
+      <tr><td class="tt-fn">VideoCapture()</td><td class="tt-es">Captura de vídeo</td><td>Abre la cámara web</td><td><span class="tt-lib tt-cv">OpenCV</span></td></tr>
+      <tr><td class="tt-fn">release()</td><td class="tt-es">Liberar</td><td>Suelta/cierra la cámara</td><td><span class="tt-lib tt-cv">OpenCV</span></td></tr>
+      <tr><td class="tt-fn">load_image_file()</td><td class="tt-es">Cargar archivo de imagen</td><td>Carga foto en formato RGB</td><td><span class="tt-lib tt-fr">face_rec</span></td></tr>
+      <tr><td class="tt-fn">face_locations()</td><td class="tt-es">Ubicaciones de caras</td><td>Encuentra dónde hay caras</td><td><span class="tt-lib tt-fr">face_rec</span></td></tr>
+      <tr><td class="tt-fn">face_landmarks()</td><td class="tt-es">Puntos de referencia faciales</td><td>Detecta los 68 puntos de la cara</td><td><span class="tt-lib tt-fr">face_rec</span></td></tr>
+      <tr><td class="tt-fn">face_encodings()</td><td class="tt-es">Codificaciones faciales</td><td>Convierte cara en 128 números</td><td><span class="tt-lib tt-fr">face_rec</span></td></tr>
+      <tr><td class="tt-fn">compare_faces()</td><td class="tt-es">Comparar caras</td><td>¿Son la misma persona? True/False</td><td><span class="tt-lib tt-fr">face_rec</span></td></tr>
+      <tr><td class="tt-fn">face_distance()</td><td class="tt-es">Distancia facial</td><td>Cuánto de diferentes son dos caras (0-1)</td><td><span class="tt-lib tt-fr">face_rec</span></td></tr>
+    </tbody>
+  </table>
+
+  <div class="info-box tip"><div class="ib-title green">💡 Truco para recordar</div>
+    <p>La mayoría de funciones en inglés siguen un patrón: <strong>verbo + sustantivo</strong>. Si sabes que <em>read</em> = leer, <em>write</em> = escribir, <em>show</em> = mostrar, <em>get</em> = obtener, <em>load</em> = cargar, <em>wait</em> = esperar… ¡ya puedes entender casi cualquier función!</p></div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ═══ FICHAS RECORTABLES / CHEAT SHEETS ═══ -->
+<section class="section" id="cheatsheets">
+  <div class="section-tag tag-extra">🟣 Extra · Imprimible</div>
+  <h2>📋 Fichas de referencia rápida</h2>
+  <p>Imprime estas fichas y tenlas al lado del ordenador mientras programas. <button class="cs-print-btn" onclick="window.print()">🖨️ Imprimir fichas</button></p>
+
+  <div class="cheat-sheet">
+    <div class="cs-header">
+      <span class="cs-title" style="color:var(--accent-green)">🟢 Ficha Nivel Básico</span>
+      <span class="cs-level" style="background:rgba(16,185,129,.1);color:var(--accent-green)">1º-2º ESO</span>
+    </div>
+    <div class="cs-grid">
+      <div class="cs-item"><div class="cs-fn">import cv2</div><div class="cs-desc">Cargar OpenCV</div></div>
+      <div class="cs-item"><div class="cs-fn">import face_recognition</div><div class="cs-desc">Cargar detector de caras</div></div>
+      <div class="cs-item"><div class="cs-fn">cv2.imread("foto.jpg")</div><div class="cs-desc">Leer imagen del disco</div></div>
+      <div class="cs-item"><div class="cs-fn">cv2.imshow("título", img)</div><div class="cs-desc">Mostrar imagen en ventana</div></div>
+      <div class="cs-item"><div class="cs-fn">cv2.waitKey(0)</div><div class="cs-desc">Esperar tecla (0=infinito)</div></div>
+      <div class="cs-item"><div class="cs-fn">cv2.destroyAllWindows()</div><div class="cs-desc">Cerrar todas las ventanas</div></div>
+      <div class="cs-item"><div class="cs-fn">imagen.shape</div><div class="cs-desc">→ (alto, ancho, canales)</div></div>
+      <div class="cs-item"><div class="cs-fn">face_recognition.load_image_file()</div><div class="cs-desc">Cargar foto en RGB</div></div>
+      <div class="cs-item"><div class="cs-fn">face_recognition.face_locations(img)</div><div class="cs-desc">→ [(arriba,der,abajo,izq)]</div></div>
+      <div class="cs-item"><div class="cs-fn">cv2.rectangle(img,pt1,pt2,color,grosor)</div><div class="cs-desc">Dibujar rectángulo</div></div>
+      <div class="cs-item"><div class="cs-fn">cv2.cvtColor(img, cv2.COLOR_RGB2BGR)</div><div class="cs-desc">Convertir RGB↔BGR</div></div>
+      <div class="cs-item"><div class="cs-fn">cv2.imwrite("out.jpg", img)</div><div class="cs-desc">Guardar imagen en disco</div></div>
+    </div>
+  </div>
+
+  <div class="cheat-sheet">
+    <div class="cs-header">
+      <span class="cs-title" style="color:var(--accent-orange)">🟡 Ficha Nivel Intermedio</span>
+      <span class="cs-level" style="background:rgba(245,158,11,.1);color:var(--accent-orange)">2º-3º ESO</span>
+    </div>
+    <div class="cs-grid">
+      <div class="cs-item"><div class="cs-fn">face_recognition.face_landmarks(img)</div><div class="cs-desc">→ 68 puntos por cara</div></div>
+      <div class="cs-item"><div class="cs-fn">face_recognition.face_encodings(img)</div><div class="cs-desc">→ lista de 128 números</div></div>
+      <div class="cs-item"><div class="cs-fn">face_recognition.compare_faces([enc],enc2)</div><div class="cs-desc">→ [True] o [False]</div></div>
+      <div class="cs-item"><div class="cs-fn">face_recognition.face_distance([enc],enc2)</div><div class="cs-desc">→ [0.0 – 1.0]</div></div>
+      <div class="cs-item"><div class="cs-fn">cv2.VideoCapture(0)</div><div class="cs-desc">Abrir webcam (0=principal)</div></div>
+      <div class="cs-item"><div class="cs-fn">cam.read()</div><div class="cs-desc">→ (ret, frame)</div></div>
+      <div class="cs-item"><div class="cs-fn">cv2.resize(img,(0,0),fx=.25,fy=.25)</div><div class="cs-desc">Reducir al 25%</div></div>
+      <div class="cs-item"><div class="cs-fn">cam.release()</div><div class="cs-desc">Liberar cámara</div></div>
+      <div class="cs-item"><div class="cs-fn">cv2.putText(img,txt,pos,font,sz,col,g)</div><div class="cs-desc">Escribir texto en imagen</div></div>
+      <div class="cs-item"><div class="cs-fn">os.listdir("carpeta")</div><div class="cs-desc">Listar archivos de carpeta</div></div>
+      <div class="cs-item"><div class="cs-fn">os.path.splitext("Ana.jpg")</div><div class="cs-desc">→ ("Ana", ".jpg")</div></div>
+      <div class="cs-item"><div class="cs-fn">Distancia &lt; 0.5 → misma persona</div><div class="cs-desc">Umbral recomendado</div></div>
+    </div>
+  </div>
+
+  <div class="cheat-sheet">
+    <div class="cs-header">
+      <span class="cs-title" style="color:var(--accent-red)">🔴 Ficha Nivel Avanzado</span>
+      <span class="cs-level" style="background:rgba(239,68,68,.1);color:var(--accent-red)">3º-4º ESO</span>
+    </div>
+    <div class="cs-grid">
+      <div class="cs-item"><div class="cs-fn">try: ... except Error as e:</div><div class="cs-desc">Capturar errores</div></div>
+      <div class="cs-item"><div class="cs-fn">np.argmin(distancias)</div><div class="cs-desc">Posición del valor mínimo</div></div>
+      <div class="cs-item"><div class="cs-fn">np.linalg.norm(a - b)</div><div class="cs-desc">Distancia entre 2 puntos</div></div>
+      <div class="cs-item"><div class="cs-fn">np.array(lista)</div><div class="cs-desc">Convertir a array NumPy</div></div>
+      <div class="cs-item"><div class="cs-fn">datetime.now()</div><div class="cs-desc">Fecha y hora actuales</div></div>
+      <div class="cs-item"><div class="cs-fn">.strftime("%Y-%m-%d %H:%M")</div><div class="cs-desc">Formatear fecha como texto</div></div>
+      <div class="cs-item"><div class="cs-fn">open("file.csv", "a") as f:</div><div class="cs-desc">Abrir para añadir (append)</div></div>
+      <div class="cs-item"><div class="cs-fn">[expr for x in lista]</div><div class="cs-desc">List comprehension</div></div>
+      <div class="cs-item"><div class="cs-fn">zip(lista_a, lista_b)</div><div class="cs-desc">Emparejar dos listas</div></div>
+      <div class="cs-item"><div class="cs-fn">set()</div><div class="cs-desc">Conjunto sin duplicados</div></div>
+      <div class="cs-item"><div class="cs-fn">nombre not in conjunto</div><div class="cs-desc">¿NO está en el conjunto?</div></div>
+      <div class="cs-item"><div class="cs-fn">cont % 5 == 0</div><div class="cs-desc">Cada 5 repeticiones</div></div>
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <p>Curso de Reconocimiento Facial con Python · v5.0 · ESO y Bachillerato</p>
+  <p style="margin-top:.3rem;opacity:.6">HOG explicado · Limitaciones · MediaPipe · Retos avanzados · Entornos virtuales · ~7h de contenido</p>
+</footer>
+</div>
+
+<script>
+// ═══ Theme Toggle ═══
+const themeToggle=document.getElementById('themeToggle');
+const savedTheme=localStorage.getItem('course-theme')||'dark';
+if(savedTheme==='light'){document.documentElement.setAttribute('data-theme','light');themeToggle.textContent='☀️'}
+themeToggle.addEventListener('click',()=>{
+  const current=document.documentElement.getAttribute('data-theme');
+  if(current==='light'){document.documentElement.removeAttribute('data-theme');themeToggle.textContent='🌙';localStorage.setItem('course-theme','dark')}
+  else{document.documentElement.setAttribute('data-theme','light');themeToggle.textContent='☀️';localStorage.setItem('course-theme','light')}
+});
+
+// ═══ Back to Top ═══
+const backTop=document.getElementById('backTop');
+window.addEventListener('scroll',()=>{backTop.classList.toggle('visible',window.scrollY>600)},{passive:true});
+
+// ═══ Quiz Scoreboard ═══
+let quizCorrect=0, quizWrong=0, quizTotal=0;
+const scoreBar=document.getElementById('quizScoreBar');
+const qsCorrectEl=document.getElementById('qsCorrect');
+const qsWrongEl=document.getElementById('qsWrong');
+const qsTotalEl=document.getElementById('qsTotal');
+const qsPctEl=document.getElementById('qsPct');
+
+function updateScoreboard(){
+  qsCorrectEl.textContent=quizCorrect;
+  qsWrongEl.textContent=quizWrong;
+  qsTotalEl.textContent=quizTotal;
+  if(quizTotal>0){
+    const pct=Math.round((quizCorrect/quizTotal)*100);
+    qsPctEl.textContent=pct+'%';
+    scoreBar.classList.add('visible');
+  }
+}
+
+// OS Tabs
+function switchOS(os){document.querySelectorAll('.os-tab').forEach(t=>t.classList.remove('active'));document.querySelectorAll('.os-content').forEach(c=>c.classList.remove('active'));document.getElementById('os-'+os).classList.add('active');event.target.classList.add('active')}
+
+// Copy
+function copyCode(btn){const pre=btn.closest('.code-block').querySelector('pre');navigator.clipboard.writeText(pre.textContent).then(()=>{btn.textContent='✓ Copiado';setTimeout(()=>btn.textContent='Copiar',2000)})}
+
+// Quiz (enhanced with scoreboard)
+function checkQuiz(qId,btn,correct){
+  const q=document.getElementById(qId);
+  const fb=document.getElementById(qId+'-fb');
+  // Prevent double-answering
+  if(q.dataset.answered) return;
+  q.dataset.answered='true';
+  quizTotal++;
+  q.querySelectorAll('.quiz-option').forEach(o=>{o.classList.add('disabled');o.classList.remove('correct','wrong')});
+  if(correct){
+    btn.classList.add('correct');
+    fb.textContent='✅ ¡Correcto!';
+    fb.className='quiz-feedback show ok';
+    quizCorrect++;
+  }else{
+    btn.classList.add('wrong');
+    q.querySelectorAll('.quiz-option').forEach(o=>{if(o.getAttribute('onclick')?.includes('true'))o.classList.add('correct')});
+    fb.textContent='❌ Incorrecto. La correcta está en verde.';
+    fb.className='quiz-feedback show fail';
+    quizWrong++;
+  }
+  updateScoreboard();
+}
+
+// Color Simulator
+function updateColor(){
+  const r=document.getElementById('sliderR').value;
+  const g=document.getElementById('sliderG').value;
+  const b=document.getElementById('sliderB').value;
+  document.getElementById('rVal').textContent=r;
+  document.getElementById('gVal').textContent=g;
+  document.getElementById('bVal').textContent=b;
+  document.getElementById('colorRGB').style.background=`rgb(${r},${g},${b})`;
+  document.getElementById('colorBGR').style.background=`rgb(${b},${g},${r})`;
+  document.getElementById('labelRGB').textContent=`RGB(${r}, ${g}, ${b})`;
+  document.getElementById('labelBGR').textContent=`BGR(${b}, ${g}, ${r})`;
+}
+
+function swapChannels(){
+  const r=document.getElementById('sliderR');
+  const b=document.getElementById('sliderB');
+  const tmp=r.value;r.value=b.value;b.value=tmp;updateColor();
+}
+
+// Distance Visualizer
+function updateDist(){
+  const val=document.getElementById('distSlider').value;
+  const d=(val/100).toFixed(2);
+  const marker=document.getElementById('distMarker');
+  const result=document.getElementById('distResult');
+  marker.style.left=val+'%';
+  marker.setAttribute('data-val',d);
+  if(val<40){result.textContent=`✅ Distancia ${d} — ¡Muy probablemente la misma persona!`;result.className='dv-result same'}
+  else if(val<60){result.textContent=`🤔 Distancia ${d} — Zona dudosa, podría ser o no`;result.className='dv-result maybe'}
+  else{result.textContent=`❌ Distancia ${d} — Personas diferentes`;result.className='dv-result diff'}
+}
+
+// Mobile menu
+const sidebar=document.getElementById('sidebar');const toggle=document.getElementById('menuToggle');const overlay=document.getElementById('overlay');
+toggle.addEventListener('click',()=>{sidebar.classList.toggle('open');overlay.classList.toggle('show')});
+overlay.addEventListener('click',()=>{sidebar.classList.remove('open');overlay.classList.remove('show')});
+
+// Progress
+const allSections=document.querySelectorAll('.section');const navLinks=document.querySelectorAll('.nav-link');
+const progressFill=document.getElementById('progressFill');const progressPercent=document.getElementById('progressPercent');
+const pmNodes=document.querySelectorAll('.pm-node');const pmLines=document.querySelectorAll('.pm-line');const visited=new Set();
+
+const observer=new IntersectionObserver((entries)=>{entries.forEach(entry=>{if(entry.isIntersecting){const id=entry.target.id;visited.add(id);
+navLinks.forEach(link=>{link.classList.remove('active');if(link.getAttribute('href')==='#'+id)link.classList.add('active')});
+const pct=Math.round((visited.size/allSections.length)*100);progressFill.style.width=pct+'%';progressPercent.textContent=pct+'%';
+pmNodes.forEach((node,i)=>{const sec=node.dataset.section;if(visited.has(sec)){node.classList.add('done');node.classList.remove('current');if(pmLines[i])pmLines[i].classList.add('done')}
+if(sec===id)node.classList.add('current');else if(!visited.has(sec))node.classList.remove('current')})}})},{rootMargin:'-20% 0px -60% 0px'});
+allSections.forEach(s=>observer.observe(s));
+navLinks.forEach(link=>{link.addEventListener('click',()=>{if(window.innerWidth<=900){sidebar.classList.remove('open');overlay.classList.remove('show')}})});
+
+// ═══ Detection Simulator ═══
+const faceMap=[
+  0,0,0,0,0,0,0,0,
+  0,0,0,1,1,0,0,0,
+  0,0,1,1,1,1,0,0,
+  0,0,2,1,1,2,0,0,
+  0,0,1,1,1,1,0,0,
+  0,0,1,3,3,1,0,0,
+  0,0,1,4,4,1,0,0,
+  0,0,0,1,1,0,0,0
+];// 0=bg,1=skin,2=eye,3=nose(skin),4=mouth
+
+(function buildGrid(){
+  const grid=document.getElementById('detGrid');
+  if(!grid)return;
+  for(let i=0;i<64;i++){
+    const c=document.createElement('div');
+    c.className='det-cell';
+    c.dataset.idx=i;
+    c.dataset.type=faceMap[i];
+    grid.appendChild(c);
+  }
+})();
+
+let detRunning=false;
+async function startDetection(){
+  if(detRunning)return;
+  detRunning=true;
+  document.getElementById('detStart').textContent='⏳ Escaneando...';
+  const cells=document.querySelectorAll('.det-cell');
+  const log=document.getElementById('detLog');
+  const steps=['ds1','ds2','ds3','ds4','ds5'];
+
+  // Reset
+  cells.forEach(c=>{c.className='det-cell'});
+  steps.forEach(s=>document.getElementById(s).className='di-step');
+
+  // Step 1: Load image
+  document.getElementById('ds1').classList.add('active');
+  log.textContent='Cargando imagen... convirtiendo a píxeles...';
+  for(let i=0;i<64;i++){
+    cells[i].style.opacity='1';
+    await new Promise(r=>setTimeout(r,15));
+  }
+  await new Promise(r=>setTimeout(r,400));
+  document.getElementById('ds1').classList.remove('active');
+  document.getElementById('ds1').classList.add('done');
+
+  // Step 2: Scan
+  document.getElementById('ds2').classList.add('active');
+  log.textContent='Escaneando región por región...';
+  for(let i=0;i<64;i++){
+    cells[i].classList.add('scanning');
+    await new Promise(r=>setTimeout(r,35));
+    cells[i].classList.remove('scanning');
+  }
+  await new Promise(r=>setTimeout(r,300));
+  document.getElementById('ds2').classList.remove('active');
+  document.getElementById('ds2').classList.add('done');
+
+  // Step 3: Detect skin
+  document.getElementById('ds3').classList.add('active');
+  log.textContent='¡Patrón facial encontrado! Analizando región...';
+  for(let i=0;i<64;i++){
+    if(faceMap[i]>=1){cells[i].classList.add('skin');cells[i].textContent='✓';await new Promise(r=>setTimeout(r,40))}
+  }
+  await new Promise(r=>setTimeout(r,400));
+  document.getElementById('ds3').classList.remove('active');
+  document.getElementById('ds3').classList.add('done');
+
+  // Step 4: Landmarks
+  document.getElementById('ds4').classList.add('active');
+  log.textContent='Detectando ojos, nariz y boca...';
+  for(let i=0;i<64;i++){
+    if(faceMap[i]===2){cells[i].classList.remove('skin');cells[i].classList.add('eye');cells[i].textContent='👁';await new Promise(r=>setTimeout(r,200))}
+    if(faceMap[i]===4){cells[i].classList.remove('skin');cells[i].classList.add('mouth');cells[i].textContent='👄';await new Promise(r=>setTimeout(r,200))}
+  }
+  await new Promise(r=>setTimeout(r,400));
+  document.getElementById('ds4').classList.remove('active');
+  document.getElementById('ds4').classList.add('done');
+
+  // Step 5: Detected!
+  document.getElementById('ds5').classList.add('active');
+  log.textContent='✅ ¡Cara detectada! Coordenadas: (1,1) → (6,7)';
+  for(let i=0;i<64;i++){if(faceMap[i]>=1)cells[i].classList.add('detected')}
+  document.getElementById('ds5').classList.add('done');
+  document.getElementById('detStart').textContent='✅ ¡Completado!';
+  detRunning=false;
+}
+
+function resetDetection(){
+  detRunning=false;
+  document.querySelectorAll('.det-cell').forEach(c=>{c.className='det-cell';c.textContent=''});
+  ['ds1','ds2','ds3','ds4','ds5'].forEach(s=>document.getElementById(s).className='di-step');
+  document.getElementById('detLog').textContent='Pulsa "Iniciar escaneo" para comenzar...';
+  document.getElementById('detStart').textContent='▶ Iniciar escaneo';
+}
+
+// ═══ Presentation Mode ═══
+let presMode=false;
+let presCurrent=0;
+const presToggleBtn=document.getElementById('presToggle');
+const presNav=document.getElementById('presNav');
+const presCounter=document.getElementById('presCounter');
+
+function getAllSlides(){return[document.querySelector('.hero'),...document.querySelectorAll('.section')]}
+
+function togglePres(){
+  presMode=!presMode;
+  document.body.classList.toggle('pres-mode',presMode);
+  presToggleBtn.textContent=presMode?'✕':'🖥️';
+  if(presMode){
+    presCurrent=0;
+    presGoTo(0);
+  }
+}
+
+function presGoTo(idx){
+  const slides=getAllSlides();
+  presCurrent=Math.max(0,Math.min(idx,slides.length-1));
+  slides[presCurrent].scrollIntoView({behavior:'smooth'});
+  presCounter.textContent=`${presCurrent+1} / ${slides.length}`;
+}
+
+function presGo(dir){presGoTo(presCurrent+dir)}
+
+presToggleBtn.addEventListener('click',togglePres);
+
+document.addEventListener('keydown',(e)=>{
+  if(!presMode)return;
+  if(e.key==='ArrowRight'||e.key===' ')presGo(1);
+  if(e.key==='ArrowLeft')presGo(-1);
+  if(e.key==='Escape')togglePres();
+});
+</script>
+</body>
+</html>
