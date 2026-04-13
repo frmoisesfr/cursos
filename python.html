@@ -925,7 +925,7 @@ resultados = DeepFace.<span class="fn">find</span>(
 <span class="kw">if</span> <span class="bi">len</span>(resultados) > <span class="num">0</span> <span class="kw">and</span> <span class="bi">len</span>(resultados[<span class="num">0</span>]) > <span class="num">0</span>:
     mejor_coincidencia = resultados[<span class="num">0</span>].<span class="fn">iloc</span>[<span class="num">0</span>]
     ruta_foto = mejor_coincidencia[<span class="str">"identity"</span>]
-    distancia = mejor_coincidencia.<span class="fn">get</span>(<span class="str">"distance"</span>, <span class="num">0</span>)
+    distancia = mejor_coincidencia[<span class="str">"distance"</span>]
 
     <span class="cm"># Extraer el nombre del archivo (sin extensión ni carpeta)</span>
     nombre = os.path.<span class="fn">splitext</span>(os.path.<span class="fn">basename</span>(ruta_foto))[<span class="num">0</span>]
@@ -947,7 +947,7 @@ resultados = DeepFace.<span class="fn">find</span>(
     <p><strong>Pasos:</strong></p>
     <p>1. Consigue fotos de 3-5 compañeros/as de clase (o usa fotos de famosos).</p>
     <p>2. Nombra cada foto con el nombre de la persona: <code>Ana.jpg</code>, <code>Carlos.jpg</code>, etc.</p>
-    <p>3. Ejecúta el Paso 1 para crear la base de datos.</p>
+    <p>3. Ejecuta el Paso 1 para crear la base de datos.</p>
     <p>4. Ahora sube una foto <strong>diferente</strong> de una de esas personas (una foto distinta a la de la base de datos) y ejecuta el Paso 2.</p>
     <p>5. <strong>Pregunta:</strong> ¿La identifica correctamente? ¿Qué distancia da? ¿Qué pasa si subes una foto de alguien que NO está en la base de datos?</p>
   </div>
@@ -988,50 +988,268 @@ resultados = DeepFace.<span class="fn">find</span>(
 <!-- SECCIÓN 9: INSTALAR EN LOCAL -->
 <section class="section" id="instalar-local">
   <div class="section-tag tag-avanzado">🔴 Nivel Avanzado · Ordenador local</div>
-  <h2>9. Instalar DeepFace en tu ordenador</h2>
+  <h2>9. Preparar tu ordenador para programar</h2>
 
   <div class="info-box important">
-    <div class="ib-title cyan">ℹ️ ¿Por qué cambiar al ordenador local?</div>
-    <p>Hasta ahora hemos trabajado desde Google Colab. Ha funcionado perfecto para analizar fotos. Pero las secciones 10 y 11 necesitan la <strong>webcam de tu ordenador</strong> en tiempo real (vídeo continuo), y eso no es posible desde Colab. Así que ahora vamos a instalar Python y DeepFace en tu equipo.</p>
+    <div class="ib-title cyan">ℹ️ ¿Por que cambiar al ordenador local?</div>
+    <p>Hasta ahora todo ha sido desde el navegador con Google Colab. Pero las secciones 10 y 11 necesitan la <strong>webcam de tu ordenador en tiempo real</strong> (video continuo), y eso no se puede hacer desde Colab. Vamos a preparar tu equipo en 4 pasos.</p>
   </div>
 
+  <!-- Diagrama visual del proceso -->
+  <div class="flow-diagram">
+    <div class="flow-step"><div class="fs-icon">🐍</div><div class="fs-label">Instalar Python</div><div class="fs-detail">Paso 1</div></div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step"><div class="fs-icon">💜</div><div class="fs-label">Instalar VS Code</div><div class="fs-detail">Paso 2</div></div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step"><div class="fs-icon">📂</div><div class="fs-label">Crear proyecto</div><div class="fs-detail">Paso 3</div></div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step"><div class="fs-icon">✅</div><div class="fs-label">Verificar</div><div class="fs-detail">Paso 4</div></div>
+  </div>
+
+  <!-- ══════════════════════════════ -->
+  <!--         PASO 1: PYTHON        -->
+  <!-- ══════════════════════════════ -->
+  <h3>Paso 1: Instalar Python 🐍</h3>
+
+  <p>Python es el lenguaje de programacion que usamos en todo el curso. Tu ordenador no lo tiene instalado por defecto, asi que hay que descargarlo.</p>
+
   <div class="os-tabs">
-    <button class="os-tab active" onclick="switchOS('windows')">🪟 Windows</button>
-    <button class="os-tab" onclick="switchOS('mac')">🍎 macOS</button>
-    <button class="os-tab" onclick="switchOS('linux')">🐧 Linux</button>
+    <button class="os-tab active" onclick="switchOS('windows',event)">🪟 Windows</button>
+    <button class="os-tab" onclick="switchOS('mac',event)">🍎 macOS</button>
+    <button class="os-tab" onclick="switchOS('linux',event)">🐧 Linux</button>
   </div>
 
   <div class="os-content active" id="os-windows">
-    <h4>Paso 1: Instalar Python</h4>
-    <p>Si no lo tienes, descarga Python 3.10, 3.11 o 3.12 de <strong>python.org</strong> (instalador de 64 bits). Al instalar, marca <strong>"Add Python to PATH"</strong>.</p>
-    <div class="info-box important">
-      <div class="ib-title cyan">ℹ️ En Windows usa <code>python</code>, no <code>python3</code></div>
-      <p>En macOS/Linux el comando es <code>python3</code>. En Windows es <code>python</code> (sin el 3). Si escribes <code>python3</code> te dará error o se abrirá la Microsoft Store.</p>
+    <h4>1.1 — Descargar e instalar</h4>
+    <ol>
+      <li>Entra en <strong>python.org/downloads</strong></li>
+      <li>Haz clic en el boton amarillo <strong>"Download Python 3.12.x"</strong> (o la version mas reciente).</li>
+      <li>Ejecuta el instalador descargado.</li>
+    </ol>
+
+    <div class="info-box warning">
+      <div class="ib-title orange">⚠️ ANTES de darle a "Install Now"</div>
+      <p>En la primera pantalla del instalador veras una casilla abajo que dice <strong>"Add Python to PATH"</strong>. Tienes que <strong>marcarla</strong>. Si no la marcas, el terminal no encontrara Python y nada de lo que hagamos despues funcionara. Es el error mas comun.</p>
     </div>
-    <h4>Paso 2: Instalar DeepFace</h4>
-    <p>Abre CMD o PowerShell y ejecuta:</p>
-    <div class="code-block"><div class="code-header"><div class="dots"><span></span><span></span><span></span></div><span>CMD o PowerShell</span><button class="copy-btn" onclick="copyCode(this)">Copiar</button></div>
+
+    <h4>1.2 — Comprobar que funciona</h4>
+    <p>Abre el menu Inicio, escribe <strong>"CMD"</strong> y abre el Simbolo del sistema. Escribe:</p>
+    <div class="code-block"><div class="code-header"><div class="dots"><span></span><span></span><span></span></div><span>CMD — Comprobar Python</span><button class="copy-btn" onclick="copyCode(this)">Copiar</button></div>
+<pre>python --version</pre></div>
+    <p>Si ves algo como <code>Python 3.12.4</code> esta bien. Si dice <strong>"no se reconoce"</strong>, repite la instalacion marcando "Add to PATH".</p>
+
+    <h4>1.3 — Instalar las bibliotecas del curso</h4>
+    <p>Sin cerrar CMD, escribe este comando. Instalara DeepFace y todo lo necesario (puede tardar 2-3 minutos):</p>
+    <div class="code-block"><div class="code-header"><div class="dots"><span></span><span></span><span></span></div><span>CMD — Instalar bibliotecas</span><button class="copy-btn" onclick="copyCode(this)">Copiar</button></div>
 <pre>pip install deepface opencv-python tf-keras</pre></div>
-    <h4>Paso 3: Verificar</h4>
-    <div class="code-block"><div class="code-header"><div class="dots"><span></span><span></span><span></span></div><span>CMD o PowerShell</span><button class="copy-btn" onclick="copyCode(this)">Copiar</button></div>
-<pre>python
->>> from deepface import DeepFace
->>> print("✅ ¡Instalado!")</pre></div>
+
+    <div class="info-box important">
+      <div class="ib-title cyan">ℹ️ En Windows: <code>python</code> y <code>pip</code> (sin el 3)</div>
+      <p>En macOS/Linux los comandos son <code>python3</code> y <code>pip3</code>. En Windows son <code>python</code> y <code>pip</code> (sin el numero 3). Si escribes <code>python3</code> en Windows te dara error o se abrira la Microsoft Store.</p>
+    </div>
   </div>
+
   <div class="os-content" id="os-mac">
-    <div class="code-block"><div class="code-header"><div class="dots"><span></span><span></span><span></span></div><span>Terminal</span><button class="copy-btn" onclick="copyCode(this)">Copiar</button></div>
-<pre>brew install python3
-pip3 install deepface opencv-python tf-keras</pre></div>
-  </div>
-  <div class="os-content" id="os-linux">
-    <div class="code-block"><div class="code-header"><div class="dots"><span></span><span></span><span></span></div><span>Terminal</span><button class="copy-btn" onclick="copyCode(this)">Copiar</button></div>
-<pre>sudo apt update && sudo apt install python3 python3-pip
+    <h4>1.1 — Instalar con Homebrew</h4>
+    <p>macOS trae una version antigua de Python que no nos sirve. Vamos a instalar una moderna con Homebrew (un gestor de paquetes para Mac):</p>
+    <div class="code-block"><div class="code-header"><div class="dots"><span></span><span></span><span></span></div><span>Terminal — Instalar Homebrew (si no lo tienes)</span><button class="copy-btn" onclick="copyCode(this)">Copiar</button></div>
+<pre>/bin/bash -c <span class="str">"$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"</span></pre></div>
+    <div class="code-block"><div class="code-header"><div class="dots"><span></span><span></span><span></span></div><span>Terminal — Instalar Python</span><button class="copy-btn" onclick="copyCode(this)">Copiar</button></div>
+<pre>brew install python3</pre></div>
+
+    <h4>1.2 — Comprobar e instalar bibliotecas</h4>
+    <div class="code-block"><div class="code-header"><div class="dots"><span></span><span></span><span></span></div><span>Terminal — Comprobar e instalar</span><button class="copy-btn" onclick="copyCode(this)">Copiar</button></div>
+<pre>python3 --version
 pip3 install deepface opencv-python tf-keras</pre></div>
   </div>
 
+  <div class="os-content" id="os-linux">
+    <h4>1.1 — Instalar Python y bibliotecas</h4>
+    <div class="code-block"><div class="code-header"><div class="dots"><span></span><span></span><span></span></div><span>Terminal</span><button class="copy-btn" onclick="copyCode(this)">Copiar</button></div>
+<pre>sudo apt update && sudo apt install python3 python3-pip
+python3 --version
+pip3 install deepface opencv-python tf-keras</pre></div>
+  </div>
+
+  <!-- ══════════════════════════════ -->
+  <!--       PASO 2: VS CODE         -->
+  <!-- ══════════════════════════════ -->
+  <h3>Paso 2: Instalar Visual Studio Code 💜</h3>
+
+  <p><strong>Visual Studio Code</strong> (VS Code) es el editor donde escribiremos y ejecutaremos nuestros programas Python. Es gratuito, muy popular y lo usan programadores profesionales de todo el mundo.</p>
+
+  <h4>2.1 — Descargar e instalar VS Code</h4>
+  <ol>
+    <li>Entra en <strong>code.visualstudio.com</strong></li>
+    <li>Haz clic en el boton azul de descarga. Detecta tu sistema automaticamente.</li>
+    <li>Ejecuta el instalador con las opciones por defecto.</li>
+    <li>Abre VS Code cuando termine la instalacion.</li>
+  </ol>
+
+  <h4>2.2 — Instalar la extension de Python</h4>
+  <p>VS Code por si solo no sabe ejecutar Python. Necesitamos instalarle una extension:</p>
+  <ol>
+    <li>En la barra lateral izquierda de VS Code, haz clic en el icono de <strong>Extensiones</strong> (parece 4 cuadraditos). Tambien puedes pulsar <code>Ctrl+Shift+X</code>.</li>
+    <li>En el buscador, escribe <strong>"Python"</strong>.</li>
+    <li>Elige la primera opcion (la de <strong>Microsoft</strong>, tiene millones de descargas).</li>
+    <li>Haz clic en el boton azul <strong>"Install"</strong>.</li>
+  </ol>
+
+  <div class="info-box concept">
+    <div class="ib-title purple">🧠 ¿Que te da esta extension?</div>
+    <p><strong>Sin la extension</strong>, VS Code es solo un editor de texto (como el Bloc de notas, pero bonito). <strong>Con la extension</strong>, VS Code se convierte en un entorno completo de Python:</p>
+    <ul>
+      <li><strong>Colores en el codigo</strong> — Las palabras clave, textos y funciones se colorean para que el codigo sea facil de leer.</li>
+      <li><strong>Autocompletado</strong> — Mientras escribes, te sugiere funciones y variables.</li>
+      <li><strong>Deteccion de errores</strong> — Si escribes algo mal, lo subraya en rojo antes de ejecutar.</li>
+      <li><strong>Boton ▶ para ejecutar</strong> — Aparece arriba a la derecha para ejecutar tu programa con un clic.</li>
+    </ul>
+  </div>
+
+  <!-- ══════════════════════════════ -->
+  <!--    PASO 3: CREAR PROYECTO     -->
+  <!-- ══════════════════════════════ -->
+  <h3>Paso 3: Crear tu carpeta de proyecto 📂</h3>
+
+  <p>Los programadores no trabajan con archivos sueltos, trabajan con <strong>carpetas de proyecto</strong>. Vamos a crear la nuestra:</p>
+
+  <h4>3.1 — Crear la carpeta</h4>
+  <ol>
+    <li>Ve al <strong>Escritorio</strong> de tu ordenador (o a Documentos, donde prefieras).</li>
+    <li>Clic derecho → <strong>Nueva carpeta</strong>.</li>
+    <li>Ponle de nombre: <code>reconocimiento_facial</code></li>
+  </ol>
+
+  <h4>3.2 — Abrir la carpeta en VS Code</h4>
+  <ol>
+    <li>Abre VS Code.</li>
+    <li>Ve a <strong>Archivo → Abrir carpeta</strong> (o en ingles: <strong>File → Open Folder</strong>).</li>
+    <li>Selecciona la carpeta <code>reconocimiento_facial</code> que acabas de crear.</li>
+    <li>Si VS Code pregunta <em>"¿Confias en los autores?"</em>, haz clic en <strong>"Si, confio"</strong>.</li>
+  </ol>
+
   <div class="info-box tip">
-    <div class="ib-title green">💡 Diferencias clave con Colab</div>
-    <p>En tu ordenador local: no necesitas <code>!</code> antes de <code>pip</code>, no usas <code>files.upload()</code> (las fotos ya están en tu disco), y <strong>sí puedes usar <code>cv2.imshow()</code></strong> para abrir ventanas con imágenes y vídeo. El código Python es el mismo; solo cambia cómo abres archivos y muestras imágenes.</p>
+    <div class="ib-title green">💡 ¿Por que abrir una carpeta y no un archivo suelto?</div>
+    <p>Cuando abres una carpeta, el <strong>terminal de VS Code se abre directamente ahi</strong>. Eso significa que los comandos <code>python mi_archivo.py</code> funcionan sin problemas. Si abres un archivo suelto, el terminal puede abrirse en otra ubicacion y dara errores de "archivo no encontrado".</p>
+  </div>
+
+  <h4>3.3 — Asi se vera tu proyecto</h4>
+  <p>Cuando terminemos las secciones 10 y 11, tu carpeta tendra esta estructura:</p>
+  <div class="folder-tree">
+    <span class="folder">📁 reconocimiento_facial/</span><br>
+    ├── <span class="file">webcam_facil.py</span> <span class="comment">← Seccion 10, opcion A</span><br>
+    ├── <span class="file">webcam_personalizada.py</span> <span class="comment">← Seccion 10, opcion B</span><br>
+    ├── <span class="file">control_asistencia.py</span> <span class="comment">← Seccion 11, proyecto final</span><br>
+    └── <span class="folder">📁 base_datos/</span> <span class="comment">← Fotos de personas conocidas</span><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;├── <span class="file">Ana.jpg</span><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;├── <span class="file">Carlos.jpg</span><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;└── <span class="file">Lucia.jpg</span>
+  </div>
+
+  <!-- ══════════════════════════════ -->
+  <!--     PASO 4: VERIFICAR         -->
+  <!-- ══════════════════════════════ -->
+  <h3>Paso 4: Verificar que todo funciona ✅</h3>
+
+  <p>Vamos a crear un pequeno programa de prueba para asegurarnos de que Python, VS Code y DeepFace funcionan correctamente juntos.</p>
+
+  <h4>4.1 — Crear el archivo de prueba</h4>
+  <ol>
+    <li>En VS Code, mira el panel izquierdo (Explorador de archivos). Veras el nombre de tu carpeta.</li>
+    <li>Pasa el raton por encima del nombre de la carpeta. Apareceran unos iconos pequenos.</li>
+    <li>Haz clic en el icono de <strong>"Nuevo archivo"</strong> (parece una hoja con un <code>+</code>).</li>
+    <li>Escribe el nombre: <code>test_deepface.py</code></li>
+  </ol>
+
+  <div class="info-box important">
+    <div class="ib-title cyan">ℹ️ El nombre DEBE terminar en .py</div>
+    <p>La extension <code>.py</code> le dice a VS Code que es un archivo de Python. Si lo llamas <code>test_deepface</code> sin el <code>.py</code>, VS Code no sabra que es Python y no te dara colores, autocompletado ni el boton ▶.</p>
+  </div>
+
+  <h4>4.2 — Escribir el codigo de prueba</h4>
+  <p>Copia este codigo en el archivo <code>test_deepface.py</code>:</p>
+  <div class="code-block"><div class="code-header"><div class="dots"><span></span><span></span><span></span></div><span>test_deepface.py</span><button class="copy-btn" onclick="copyCode(this)">Copiar</button></div>
+<pre><span class="kw">from</span> deepface <span class="kw">import</span> DeepFace
+<span class="kw">import</span> cv2
+
+<span class="bi">print</span>(<span class="str">"==========================="</span>)
+<span class="bi">print</span>(<span class="str">"  VERIFICACION DEL SISTEMA"</span>)
+<span class="bi">print</span>(<span class="str">"==========================="</span>)
+<span class="bi">print</span>(<span class="str">f"Python:   OK"</span>)
+<span class="bi">print</span>(<span class="str">f"DeepFace: {DeepFace.__version__}"</span>)
+<span class="bi">print</span>(<span class="str">f"OpenCV:   {cv2.__version__}"</span>)
+<span class="bi">print</span>(<span class="str">"==========================="</span>)
+<span class="bi">print</span>(<span class="str">"Todo instalado correctamente!"</span>)</pre></div>
+
+  <h4>4.3 — Ejecutar el programa</h4>
+  <p>Tienes dos formas de ejecutarlo:</p>
+
+  <div class="info-box tip">
+    <div class="ib-title green">▶ Opcion A: Boton Play (la mas facil)</div>
+    <p>Mira en la <strong>esquina superior derecha</strong> del editor. Veras un boton <strong>▶</strong> (triangulo). Haz clic y el programa se ejecutara. El resultado aparece en el panel de abajo (terminal).</p>
+  </div>
+
+  <div class="info-box tip">
+    <div class="ib-title green">⌨️ Opcion B: Desde el terminal</div>
+    <p>Si el boton ▶ no aparece, ve a <strong>Terminal → Nuevo terminal</strong> (en el menu de arriba) y escribe:</p>
+  </div>
+  <div class="code-block"><div class="code-header"><div class="dots"><span></span><span></span><span></span></div><span>Terminal de VS Code</span><button class="copy-btn" onclick="copyCode(this)">Copiar</button></div>
+<pre>python test_deepface.py</pre></div>
+
+  <h4>4.4 — ¿Que deberias ver?</h4>
+  <p>Si todo esta bien instalado, veras algo asi en el terminal:</p>
+  <div class="code-block"><div class="code-header"><div class="dots"><span></span><span></span><span></span></div><span>Resultado esperado</span></div>
+<pre>===========================
+  VERIFICACION DEL SISTEMA
+===========================
+Python:   OK
+DeepFace: 0.0.93
+OpenCV:   4.10.0
+===========================
+Todo instalado correctamente!</pre></div>
+
+  <div class="info-box warning">
+    <div class="ib-title orange">⚠️ ¿Te sale un error?</div>
+    <p>Si ves <code>ModuleNotFoundError: No module named 'deepface'</code>, significa que las bibliotecas no se instalaron. Vuelve al <strong>Paso 1.3</strong> y ejecuta otra vez <code>pip install deepface opencv-python tf-keras</code>. Si sigue fallando, consulta la tabla de <strong>Errores comunes</strong> al final del curso.</p>
+  </div>
+
+  <!-- ══════════════════════════════ -->
+  <!--    RESUMEN Y COMPARATIVA      -->
+  <!-- ══════════════════════════════ -->
+  <h3>Resumen: Colab vs. tu ordenador</h3>
+
+  <p>A partir de ahora vas a escribir codigo en VS Code en vez de en Colab. Estas son las diferencias mas importantes:</p>
+
+  <table class="error-table">
+    <thead><tr><th></th><th>Google Colab</th><th>Tu ordenador (VS Code)</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Instalar paquetes</strong></td><td><code>!pip install deepface</code></td><td><code>pip install deepface</code> (sin <code>!</code>)</td></tr>
+      <tr><td><strong>Subir fotos</strong></td><td><code>files.upload()</code></td><td>Ya estan en tu disco, solo pon la ruta</td></tr>
+      <tr><td><strong>Mostrar imagenes</strong></td><td><code>cv2_imshow()</code></td><td><code>cv2.imshow()</code> (abre una ventana)</td></tr>
+      <tr><td><strong>Usar webcam</strong></td><td>No se puede (video continuo)</td><td>Si, con <code>cv2.VideoCapture(0)</code></td></tr>
+      <tr><td><strong>Ejecutar codigo</strong></td><td>Boton ▶ en cada celda</td><td>Boton ▶ arriba a la derecha o terminal</td></tr>
+      <tr><td><strong>Guardar archivos</strong></td><td>Se borran al cerrar sesion</td><td>Se quedan en tu ordenador para siempre</td></tr>
+    </tbody>
+  </table>
+
+  <div class="info-box concept">
+    <div class="ib-title purple">🧠 La regla de oro</div>
+    <p>El <strong>codigo Python es el mismo</strong> en Colab y en tu ordenador. Lo unico que cambia es <em>como</em> cargas las imagenes y <em>como</em> las muestras. Todo lo que has aprendido hasta ahora sigue siendo valido.</p>
+  </div>
+
+  <div class="exercise-box">
+    <div class="ex-header"><div class="ex-icon">✏️</div> Actividad 9.1 — Checklist de instalacion</div>
+    <p><strong>Objetivo:</strong> Asegurarte de que todo esta listo antes de empezar con la webcam.</p>
+    <p>Marca cada punto cuando lo tengas:</p>
+    <ul>
+      <li>☐ <code>python --version</code> muestra Python 3.10 o superior</li>
+      <li>☐ VS Code esta instalado y se abre correctamente</li>
+      <li>☐ La extension de Python esta instalada (icono de Extensiones → buscar "Python" → dice "Installed")</li>
+      <li>☐ Has abierto la carpeta <code>reconocimiento_facial</code> en VS Code</li>
+      <li>☐ El archivo <code>test_deepface.py</code> se ejecuta sin errores</li>
+      <li>☐ El terminal muestra las versiones de DeepFace y OpenCV</li>
+    </ul>
+    <p>Si todos los puntos estan marcados, estas listo para la <strong>seccion 10: Webcam en tiempo real</strong>.</p>
   </div>
 </section>
 
@@ -1044,33 +1262,103 @@ pip3 install deepface opencv-python tf-keras</pre></div>
 
   <p>Ahora viene lo espectacular: usar tu webcam para <strong>reconocer caras y emociones en directo</strong>. DeepFace incluye una función que hace todo el trabajo en una sola línea.</p>
 
-  <h3>Opción A: La forma más fácil (una sola línea)</h3>
-  <p>Crea una carpeta llamada <code>base_datos</code> con fotos de personas conocidas (igual que hicimos en Colab) y ejecuta:</p>
+  <h3>Opcion A: La forma mas facil (una sola linea)</h3>
+  <p>Antes de ejecutar este codigo, necesitas preparar la carpeta con las fotos de las personas que quieres reconocer:</p>
+  <ol>
+    <li>Dentro de tu carpeta de proyecto, crea una subcarpeta llamada <code>base_datos</code>.</li>
+    <li>Mete dentro una foto de cada persona. <strong>El nombre del archivo sera el nombre que aparezca en pantalla</strong>: <code>Ana.jpg</code>, <code>Carlos.jpg</code>, etc.</li>
+    <li>Usa fotos de buena calidad, de frente y bien iluminadas.</li>
+  </ol>
+
+  <p>Ahora crea un archivo llamado <code>webcam_facil.py</code> y escribe este codigo:</p>
 
   <div class="code-block"><div class="code-header"><div class="dots"><span></span><span></span><span></span></div><span>webcam_facil.py</span><button class="copy-btn" onclick="copyCode(this)">Copiar</button></div>
 <pre><span class="kw">from</span> deepface <span class="kw">import</span> DeepFace
 
-<span class="cm"># ─── UNA SOLA LÍNEA: webcam + reconocimiento + emociones ───</span>
+<span class="cm"># ─── UNA SOLA LINEA: webcam + reconocimiento + emociones ───</span>
 DeepFace.<span class="fn">stream</span>(
     db_path=<span class="str">"base_datos"</span>,   <span class="cm"># Carpeta con fotos conocidas</span>
     source=<span class="num">0</span>                 <span class="cm"># 0 = tu webcam principal</span>
 )</pre></div>
 
-  <div class="explain"><span class="line-ref">DeepFace.stream()</span><div class="explain-text">Abre la webcam, detecta caras, las compara con la base de datos, y muestra en pantalla el nombre, emoción, edad y género. Todo automático. Pulsa <strong>Q</strong> para salir. Es la forma más rápida de tener un sistema de reconocimiento facial completo funcionando.</div></div>
+  <div class="explain"><span class="line-ref">DeepFace.stream()</span><div class="explain-text">Abre la webcam, detecta caras, las compara con la base de datos, y muestra en pantalla el nombre, emocion, edad y genero. Todo automatico. Pulsa <strong>Q</strong> para salir. Es la forma mas rapida de tener un sistema de reconocimiento facial completo funcionando.</div></div>
+  <div class="explain"><span class="line-ref">db_path</span><div class="explain-text">Ruta a la carpeta donde estan las fotos de personas conocidas. Puede ser una ruta relativa (como <code>"base_datos"</code>, que busca dentro de tu carpeta de proyecto) o una ruta completa (como <code>"C:\Users\tu_nombre\fotos"</code>).</div></div>
+  <div class="explain"><span class="line-ref">source=0</span><div class="explain-text">El numero de camara. <code>0</code> es la webcam principal. Si tienes una camara externa conectada, prueba con <code>1</code> o <code>2</code>. Si no tienes webcam, te dara error.</div></div>
 
-  <h3>Opción B: Control total (tu propio bucle)</h3>
-  <p>Si quieres personalizar la interfaz o añadir funciones (como guardar asistencia), necesitas construir tu propio bucle de webcam:</p>
+  <h4>Parametros que puedes modificar</h4>
+  <p>La funcion <code>stream()</code> acepta mas parametros para personalizar su comportamiento:</p>
+
+  <div class="code-block"><div class="code-header"><div class="dots"><span></span><span></span><span></span></div><span>webcam_facil_personalizada.py</span><button class="copy-btn" onclick="copyCode(this)">Copiar</button></div>
+<pre><span class="kw">from</span> deepface <span class="kw">import</span> DeepFace
+
+DeepFace.<span class="fn">stream</span>(
+    db_path=<span class="str">"base_datos"</span>,
+    source=<span class="num">0</span>,
+    model_name=<span class="str">"VGG-Face"</span>,          <span class="cm"># Modelo de reconocimiento (ver seccion 12)</span>
+    detector_backend=<span class="str">"opencv"</span>,      <span class="cm"># Detector de caras (opencv = rapido)</span>
+    time_threshold=<span class="num">3</span>,              <span class="cm"># Segundos entre cada analisis</span>
+    frame_threshold=<span class="num">1</span>,             <span class="cm"># Frames de confirmacion antes de decidir</span>
+    anti_spoofing=<span class="kw">False</span>             <span class="cm"># True = detectar si es foto o cara real</span>
+)</pre></div>
+
+  <div class="explain"><span class="line-ref">time_threshold</span><div class="explain-text">Cada cuantos segundos analiza la webcam. Por defecto es <code>3</code>. Si lo bajas a <code>1</code>, analiza mas a menudo (pero va mas lento). Si lo subes a <code>5</code>, analiza menos (pero el video va mas fluido). Ajustalo segun la velocidad de tu ordenador.</div></div>
+  <div class="explain"><span class="line-ref">frame_threshold</span><div class="explain-text">Cuantas veces tiene que confirmar una deteccion antes de mostrarla. Con <code>1</code> muestra el resultado inmediatamente. Con valores mas altos es mas estable pero tarda mas en reaccionar.</div></div>
+  <div class="explain"><span class="line-ref">anti_spoofing</span><div class="explain-text">Si lo pones a <code>True</code>, intenta detectar si alguien esta mostrando una <strong>foto impresa o una pantalla</strong> en vez de su cara real. Es experimental y a veces falla, pero es interesante para probar.</div></div>
+
+  <div class="exercise-box">
+    <div class="ex-header"><div class="ex-icon">✏️</div> Actividad 10.1 — Prueba stream() con tus fotos</div>
+    <p><strong>Objetivo:</strong> Comprobar que el reconocimiento funciona en tiempo real.</p>
+    <p><strong>Pasos:</strong></p>
+    <p>1. Mete 2-3 fotos de companeros o familiares en la carpeta <code>base_datos</code>.</p>
+    <p>2. Ejecuta <code>webcam_facil.py</code>. Espera unos segundos (la primera vez carga modelos).</p>
+    <p>3. Ponte delante de la camara. ¿Te reconoce? ¿Que nombre muestra?</p>
+    <p>4. Prueba a cambiar <code>time_threshold</code> entre <code>1</code> y <code>5</code>. ¿Notas la diferencia de velocidad?</p>
+    <p>5. Pulsa <strong>Q</strong> para cerrar la ventana.</p>
+  </div>
+
+  <!-- ─── OPCION B ─── -->
+  <h3>Opcion B: Control total (tu propio bucle)</h3>
+
+  <p><code>stream()</code> es comoda pero no puedes cambiar como se ve la pantalla ni anadir funciones extra. Con tu propio bucle puedes <strong>personalizar todo</strong> y ademas combinar dos funciones a la vez: <strong>identificar quien es</strong> (buscando en la base de datos) y <strong>analizar su emocion y edad</strong>.</p>
+
+  <div class="flow-diagram">
+    <div class="flow-step"><div class="fs-icon">📷</div><div class="fs-label">Webcam</div><div class="fs-detail">Captura frame</div></div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step"><div class="fs-icon">🔍</div><div class="fs-label">find()</div><div class="fs-detail">¿Quien es?</div></div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step"><div class="fs-icon">😊</div><div class="fs-label">analyze()</div><div class="fs-detail">Emocion + edad</div></div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step"><div class="fs-icon">🖼️</div><div class="fs-label">Dibujar</div><div class="fs-detail">Nombre + datos</div></div>
+  </div>
+
+  <p>Crea un archivo llamado <code>webcam_personalizada.py</code> y copia este codigo:</p>
 
   <div class="code-block"><div class="code-header"><div class="dots"><span></span><span></span><span></span></div><span>webcam_personalizada.py</span><button class="copy-btn" onclick="copyCode(this)">Copiar</button></div>
 <pre><span class="kw">from</span> deepface <span class="kw">import</span> DeepFace
 <span class="kw">import</span> cv2
+<span class="kw">import</span> os
 
+<span class="cm"># ═══ CONFIGURACION ═══</span>
+CARPETA_BD = <span class="str">"base_datos"</span>     <span class="cm"># Carpeta con fotos conocidas</span>
+FRECUENCIA = <span class="num">45</span>               <span class="cm"># Analizar cada X frames (~1.5 seg a 30fps)</span>
+
+<span class="cm"># ═══ Abrir la webcam ═══</span>
 camara = cv2.<span class="fn">VideoCapture</span>(<span class="num">0</span>)
-<span class="bi">print</span>(<span class="str">"📷 Pulsa 'q' para salir."</span>)
+<span class="kw">if not</span> camara.<span class="fn">isOpened</span>():
+    <span class="bi">print</span>(<span class="str">"Error: no se pudo abrir la camara."</span>)
+    <span class="bi">exit</span>()
 
+<span class="bi">print</span>(<span class="str">"Webcam abierta. Pulsa 'q' para salir."</span>)
+
+<span class="cm"># ═══ Variables que guardan el ultimo resultado ═══</span>
 contador = <span class="num">0</span>
-ultimo_resultado = []
+nombre_actual = <span class="str">"?"</span>
+emocion_actual = <span class="str">"?"</span>
+edad_actual = <span class="str">"?"</span>
+x, y, ancho, alto = <span class="num">0</span>, <span class="num">0</span>, <span class="num">0</span>, <span class="num">0</span>
+hay_cara = <span class="kw">False</span>
 
+<span class="cm"># ═══ BUCLE PRINCIPAL ═══</span>
 <span class="kw">while</span> <span class="kw">True</span>:
     ret, frame = camara.<span class="fn">read</span>()
     <span class="kw">if not</span> ret:
@@ -1078,37 +1366,160 @@ ultimo_resultado = []
 
     contador += <span class="num">1</span>
 
-    <span class="cm"># Analizar cada 30 frames (~1 segundo)</span>
-    <span class="kw">if</span> contador % <span class="num">30</span> == <span class="num">0</span>:
+    <span class="cm"># ─── Cada X frames: identificar + analizar ───</span>
+    <span class="kw">if</span> contador % FRECUENCIA == <span class="num">0</span>:
+
+        <span class="cm"># PASO 1: Buscar quien es en la base de datos</span>
         <span class="kw">try</span>:
-            ultimo_resultado = DeepFace.<span class="fn">analyze</span>(
+            resultados_find = DeepFace.<span class="fn">find</span>(
+                img_path=frame,
+                db_path=CARPETA_BD,
+                enforce_detection=<span class="kw">False</span>,
+                silent=<span class="kw">True</span>
+            )
+            <span class="kw">if</span> <span class="bi">len</span>(resultados_find) > <span class="num">0</span> <span class="kw">and</span> <span class="bi">len</span>(resultados_find[<span class="num">0</span>]) > <span class="num">0</span>:
+                mejor = resultados_find[<span class="num">0</span>].<span class="fn">iloc</span>[<span class="num">0</span>]
+                ruta = mejor[<span class="str">"identity"</span>]
+                nombre_actual = os.path.<span class="fn">splitext</span>(os.path.<span class="fn">basename</span>(ruta))[<span class="num">0</span>]
+            <span class="kw">else</span>:
+                nombre_actual = <span class="str">"Desconocido"</span>
+        <span class="kw">except</span> <span class="cls">Exception</span>:
+            nombre_actual = <span class="str">"?"</span>
+
+        <span class="cm"># PASO 2: Analizar emocion y edad</span>
+        <span class="kw">try</span>:
+            resultados_analisis = DeepFace.<span class="fn">analyze</span>(
                 img_path=frame,
                 actions=[<span class="str">"emotion"</span>, <span class="str">"age"</span>],
                 enforce_detection=<span class="kw">False</span>,
                 silent=<span class="kw">True</span>
             )
+            <span class="kw">if</span> <span class="bi">len</span>(resultados_analisis) > <span class="num">0</span>:
+                cara = resultados_analisis[<span class="num">0</span>]
+                emocion_actual = cara.<span class="fn">get</span>(<span class="str">"dominant_emotion"</span>, <span class="str">"?"</span>)
+                edad_actual = cara.<span class="fn">get</span>(<span class="str">"age"</span>, <span class="str">"?"</span>)
+                region = cara.<span class="fn">get</span>(<span class="str">"region"</span>, {})
+                x = region.<span class="fn">get</span>(<span class="str">"x"</span>, <span class="num">0</span>)
+                y = region.<span class="fn">get</span>(<span class="str">"y"</span>, <span class="num">0</span>)
+                ancho = region.<span class="fn">get</span>(<span class="str">"w"</span>, <span class="num">0</span>)
+                alto = region.<span class="fn">get</span>(<span class="str">"h"</span>, <span class="num">0</span>)
+                hay_cara = <span class="kw">True</span>
+            <span class="kw">else</span>:
+                hay_cara = <span class="kw">False</span>
         <span class="kw">except</span> <span class="cls">Exception</span>:
-            ultimo_resultado = []
+            hay_cara = <span class="kw">False</span>
 
-    <span class="cm"># Dibujar resultados</span>
-    <span class="kw">for</span> cara <span class="kw">in</span> ultimo_resultado:
-        x = cara.<span class="fn">get</span>(<span class="str">"region"</span>, {}).<span class="fn">get</span>(<span class="str">"x"</span>, <span class="num">0</span>)
-        y = cara.<span class="fn">get</span>(<span class="str">"region"</span>, {}).<span class="fn">get</span>(<span class="str">"y"</span>, <span class="num">0</span>)
-        ancho = cara.<span class="fn">get</span>(<span class="str">"region"</span>, {}).<span class="fn">get</span>(<span class="str">"w"</span>, <span class="num">0</span>)
-        alto = cara.<span class="fn">get</span>(<span class="str">"region"</span>, {}).<span class="fn">get</span>(<span class="str">"h"</span>, <span class="num">0</span>)
-        emocion = cara.<span class="fn">get</span>(<span class="str">"dominant_emotion"</span>, <span class="str">"?"</span>)
-        edad = cara.<span class="fn">get</span>(<span class="str">"age"</span>, <span class="str">"?"</span>)
+    <span class="cm"># ─── Dibujar resultados sobre el video ───</span>
+    <span class="kw">if</span> hay_cara:
+        <span class="cm"># Color: verde si esta identificado, rojo si es desconocido</span>
+        <span class="kw">if</span> nombre_actual <span class="kw">not in</span> (<span class="str">"Desconocido"</span>, <span class="str">"?"</span>):
+            color = (<span class="num">0</span>, <span class="num">200</span>, <span class="num">0</span>)    <span class="cm"># Verde</span>
+        <span class="kw">else</span>:
+            color = (<span class="num">0</span>, <span class="num">0</span>, <span class="num">200</span>)    <span class="cm"># Rojo</span>
 
-        cv2.<span class="fn">rectangle</span>(frame, (x, y), (x + ancho, y + alto), (<span class="num">0</span>, <span class="num">255</span>, <span class="num">0</span>), <span class="num">2</span>)
-        cv2.<span class="fn">putText</span>(frame, <span class="str">f"{emocion}, {edad}"</span>, (x, y - <span class="num">10</span>),
-                    cv2.<span class="var">FONT_HERSHEY_SIMPLEX</span>, <span class="num">0.7</span>, (<span class="num">0</span>, <span class="num">255</span>, <span class="num">0</span>), <span class="num">2</span>)
+        <span class="cm"># Rectangulo alrededor de la cara</span>
+        cv2.<span class="fn">rectangle</span>(frame, (x, y), (x + ancho, y + alto), color, <span class="num">2</span>)
 
+        <span class="cm"># Nombre encima del rectangulo</span>
+        cv2.<span class="fn">putText</span>(frame, nombre_actual, (x, y - <span class="num">30</span>),
+                    cv2.<span class="var">FONT_HERSHEY_SIMPLEX</span>, <span class="num">0.8</span>, color, <span class="num">2</span>)
+
+        <span class="cm"># Emocion y edad debajo del nombre</span>
+        cv2.<span class="fn">putText</span>(frame, <span class="str">f"{emocion_actual}, {edad_actual} year"</span>, (x, y - <span class="num">10</span>),
+                    cv2.<span class="var">FONT_HERSHEY_SIMPLEX</span>, <span class="num">0.6</span>, color, <span class="num">2</span>)
+
+    <span class="cm"># ─── Mostrar el frame en la ventana ───</span>
     cv2.<span class="fn">imshow</span>(<span class="str">"DeepFace Webcam"</span>, frame)
-    <span class="kw">if</span> cv2.<span class="fn">waitKey</span>(<span class="num">1</span>) & <span class="num">0xFF</span> == <span class="bi">ord</span>(<span class="str">"q"</span>):
-        <span class="kw">break</span>
 
+    <span class="cm"># ─── Teclas ───</span>
+    tecla = cv2.<span class="fn">waitKey</span>(<span class="num">1</span>) & <span class="num">0xFF</span>
+    <span class="kw">if</span> tecla == <span class="bi">ord</span>(<span class="str">"q"</span>):
+        <span class="kw">break</span>
+    <span class="kw">if</span> tecla == <span class="bi">ord</span>(<span class="str">"s"</span>):
+        cv2.<span class="fn">imwrite</span>(<span class="str">f"captura_{contador}.jpg"</span>, frame)
+        <span class="bi">print</span>(<span class="str">f"Foto guardada: captura_{contador}.jpg"</span>)
+
+<span class="cm"># ═══ Limpieza al salir ═══</span>
 camara.<span class="fn">release</span>()
-cv2.<span class="fn">destroyAllWindows</span>()</pre></div>
+cv2.<span class="fn">destroyAllWindows</span>()
+<span class="bi">print</span>(<span class="str">"Webcam cerrada."</span>)</pre></div>
+
+  <h4>Explicacion del codigo</h4>
+
+  <div class="info-box concept">
+    <div class="ib-title purple">🧠 ¿Por que dos llamadas a DeepFace?</div>
+    <p>Este programa hace <strong>dos cosas diferentes</strong> cada vez que analiza un frame:</p>
+    <ul>
+      <li><strong><code>DeepFace.find()</code></strong> — Busca la cara en la carpeta <code>base_datos</code> y nos dice <strong>quien es</strong> (el nombre del archivo mas parecido).</li>
+      <li><strong><code>DeepFace.analyze()</code></strong> — Analiza la cara y nos dice su <strong>emocion y edad</strong>.</li>
+    </ul>
+    <p>Son funciones distintas porque hacen cosas distintas: <code>find()</code> compara contra una base de datos, <code>analyze()</code> extrae atributos. Combinandolas, conseguimos el resultado completo: <strong>nombre + emocion + edad</strong>.</p>
+  </div>
+
+  <div class="explain"><span class="line-ref">FRECUENCIA = 45</span><div class="explain-text">Cada cuantos frames se ejecuta el analisis. Como ahora hacemos <strong>dos llamadas</strong> a DeepFace (find + analyze), necesitamos un poco mas de tiempo entre cada analisis. Con <code>45</code> a 30fps, analizamos cada ~1.5 segundos. Si tu ordenador es rapido, baja a <code>30</code>. Si va lento, sube a <code>60</code>.</div></div>
+  <div class="explain"><span class="line-ref">DeepFace.find()</span><div class="explain-text">Busca la cara del frame en <strong>todas las fotos</strong> de la carpeta <code>base_datos</code>. Devuelve la coincidencia mas parecida. La primera vez tarda mas porque genera un archivo de cache con los "numeros" (embeddings) de cada cara. Las siguientes veces es mucho mas rapido.</div></div>
+  <div class="explain"><span class="line-ref">os.path.splitext(os.path.basename(ruta))[0]</span><div class="explain-text">De una ruta como <code>"base_datos/Carlos.jpg"</code>, extrae solo el nombre: <code>"Carlos"</code>. Primero <code>basename()</code> quita la carpeta (<code>"Carlos.jpg"</code>), luego <code>splitext()</code> separa el nombre de la extension, y <code>[0]</code> coge solo el nombre.</div></div>
+  <div class="explain"><span class="line-ref">nombre_actual, emocion_actual, edad_actual</span><div class="explain-text">Estas variables guardan el <strong>ultimo resultado</strong> del analisis. Se actualizan cada X frames pero se <strong>dibujan en cada frame</strong>. Por eso la etiqueta se mantiene visible entre analisis, en vez de parpadear.</div></div>
+  <div class="explain"><span class="line-ref">Color verde / rojo</span><div class="explain-text">Si la persona esta en la base de datos, el rectangulo y el texto se muestran en <strong>verde</strong>. Si es desconocido o no se pudo identificar, en <strong>rojo</strong>. Esto da un feedback visual inmediato.</div></div>
+  <div class="explain"><span class="line-ref">Dos lineas de putText</span><div class="explain-text">Dibujamos el nombre en una linea (mas grande, a <code>0.8</code>) y la emocion + edad en otra linea justo debajo (mas pequena, a <code>0.6</code>). Usamos <code>y - 30</code> y <code>y - 10</code> para que no se solapen.</div></div>
+  <div class="explain"><span class="line-ref">Tecla S para captura</span><div class="explain-text">Si pulsas la tecla <strong>S</strong>, el programa guarda una foto del frame actual con la etiqueta dibujada encima. Util para tener evidencia de que el reconocimiento funciona.</div></div>
+
+  <div class="info-box tip">
+    <div class="ib-title green">💡 ¿Que puedes personalizar?</div>
+    <p>Esta es la ventaja de tener tu propio bucle: puedes cambiar <strong>todo</strong>. Algunas ideas:</p>
+    <ul>
+      <li><strong>Colores por emocion:</strong> Usa un diccionario (como en la seccion 5) para que el rectangulo cambie de color segun la emocion: verde si feliz, rojo si enfadado, azul si triste.</li>
+      <li><strong>Anadir genero:</strong> Anade <code>"gender"</code> a <code>actions</code> y muestra <code>cara.get("dominant_gender", "?")</code> junto al resto.</li>
+      <li><strong>Tamano del texto:</strong> Cambia <code>0.8</code> y <code>0.6</code> en <code>putText</code>. Valores mas grandes = texto mas grande.</li>
+      <li><strong>Velocidad:</strong> Baja <code>FRECUENCIA</code> para analizar mas a menudo (mas reactivo) o subela (video mas fluido).</li>
+      <li><strong>Titulo de la ventana:</strong> Cambia <code>"DeepFace Webcam"</code> por lo que quieras.</li>
+    </ul>
+  </div>
+
+  <div class="exercise-box">
+    <div class="ex-header"><div class="ex-icon">✏️</div> Actividad 10.2 — Prueba la identificacion</div>
+    <p><strong>Objetivo:</strong> Comprobar que tu webcam identifica personas de la base de datos.</p>
+    <p><strong>Pasos:</strong></p>
+    <p>1. Asegurate de que la carpeta <code>base_datos</code> tiene al menos 2-3 fotos (tuya y de companeros).</p>
+    <p>2. Ejecuta <code>webcam_personalizada.py</code>. La primera vez tardara unos segundos en cargar.</p>
+    <p>3. Ponte delante de la camara. ¿Aparece tu nombre en verde? ¿La emocion y edad son correctas?</p>
+    <p>4. Pide a un companero que no este en la base de datos que se ponga. ¿Aparece "Desconocido" en rojo?</p>
+    <p>5. Pulsa <strong>S</strong> para guardar una captura y <strong>Q</strong> para salir.</p>
+  </div>
+
+  <div class="exercise-box">
+    <div class="ex-header"><div class="ex-icon">✏️</div> Actividad 10.3 — Colores por emocion</div>
+    <p><strong>Objetivo:</strong> Que el color del rectangulo cambie segun la emocion detectada.</p>
+    <p><strong>Instrucciones:</strong> Crea un diccionario de colores y usalo para elegir el color en vez del verde/rojo fijo.</p>
+    <details><summary>Ver solucion</summary><div class="solution-content"><div class="code-block"><div class="code-header"><div class="dots"><span></span><span></span><span></span></div><span>solucion — anadir antes del bloque "if hay_cara:"</span></div>
+<pre><span class="cm"># Diccionario de colores por emocion (BGR)</span>
+colores_emocion = {
+    <span class="str">"happy"</span>: (<span class="num">0</span>, <span class="num">255</span>, <span class="num">0</span>),      <span class="cm"># Verde</span>
+    <span class="str">"sad"</span>: (<span class="num">255</span>, <span class="num">0</span>, <span class="num">0</span>),        <span class="cm"># Azul</span>
+    <span class="str">"angry"</span>: (<span class="num">0</span>, <span class="num">0</span>, <span class="num">255</span>),      <span class="cm"># Rojo</span>
+    <span class="str">"surprise"</span>: (<span class="num">0</span>, <span class="num">255</span>, <span class="num">255</span>), <span class="cm"># Amarillo</span>
+    <span class="str">"neutral"</span>: (<span class="num">200</span>, <span class="num">200</span>, <span class="num">200</span>), <span class="cm"># Gris</span>
+    <span class="str">"fear"</span>: (<span class="num">255</span>, <span class="num">0</span>, <span class="num">255</span>),     <span class="cm"># Morado</span>
+    <span class="str">"disgust"</span>: (<span class="num">0</span>, <span class="num">128</span>, <span class="num">128</span>),  <span class="cm"># Turquesa</span>
+}
+
+<span class="cm"># Dentro de "if hay_cara:", reemplazar la eleccion de color por:</span>
+color = colores_emocion.<span class="fn">get</span>(emocion_actual, (<span class="num">255</span>, <span class="num">255</span>, <span class="num">255</span>))</pre></div></div></details>
+  </div>
+
+  <div class="exercise-box">
+    <div class="ex-header"><div class="ex-icon">✏️</div> Reto 10.4 — Mostrar la hora en pantalla</div>
+    <p><strong>Objetivo:</strong> Anadir la fecha y hora actual en la esquina superior de la ventana, como en las camaras de seguridad.</p>
+    <p><strong>Pista:</strong> Importa <code>datetime</code> y usa <code>datetime.now().strftime("%d/%m/%Y %H:%M:%S")</code> para obtener la hora. Dibujala con <code>cv2.putText()</code> en la posicion <code>(10, 30)</code>.</p>
+    <details><summary>Ver solucion</summary><div class="solution-content"><div class="code-block"><div class="code-header"><div class="dots"><span></span><span></span><span></span></div><span>solucion</span></div>
+<pre><span class="cm"># Arriba del archivo, anadir:</span>
+<span class="kw">from</span> datetime <span class="kw">import</span> datetime
+
+<span class="cm"># Dentro del bucle, justo antes de cv2.imshow(), anadir:</span>
+hora = datetime.<span class="fn">now</span>().<span class="fn">strftime</span>(<span class="str">"%d/%m/%Y %H:%M:%S"</span>)
+cv2.<span class="fn">putText</span>(frame, hora, (<span class="num">10</span>, <span class="num">30</span>),
+            cv2.<span class="var">FONT_HERSHEY_SIMPLEX</span>, <span class="num">0.7</span>, (<span class="num">255</span>, <span class="num">255</span>, <span class="num">255</span>), <span class="num">2</span>)</pre></div></div></details>
+  </div>
 </section>
 
 <div class="divider"></div>
@@ -1378,6 +1789,7 @@ resultado = DeepFace.<span class="fn">verify</span>(
   <table class="error-table">
     <thead><tr><th>Error</th><th>Causa</th><th>Solución</th></tr></thead>
     <tbody>
+      <tr><td><code>ModuleNotFoundError: No module named 'deepface'</code></td><td>Las bibliotecas no estan instaladas o se instalaron en otro Python</td><td>Ejecuta <code>pip install deepface opencv-python tf-keras</code> desde CMD o el terminal de VS Code</td></tr>
       <tr><td><code>'python3' no se reconoce</code></td><td>En Windows se usa <code>python</code></td><td>Escribe <code>python</code> sin el 3</td></tr>
       <tr><td><strong>"requires tf-keras package"</strong></td><td>TensorFlow separó Keras</td><td><code>pip install tf-keras</code></td></tr>
       <tr><td><strong>"Face could not be detected"</strong></td><td>No encontró cara</td><td>Usa <code>enforce_detection=False</code></td></tr>
@@ -1456,8 +1868,8 @@ let quizCorrect=0,quizWrong=0,quizTotal=0;
 const scoreBar=document.getElementById('quizScoreBar');
 function updateScoreboard(){document.getElementById('qsCorrect').textContent=quizCorrect;document.getElementById('qsWrong').textContent=quizWrong;document.getElementById('qsTotal').textContent=quizTotal;if(quizTotal>0){document.getElementById('qsPct').textContent=Math.round((quizCorrect/quizTotal)*100)+'%';scoreBar.classList.add('visible')}}
 function checkQuiz(qId,btn,correct){const q=document.getElementById(qId);if(q.dataset.answered)return;q.dataset.answered='true';quizTotal++;q.querySelectorAll('.quiz-option').forEach(o=>{o.classList.add('disabled');o.classList.remove('correct','wrong')});const fb=document.getElementById(qId+'-fb');if(correct){btn.classList.add('correct');fb.textContent='✅ ¡Correcto!';fb.className='quiz-feedback show ok';quizCorrect++}else{btn.classList.add('wrong');q.querySelectorAll('.quiz-option').forEach(o=>{if(o.getAttribute('onclick')?.includes('true'))o.classList.add('correct')});fb.textContent='❌ Incorrecto. La correcta está en verde.';fb.className='quiz-feedback show fail';quizWrong++}updateScoreboard()}
-function switchOS(os){document.querySelectorAll('.os-tab').forEach(t=>t.classList.remove('active'));document.querySelectorAll('.os-content').forEach(c=>c.classList.remove('active'));document.getElementById('os-'+os).classList.add('active');event.target.classList.add('active')}
-function copyCode(btn){const pre=btn.closest('.code-block').querySelector('pre');navigator.clipboard.writeText(pre.textContent).then(()=>{btn.textContent='✓ Copiado';setTimeout(()=>btn.textContent='Copiar',2000)})}
+function switchOS(os,evt){const e=evt||window.event;const btn=e.target||e.srcElement;const target=document.getElementById('os-'+os);if(!target)return;const container=btn.closest('.os-tabs');if(container){container.querySelectorAll('.os-tab').forEach(t=>t.classList.remove('active'));btn.classList.add('active');let el=container.nextElementSibling;while(el&&el.classList.contains('os-content')){el.classList.remove('active');el=el.nextElementSibling}}target.classList.add('active')}
+function copyCode(btn){const pre=btn.closest('.code-block').querySelector('pre');const text=pre.textContent;if(navigator.clipboard&&window.isSecureContext){navigator.clipboard.writeText(text).then(()=>{btn.textContent='✓ Copiado';setTimeout(()=>btn.textContent='Copiar',2000)})}else{const ta=document.createElement('textarea');ta.value=text;ta.style.position='fixed';ta.style.opacity='0';document.body.appendChild(ta);ta.select();document.execCommand('copy');document.body.removeChild(ta);btn.textContent='✓ Copiado';setTimeout(()=>btn.textContent='Copiar',2000)}}
 const sidebar=document.getElementById('sidebar'),toggle=document.getElementById('menuToggle'),overlay=document.getElementById('overlay');
 toggle.addEventListener('click',()=>{
   if(window.innerWidth<=900){sidebar.classList.toggle('open');overlay.classList.toggle('show')}
@@ -1535,7 +1947,8 @@ presNext.addEventListener('click',()=>{if(presIndex<presSlides.length-1)presShow
 
 document.addEventListener('keydown',e=>{
   if(!presActive)return;
-  if(e.key==='ArrowRight'||e.key===' '){e.preventDefault();if(presIndex<presSlides.length-1)presShow(presIndex+1)}
+  if(e.target.tagName==='BUTTON'||e.target.tagName==='INPUT')return;
+  if(e.key==='ArrowRight'){e.preventDefault();if(presIndex<presSlides.length-1)presShow(presIndex+1)}
   if(e.key==='ArrowLeft'){e.preventDefault();if(presIndex>0)presShow(presIndex-1)}
   if(e.key==='Escape'){e.preventDefault();exitPresentation()}
 });
