@@ -660,7 +660,8 @@ imagen = cv2.<span class="fn">imread</span>(<span class="str">"foto_grupo.jpg"</
 resultados = DeepFace.<span class="fn">analyze</span>(
     img_path=<span class="str">"foto_grupo.jpg"</span>,
     actions=[<span class="str">"emotion"</span>, <span class="str">"age"</span>],
-    enforce_detection=<span class="kw">False</span>  <span class="cm"># No dar error si alguna cara no se detecta</span>
+    detector_backend=<span class="str">"retinaface"</span>,  <span class="cm"># Detecta caras de perfil y parcialmente ocultas</span>
+    enforce_detection=<span class="kw">False</span>          <span class="cm"># No dar error si alguna cara no se detecta</span>
 )
 
 <span class="cm"># ─── Paso 3: Dibujar un rectángulo y etiqueta en cada cara ───</span>
@@ -674,7 +675,7 @@ resultados = DeepFace.<span class="fn">analyze</span>(
     <span class="cm"># Preparar el texto de la etiqueta</span>
     emocion = cara[<span class="str">"dominant_emotion"</span>]
     edad = cara[<span class="str">"age"</span>]
-    etiqueta = <span class="str">f"{emocion}, {edad} años"</span>
+    etiqueta = <span class="str">f"{emocion}, {edad} year"</span>
 
     <span class="cm"># Dibujar rectángulo verde alrededor de la cara</span>
     cv2.<span class="fn">rectangle</span>(imagen, (x, y), (x + ancho, y + alto), (<span class="num">0</span>, <span class="num">255</span>, <span class="num">0</span>), <span class="num">2</span>)
@@ -692,6 +693,7 @@ cv2.<span class="fn">imwrite</span>(<span class="str">"resultado.jpg"</span>, im
 
   <div class="explain"><span class="line-ref">cv2.rectangle()</span><div class="explain-text">Dibuja un rectángulo. Los parámetros son: imagen donde dibujar, esquina superior izquierda <code>(x, y)</code>, esquina inferior derecha <code>(x+ancho, y+alto)</code>, color <code>(0, 255, 0)</code> = verde en formato BGR, y grosor de línea <code>2</code> píxeles.</div></div>
   <div class="explain"><span class="line-ref">cv2.putText()</span><div class="explain-text">Escribe texto sobre la imagen. Parámetros: imagen, texto, posición <code>(x, y-10)</code> (un poco por encima del rectángulo), tipo de letra, tamaño <code>0.6</code>, color verde, y grosor <code>2</code>.</div></div>
+  <div class="explain"><span class="line-ref">detector_backend</span><div class="explain-text">Usamos <code>"retinaface"</code> porque es el detector más preciso: detecta <strong>caras de perfil, parcialmente ocultas y en ángulo</strong>. El detector por defecto (<code>"opencv"</code>) solo funciona bien con caras de frente. En fotos de grupo, la diferencia es enorme. Tarda un poco más, pero merece la pena.</div></div>
   <div class="explain"><span class="line-ref">enforce_detection=False</span><div class="explain-text">Por defecto, DeepFace da error si no encuentra cara. Con <code>False</code>, simplemente ignora las zonas donde no hay cara. Útil en fotos de grupo donde alguna cara puede estar parcialmente oculta.</div></div>
   <div class="explain"><span class="line-ref">cv2.imwrite()</span><div class="explain-text">Guarda la imagen modificada como un archivo nuevo. En Colab, el archivo se guarda en el espacio temporal del servidor. Puedes descargarlo con <code>from google.colab import files; files.download("resultado.jpg")</code>.</div></div>
 
