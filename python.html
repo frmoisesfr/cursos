@@ -10,7 +10,7 @@
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Outfit:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
 <style>
 :root{
-  --bg-deep:#0a0e1a;--bg-card:#111827;--bg-code:#0d1117;--bg-code-header:#161b22;
+  --bg-deep:#0a0e1a;--bg-card:#111827;--bg-code:#1e2433;--bg-code-header:#252b3b;
   --accent-cyan:#00d4ff;--accent-green:#10b981;--accent-purple:#a78bfa;
   --accent-orange:#f59e0b;--accent-pink:#f472b6;--accent-red:#ef4444;
   --text-primary:#e2e8f0;--text-secondary:#94a3b8;--text-muted:#64748b;
@@ -48,8 +48,15 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
 .progress-label{font-size:.7rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:.5rem;display:flex;justify-content:space-between}
 .progress-bar-bg{height:6px;background:rgba(255,255,255,.06);border-radius:3px;overflow:hidden}
 .progress-bar-fill{height:100%;background:linear-gradient(90deg,var(--accent-green),var(--accent-cyan));border-radius:3px;width:0%;transition:width .6s}
+.sidebar-search{padding:.8rem 1.5rem;border-bottom:1px solid var(--border)}
+.sidebar-search input{width:100%;padding:.45rem .7rem;border-radius:8px;border:1px solid var(--border);background:rgba(255,255,255,.04);color:var(--text-primary);font-family:'Outfit',sans-serif;font-size:.82rem;outline:none;transition:border-color .2s}
+.sidebar-search input:focus{border-color:var(--accent-cyan)}
+.sidebar-search input::placeholder{color:var(--text-muted)}
 .nav-section{padding:.8rem 1rem 0}
-.nav-section-title{font-size:.63rem;text-transform:uppercase;letter-spacing:.12em;color:var(--text-muted);padding:.5rem;font-weight:600}
+.nav-section-title{font-size:.63rem;text-transform:uppercase;letter-spacing:.12em;color:var(--text-muted);padding:.5rem;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:space-between;border-radius:6px;transition:background .2s}
+.nav-section-title:hover{background:rgba(255,255,255,.04)}
+.nav-section-title .toggle-arrow{font-size:.55rem;transition:transform .3s;opacity:.5}
+.nav-section-title.expanded .toggle-arrow{transform:rotate(90deg)}
 .nav-link{display:flex;align-items:center;gap:.5rem;padding:.45rem .75rem;font-size:.78rem;color:var(--text-secondary);text-decoration:none;border-radius:8px;transition:all .2s;cursor:pointer}
 .nav-link:hover{background:rgba(0,212,255,.06);color:var(--text-primary)}
 .nav-link.active{background:rgba(0,212,255,.1);color:var(--accent-cyan);font-weight:600}
@@ -77,11 +84,11 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
 .back-top.visible{opacity:1;transform:translateY(0)}
 
 /* Hero */
-.hero{padding:5rem 3rem 4rem;text-align:center;position:relative;overflow:hidden}
-.hero::before{content:'';position:absolute;top:-100px;left:50%;transform:translateX(-50%);width:700px;height:700px;background:radial-gradient(circle,rgba(0,212,255,.08) 0%,transparent 70%);pointer-events:none}
+.hero{padding:0;text-align:center;position:relative;overflow:hidden;background:url('hero.jpg') center/cover no-repeat;min-height:500px}
+.hero::before{display:none}
 .hero-badge{display:inline-flex;align-items:center;gap:.5rem;padding:.5rem 1.2rem;background:rgba(0,212,255,.08);border:1px solid rgba(0,212,255,.2);border-radius:50px;font-size:.85rem;color:var(--accent-cyan);font-weight:600;margin-bottom:1.5rem}
-.hero h1{font-size:clamp(2.2rem,5vw,3.5rem);font-weight:900;line-height:1.1;letter-spacing:-.03em;margin-bottom:1rem;background:linear-gradient(135deg,#fff 0%,var(--accent-cyan) 50%,var(--accent-purple) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-.hero p{font-size:1.25rem;color:var(--text-secondary);max-width:700px;margin:0 auto 2rem;font-weight:300}
+.hero h1{font-size:clamp(2.2rem,5vw,3.5rem);font-weight:900;line-height:1.1;letter-spacing:-.03em;margin-bottom:1rem;background:linear-gradient(135deg,#fff 0%,var(--accent-cyan) 50%,var(--accent-purple) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;position:relative;z-index:1}
+.hero p{font-size:1.25rem;color:#cbd5e1;max-width:700px;margin:0 auto 1rem;font-weight:300;position:relative;z-index:1}
 .hero-cards{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;margin-top:2rem}
 .hero-card{background:var(--bg-card);border:1px solid var(--border);border-radius:14px;padding:1.1rem 1.3rem;min-width:130px;text-align:center}
 .hero-card .hc-icon{font-size:1.4rem;margin-bottom:.2rem}
@@ -95,6 +102,7 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
 .tag-intermedio{background:rgba(245,158,11,.1);color:var(--accent-orange)}
 .tag-avanzado{background:rgba(239,68,68,.1);color:var(--accent-red)}
 .tag-extra{background:rgba(167,139,250,.1);color:var(--accent-purple)}
+.tag-browser{background:rgba(0,212,255,.1);color:var(--accent-cyan)}
 .section h2{font-size:2.35rem;font-weight:800;letter-spacing:-.02em;margin-bottom:1.5rem;line-height:1.2}
 .section h3{font-size:1.6rem;font-weight:700;margin:2.5rem 0 1rem;color:var(--accent-cyan)}
 .section h4{font-size:1.25rem;font-weight:600;margin:1.8rem 0 .8rem;color:var(--accent-purple)}
@@ -114,6 +122,8 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
 .copy-btn:hover{border-color:var(--accent-cyan);color:var(--accent-cyan)}
 .code-block pre{padding:1.1rem 1.3rem;overflow-x:auto;font-family:'JetBrains Mono',monospace;font-size:1rem;line-height:1.8;color:#c9d1d9}
 .kw{color:#ff7b72}.fn{color:#d2a8ff}.str{color:#a5d6ff}.cm{color:#8b949e;font-style:italic}.num{color:#79c0ff}.var{color:#ffa657}.cls{color:#7ee787}.bi{color:#d2a8ff}
+pre.numbered{position:relative;padding-left:3.5em!important}
+pre.numbered .line-nums{position:absolute;left:0;top:1.1rem;width:2.8em;text-align:right;color:var(--text-muted);font-size:.85em;line-height:1.8;user-select:none;opacity:.4;pointer-events:none}
 
 /* Boxes */
 .info-box{border-radius:12px;padding:1.3rem 1.5rem;margin:1.2rem 0;font-size:1.12rem;line-height:1.8;border-left:4px solid}
@@ -134,6 +144,10 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
 .exercise-box .ex-header{display:flex;align-items:center;gap:.6rem;font-weight:700;font-size:1.15rem;color:var(--accent-cyan);margin-bottom:.8rem}
 .exercise-box p{color:var(--text-secondary);font-size:1.12rem;margin-bottom:.8rem}
 .exercise-box .hint{font-size:.9rem;color:var(--text-muted);font-style:italic}
+.diff-badge{font-size:.65rem;padding:.15rem .45rem;border-radius:5px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;margin-left:auto}
+.diff-facil{background:rgba(16,185,129,.12);color:var(--accent-green)}
+.diff-medio{background:rgba(245,158,11,.12);color:var(--accent-orange)}
+.diff-dificil{background:rgba(239,68,68,.12);color:var(--accent-red)}
 
 /* Collapsible */
 details{margin:.8rem 0}
@@ -242,6 +256,23 @@ details .solution-content{border:1px solid rgba(16,185,129,.15);border-top:none;
 .qs-item{display:flex;align-items:center;gap:.3rem;font-weight:600}
 .qs-correct{color:var(--accent-green)}.qs-wrong{color:var(--accent-red)}.qs-total{color:var(--text-muted)}.qs-divider{width:1px;height:16px;background:var(--border)}.qs-pct{color:var(--accent-cyan);font-weight:700;font-family:'JetBrains Mono',monospace}
 
+.path-indicator{position:fixed;top:1rem;left:50%;transform:translateX(-50%);z-index:190;padding:.35rem 1rem;border-radius:50px;font-size:.78rem;font-weight:600;display:none;pointer-events:none;box-shadow:0 2px 12px rgba(0,0,0,.3)}
+.path-indicator.visible{display:block}
+.path-indicator.path-local{background:rgba(239,68,68,.15);color:var(--accent-red);border:1px solid rgba(239,68,68,.3)}
+.path-indicator.path-browser{background:rgba(0,212,255,.15);color:var(--accent-cyan);border:1px solid rgba(0,212,255,.3)}
+body.presentation-mode .path-indicator{display:none!important}
+
+.path-block{overflow:hidden;max-height:0;opacity:0;transition:max-height .5s ease,opacity .4s ease}
+.path-block.expanded{max-height:none;opacity:1}
+.path-toggle-btn{display:inline-flex;align-items:center;gap:.4rem;padding:.5rem 1.2rem;border-radius:10px;border:none;cursor:pointer;font-family:'Outfit',sans-serif;font-size:1rem;font-weight:600;transition:all .2s;margin-top:.5rem}
+.path-toggle-btn:hover{transform:translateY(-2px)}
+.path-toggle-btn.btn-local{background:rgba(239,68,68,.12);color:var(--accent-red);border:1.5px solid rgba(239,68,68,.3)}
+.path-toggle-btn.btn-local:hover{background:rgba(239,68,68,.2)}
+.path-toggle-btn.btn-browser{background:rgba(0,212,255,.12);color:var(--accent-cyan);border:1.5px solid rgba(0,212,255,.3)}
+.path-toggle-btn.btn-browser:hover{background:rgba(0,212,255,.2)}
+.path-toggle-btn .arrow{transition:transform .3s;display:inline-block}
+.path-toggle-btn.active .arrow{transform:rotate(90deg)}
+
 .footer{text-align:center;padding:3rem;color:var(--text-muted);font-size:.85rem;border-top:1px solid var(--border)}
 
 /* Responsive */
@@ -258,6 +289,8 @@ body.sidebar-collapsed .main{margin-left:0}
 body.sidebar-collapsed .menu-toggle{left:1rem}
 
 /* Botón presentación */
+.pdf-toggle{position:fixed;top:1rem;right:7.4rem;z-index:200;width:44px;height:44px;background:var(--bg-card);border:1px solid var(--border);border-radius:50%;color:var(--accent-green);font-size:1.2rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .3s;box-shadow:0 2px 10px rgba(0,0,0,.2)}
+.pdf-toggle:hover{transform:scale(1.1)}
 .pres-toggle{position:fixed;top:1rem;right:4.2rem;z-index:200;width:44px;height:44px;background:var(--bg-card);border:1px solid var(--border);border-radius:50%;color:var(--accent-purple);font-size:1.2rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .3s;box-shadow:0 2px 10px rgba(0,0,0,.2)}
 .pres-toggle:hover{transform:scale(1.1)}
 
@@ -303,10 +336,29 @@ body.presentation-mode .pres-nav{display:flex}
 .pres-nav-title{max-width:400px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .pres-nav-exit{background:none;border:1px solid rgba(239,68,68,.3);color:var(--accent-red);padding:.5rem 1rem;border-radius:8px;cursor:pointer;font-family:'Outfit',sans-serif;font-size:.9rem;font-weight:600;transition:all .2s}
 .pres-nav-exit:hover{background:rgba(239,68,68,.1);border-color:var(--accent-red)}
+
+/* Impresion */
+@media print{
+  body{background:#fff!important;color:#000!important}
+  body::before,.sidebar,.menu-toggle,.theme-toggle,.pres-toggle,.pdf-toggle,.back-top,.quiz-score-bar,.overlay,.path-indicator,.pres-nav,.level-bar,.copy-btn{display:none!important}
+  .main{margin-left:0!important}
+  .hero,.section,.divider{break-inside:avoid}
+  .section{max-width:100%;padding:1.5rem 0}
+  .code-block{border:1px solid #ccc;background:#f5f5f5!important}
+  .code-block pre{color:#000!important;font-size:.85rem}
+  .info-box{border-left:3px solid #666;background:#f9f9f9!important}
+  .exercise-box{border:1px solid #ccc;background:#f9f9f9!important}
+  a{color:#000;text-decoration:none}
+  .hero h1{-webkit-text-fill-color:#000;background:none!important}
+  .section h2,.section h3,.section h4{color:#000!important}
+  .section p,.section li,.explain .explain-text,.info-box,.exercise-box p{color:#333!important}
+  .kw,.fn,.str,.cm,.num,.var,.cls,.bi{color:#000!important;font-style:normal!important}
+}
 </style>
 </head>
-<body>
+<body class="sidebar-collapsed">
 <button class="menu-toggle" id="menuToggle" aria-label="Menú">☰</button>
+<button class="pdf-toggle" id="pdfToggle" aria-label="Exportar PDF" title="Exportar a PDF" onclick="window.print()">📄</button>
 <button class="pres-toggle" id="presToggle" aria-label="Modo presentación" title="Modo presentación">🖥</button>
 <button class="theme-toggle" id="themeToggle" aria-label="Cambiar tema">🌙</button>
 <button class="back-top" id="backTop" aria-label="Volver arriba" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
@@ -317,19 +369,16 @@ body.presentation-mode .pres-nav{display:flex}
   <span class="qs-pct" id="qsPct">—</span>
 </div>
 <div class="overlay" id="overlay"></div>
+<div class="path-indicator" id="pathIndicator"></div>
 
 <!-- ═══════ SIDEBAR ═══════ -->
 <nav class="sidebar" id="sidebar">
   <div class="sidebar-header">
     <div class="sidebar-logo"><div class="icon">👁</div>Reconocimiento Facial</div>
-    <div class="sidebar-subtitle">DeepFace · Python · Google Colab · v6.0</div>
   </div>
-  <div class="sidebar-progress">
-    <div class="progress-label"><span>Tu progreso</span><span id="progressPercent">0%</span></div>
-    <div class="progress-bar-bg"><div class="progress-bar-fill" id="progressFill"></div></div>
-  </div>
+  <div class="sidebar-search"><input type="text" id="sidebarSearch" placeholder="Buscar sección..." oninput="filterNav(this.value)"></div>
   <div class="nav-section">
-    <div class="nav-section-title">🟢 Nivel Básico · Google Colab</div>
+    <div class="nav-section-title" data-path="pathBasico" onclick="toggleLevel(this)">🟢 Nivel Básico · Google Colab<span class="toggle-arrow">▶</span></div>
     <a class="nav-link" href="#intro"><span class="nav-dot dot-green"></span>1. Introducción<span class="time-badge">10 min</span></a>
     <a class="nav-link" href="#preparar-colab"><span class="nav-dot dot-green"></span>2. Preparar Google Colab<span class="time-badge">10 min</span></a>
     <a class="nav-link" href="#primer-programa"><span class="nav-dot dot-green"></span>3. Tu primer programa<span class="time-badge">15 min</span></a>
@@ -338,47 +387,63 @@ body.presentation-mode .pres-nav{display:flex}
     <a class="nav-link" href="#quiz-basico"><span class="nav-dot dot-green"></span>Quiz Básico<span class="badge badge-basico">Test</span></a>
   </div>
   <div class="nav-section">
-    <div class="nav-section-title">🟡 Nivel Intermedio · Google Colab</div>
+    <div class="nav-section-title" data-path="pathIntermedio" onclick="toggleLevel(this)">🟡 Nivel Intermedio · Google Colab<span class="toggle-arrow">▶</span></div>
     <a class="nav-link" href="#comparar-caras"><span class="nav-dot dot-orange"></span>6. ¿Misma persona?<span class="time-badge">20 min</span></a>
     <a class="nav-link" href="#analizar-cara"><span class="nav-dot dot-orange"></span>7. Edad, género, emoción<span class="time-badge">20 min</span></a>
     <a class="nav-link" href="#buscar-persona"><span class="nav-dot dot-orange"></span>8. Buscar en base de datos<span class="time-badge">20 min</span></a>
     <a class="nav-link" href="#quiz-intermedio"><span class="nav-dot dot-orange"></span>Quiz Intermedio<span class="badge badge-intermedio">Test</span></a>
   </div>
   <div class="nav-section">
-    <div class="nav-section-title">🔴 Nivel Avanzado · Ordenador local</div>
-    <a class="nav-link" href="#instalar-local"><span class="nav-dot dot-red"></span>9. Instalar en tu ordenador<span class="time-badge">15 min</span></a>
+    <a class="nav-link" href="#elegir-camino" style="font-weight:700;color:var(--accent-purple);justify-content:center;border:1px dashed var(--border);margin:.3rem .5rem;padding:.5rem"><span style="margin-right:.3rem">🔀</span> Elige tu camino</a>
+  </div>
+  <div class="nav-section">
+    <div class="nav-section-title" data-path="pathLocal" onclick="toggleLevel(this)">🔴 Nivel Avanzado · Ordenador local<span class="toggle-arrow">▶</span></div>
+    <a class="nav-link" href="#instalar-local"><span class="nav-dot dot-red"></span>9. Instalar en tu ordenador<span class="time-badge">25 min</span></a>
     <a class="nav-link" href="#webcam"><span class="nav-dot dot-red"></span>10. Webcam en tiempo real<span class="time-badge">25 min</span></a>
     <a class="nav-link" href="#proyecto-final"><span class="nav-dot dot-red"></span>11. Proyecto: Asistencia<span class="time-badge">40 min</span></a>
     <a class="nav-link" href="#modelos"><span class="nav-dot dot-red"></span>12. Modelos y backends<span class="time-badge">15 min</span></a>
     <a class="nav-link" href="#quiz-avanzado"><span class="nav-dot dot-red"></span>Quiz Avanzado<span class="badge badge-avanzado">Test</span></a>
   </div>
   <div class="nav-section">
-    <div class="nav-section-title">🟣 Extras</div>
+    <div class="nav-section-title" data-path="pathBrowser" onclick="toggleLevel(this)">🔵 Alternativa Avanzada · Navegador<span class="toggle-arrow">▶</span></div>
+    <a class="nav-link" href="#preparar-web"><span class="nav-dot dot-cyan"></span>9b. Entorno web<span class="time-badge">10 min</span></a>
+    <a class="nav-link" href="#webcam-web"><span class="nav-dot dot-cyan"></span>10b. Webcam navegador<span class="time-badge">25 min</span></a>
+    <a class="nav-link" href="#asistencia-web"><span class="nav-dot dot-cyan"></span>11b. Asistencia navegador<span class="time-badge">40 min</span></a>
+    <a class="nav-link" href="#quiz-browser"><span class="nav-dot dot-cyan"></span>Quiz Navegador<span class="badge" style="background:rgba(0,212,255,.15);color:var(--accent-cyan)">Test</span></a>
+  </div>
+  <div class="nav-section">
+    <div class="nav-section-title" data-path="pathExtras" onclick="toggleLevel(this)">🟣 Extras<span class="toggle-arrow">▶</span></div>
     <a class="nav-link" href="#limitaciones"><span class="nav-dot dot-purple"></span>Limitaciones</a>
     <a class="nav-link" href="#casos-reales"><span class="nav-dot dot-purple"></span>Mundo real</a>
     <a class="nav-link" href="#errores-comunes"><span class="nav-dot dot-purple"></span>Errores comunes</a>
     <a class="nav-link" href="#glosario"><span class="nav-dot dot-purple"></span>Glosario</a>
     <a class="nav-link" href="#etica"><span class="nav-dot dot-purple"></span>Ética</a>
+    <a class="nav-link" href="#siguiente"><span class="nav-dot dot-purple"></span>¿Y ahora qué?</a>
   </div>
 </nav>
 
 <!-- ═══════ MAIN ═══════ -->
 <div class="main">
 
-<header class="hero" id="top">
-  <div class="hero-badge">🎓 Curso desde Google Colab · DeepFace + Python · v6.0</div>
-  <h1>Reconocimiento Facial<br>con DeepFace y Python</h1>
-  <p>Aprende a detectar caras, identificar personas y analizar emociones. Todo desde el navegador con Google Colab. Sin instalar nada en tu ordenador hasta que lo necesites.</p>
-  <div class="hero-cards">
-    <div class="hero-card"><div class="hc-icon">☁️</div><div class="hc-num">8</div><div class="hc-label">Lecciones en Colab</div></div>
-    <div class="hero-card"><div class="hc-icon">💻</div><div class="hc-num">4</div><div class="hc-label">Lecciones local</div></div>
-    <div class="hero-card"><div class="hc-icon">📝</div><div class="hc-num">3</div><div class="hc-label">Quizzes</div></div>
-    <div class="hero-card"><div class="hc-icon">⏱️</div><div class="hc-num">~6h</div><div class="hc-label">Duración</div></div>
-  </div>
-</header>
+<header class="hero" id="top"></header>
+
+<section class="section" style="text-align:center;padding-top:2.5rem;padding-bottom:2rem">
+  <h1 style="font-size:clamp(2.2rem,5vw,3.2rem);font-weight:900;line-height:1.15;letter-spacing:-.03em;margin-bottom:1rem;background:linear-gradient(135deg,var(--text-primary) 0%,var(--accent-cyan) 50%,var(--accent-purple) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">Reconocimiento Facial<br>con DeepFace y Python</h1>
+  <p style="max-width:700px;margin:0 auto">Aprende a detectar caras, identificar personas y analizar emociones. Empieza desde el navegador con Google Colab y avanza hasta la webcam en tiempo real — con Python en tu ordenador o con JavaScript sin instalar nada.</p>
+</section>
 
 <div class="divider"></div>
 
+<section class="section" style="text-align:center;padding:2rem 3rem">
+  <div style="background:var(--bg-card);border:2px solid var(--accent-green);border-radius:14px;padding:1.5rem;max-width:600px;margin:0 auto">
+    <div style="font-size:2rem;margin-bottom:.4rem">🟢</div>
+    <div style="font-size:1.2rem;font-weight:700;color:var(--accent-green);margin-bottom:.5rem">Nivel Básico · Google Colab</div>
+    <div style="font-size:.95rem;color:var(--text-secondary);line-height:1.6;margin-bottom:1rem">Secciones 1 a 5 + Quiz. Aprende los fundamentos del reconocimiento facial desde el navegador.</div>
+    <button class="path-toggle-btn" style="background:rgba(16,185,129,.12);color:var(--accent-green);border:1.5px solid rgba(16,185,129,.3)" onclick="toggleLevel(this)" data-path="pathBasico"><span class="arrow">▶</span> Desplegar</button>
+  </div>
+</section>
+
+<div class="path-block" id="pathBasico">
 <!-- ══════════════════════════════════════════ -->
 <!-- SECCIÓN 1: INTRODUCCIÓN                    -->
 <!-- ══════════════════════════════════════════ -->
@@ -417,7 +482,7 @@ body.presentation-mode .pres-nav{display:flex}
 
   <div class="info-box tip">
     <div class="ib-title green">💡 ¿Cómo está organizado el curso?</div>
-    <p>Las <strong>secciones 1 a 8</strong> (niveles Básico e Intermedio) se hacen <strong>completamente desde Google Colab</strong> en tu navegador. No necesitas instalar nada. Las <strong>secciones 9 a 12</strong> (nivel Avanzado) usan la webcam de tu ordenador, así que ahí sí necesitarás instalar Python y DeepFace en tu equipo. Pero eso será más adelante.</p>
+    <p>Las <strong>secciónes 1 a 8</strong> (niveles Básico e Intermedio) se hacen <strong>completamente desde Google Colab</strong> en tu navegador. No necesitas instalar nada. Las <strong>secciónes 9 a 12</strong> (nivel Avanzado) usan la webcam de tu ordenador, así que ahí sí necesitarás instalar Python y DeepFace en tu equipo. Pero eso será más adelante.</p>
   </div>
 </section>
 
@@ -437,7 +502,7 @@ body.presentation-mode .pres-nav{display:flex}
 
   <div class="info-box concept">
     <div class="ib-title purple">🧠 ¿Qué es un "cuaderno" de Colab?</div>
-    <p>Es un documento interactivo con <strong>celdas</strong>. Cada celda es un trozo de código que puedes ejecutar por separado pulsando el botón <strong>▶ (play)</strong> de la izquierda o con <strong>Ctrl + Enter</strong>. El resultado aparece justo debajo de la celda. Es como un documento de Word pero cada párrafo es código que "funciona".</p>
+    <p>Es un documento interactivo con <strong>celdas</strong>. Cada celda es un trozo de código que puedes ejecutar por separado pulsando el botón <strong>▶ (play)</strong> de la izquierda o con <strong>Ctrl + Enter</strong>. El resultado aparece justo debajo de la celda. Es como un documento de Word pero cada párrafo es código que "funcióna".</p>
   </div>
 
   <h3>Paso 2: Instalar DeepFace</h3>
@@ -449,15 +514,15 @@ body.presentation-mode .pres-nav{display:flex}
 !pip install deepface tf-keras</pre></div>
 
   <div class="explain"><span class="line-ref">!</span><div class="explain-text">En Google Colab, el signo <code>!</code> al inicio de una línea indica que no es código Python, sino un <strong>comando del sistema</strong>. <code>pip install</code> es el comando para instalar bibliotecas de Python. Este paso solo hay que hacerlo <strong>una vez</strong> cada vez que abras un cuaderno nuevo (Colab se reinicia cuando lo cierras).</div></div>
-  <div class="explain"><span class="line-ref">tf-keras</span><div class="explain-text">Es un paquete extra que DeepFace necesita para funcionar con las versiones recientes de TensorFlow. Sin él, te saldría un error al importar DeepFace. Lo instalamos juntos para evitar problemas.</div></div>
+  <div class="explain"><span class="line-ref">tf-keras</span><div class="explain-text">Es un paquete extra que DeepFace necesita para funciónar con las versiónes recientes de TensorFlow. Sin él, te saldría un error al importar DeepFace. Lo instalamos juntos para evitar problemas.</div></div>
 
-  <h3>Paso 3: Comprobar que funciona</h3>
+  <h3>Paso 3: Comprobar que funcióna</h3>
   <p>En una celda nueva, escribe:</p>
   <div class="code-block"><div class="code-header"><div class="dots"><span></span><span></span><span></span></div><span>Celda 2 — Verificar instalación</span><button class="copy-btn" onclick="copyCode(this)">Copiar</button></div>
 <pre><span class="kw">from</span> deepface <span class="kw">import</span> DeepFace
 <span class="bi">print</span>(<span class="str">"✅ ¡DeepFace instalado y listo!"</span>)</pre></div>
 
-  <p>Si ves el mensaje <code>✅ ¡DeepFace instalado y listo!</code> debajo de la celda, todo funciona correctamente.</p>
+  <p>Si ves el mensaje <code>✅ ¡DeepFace instalado y listo!</code> debajo de la celda, todo funcióna correctamente.</p>
 
   <h3>Paso 4: Subir fotos a Colab</h3>
   <p>Colab se ejecuta en los servidores de Google, no tiene acceso a las fotos de tu ordenador. Para trabajar con fotos, necesitas subirlas:</p>
@@ -491,7 +556,7 @@ imagen = cv2.<span class="fn">imread</span>(<span class="str">"foto.jpg"</span>)
 <span class="cm"># OPCIÓN A: cv2_imshow (rápida y sencilla)</span>
 cv2_imshow(imagen)
 
-<span class="cm"># OPCIÓN B: matplotlib (más bonita, con título y tamaño)</span>
+<span class="cm"># OPCIÓN B: matplotlib (mas bonita, con título y tamaño)</span>
 imagen_rgb = cv2.<span class="fn">cvtColor</span>(imagen, cv2.<span class="var">COLOR_BGR2RGB</span>)
 plt.<span class="fn">figure</span>(figsize=(<span class="num">10</span>, <span class="num">8</span>))
 plt.<span class="fn">imshow</span>(imagen_rgb)
@@ -503,15 +568,15 @@ plt.<span class="fn">show</span>()</pre></div>
   <div class="explain"><span class="line-ref">COLOR_BGR2RGB</span><div class="explain-text">OpenCV carga las imágenes en formato <strong>BGR</strong> (Azul-Verde-Rojo) en vez de RGB (Rojo-Verde-Azul). Si muestras con <code>matplotlib</code> sin convertir, los colores se ven mal (la cara azulada). <code>cvtColor</code> convierte de un formato a otro.</div></div>
 
   <div class="exercise-box">
-    <div class="ex-header"><div class="ex-icon">✏️</div> Actividad 2.1 — Prepara tu espacio de trabajo</div>
-    <p><strong>Objetivo:</strong> Asegurarte de que todo funciona antes de empezar a programar.</p>
+    <div class="ex-header"><div class="ex-icon">✏️<span class="diff-badge diff-facil">Fácil</span></div> Actividad 2.1 — Prepara tu espacio de trabajo<span class="diff-badge diff-facil">Fácil</span></div>
+    <p><strong>Objetivo:</strong> Asegurarte de que todo funcióna antes de empezar a programar.</p>
     <p><strong>Pasos:</strong></p>
     <p>1. Abre Google Colab y crea un nuevo cuaderno.</p>
     <p>2. Ejecuta la celda de instalación (<code>!pip install deepface tf-keras</code>).</p>
     <p>3. Ejecuta la celda de verificación (<code>from deepface import DeepFace</code>).</p>
     <p>4. Sube una foto con una cara visible usando <code>files.upload()</code>.</p>
     <p>5. Muéstrala con <code>cv2_imshow()</code> para comprobar que se ve bien.</p>
-    <p class="hint">Si todo funciona, estás listo para la siguiente sección. Si algo falla, revisa la sección de Errores Comunes al final del curso.</p>
+    <p class="hint">Si todo funcióna, estás listo para la siguiente sección. Si algo falla, revisa la sección de Errores Comunes al final del curso.</p>
   </div>
 </section>
 
@@ -556,25 +621,26 @@ resultados = DeepFace.<span class="fn">analyze</span>(
   </div>
 
   <div class="exercise-box">
-    <div class="ex-header"><div class="ex-icon">✏️</div> Actividad 3.1 — Compara resultados</div>
+    <div class="ex-header"><div class="ex-icon">✏️<span class="diff-badge diff-medio">Medio</span></div> Actividad 3.1 — Compara resultados<span class="diff-badge diff-medio">Medio</span></div>
     <p><strong>Objetivo:</strong> Comprobar cómo de precisa es la IA con diferentes fotos.</p>
     <p><strong>Pasos:</strong></p>
     <p>1. Sube 3 fotos diferentes: una tuya, una de un familiar, y una de un famoso descargada de internet.</p>
     <p>2. Ejecuta el código de análisis con cada una.</p>
     <p>3. Anota los resultados en una tabla como esta:</p>
     <table class="error-table" style="margin:.8rem 0">
-      <thead><tr><th>Foto</th><th>Emoción</th><th>Edad real</th><th>Edad estimada</th><th>¿Acierta?</th></tr></thead>
+      <thead><tr><th>Foto</th><th>Emocion</th><th>Edad real</th><th>Edad estimada</th><th>¿Acierta?</th></tr></thead>
       <tbody>
-        <tr><td>Yo</td><td></td><td></td><td></td><td></td></tr>
-        <tr><td>Familiar</td><td></td><td></td><td></td><td></td></tr>
-        <tr><td>Famoso</td><td></td><td></td><td></td><td></td></tr>
+        <tr><td>Yo</td><td contenteditable="true" style="background:rgba(0,212,255,.04);outline:none;min-width:80px"></td><td contenteditable="true" style="background:rgba(0,212,255,.04);outline:none;min-width:60px"></td><td contenteditable="true" style="background:rgba(0,212,255,.04);outline:none;min-width:60px"></td><td contenteditable="true" style="background:rgba(0,212,255,.04);outline:none;min-width:60px"></td></tr>
+        <tr><td>Familiar</td><td contenteditable="true" style="background:rgba(0,212,255,.04);outline:none"></td><td contenteditable="true" style="background:rgba(0,212,255,.04);outline:none"></td><td contenteditable="true" style="background:rgba(0,212,255,.04);outline:none"></td><td contenteditable="true" style="background:rgba(0,212,255,.04);outline:none"></td></tr>
+        <tr><td>Famoso</td><td contenteditable="true" style="background:rgba(0,212,255,.04);outline:none"></td><td contenteditable="true" style="background:rgba(0,212,255,.04);outline:none"></td><td contenteditable="true" style="background:rgba(0,212,255,.04);outline:none"></td><td contenteditable="true" style="background:rgba(0,212,255,.04);outline:none"></td></tr>
       </tbody>
     </table>
+    <p style="font-size:.85rem;color:var(--text-muted);font-style:italic">Haz clic en las celdas para escribir directamente tus resultados.</p>
     <p><strong>Reflexiona:</strong> ¿En qué casos acierta más? ¿Cuándo falla? ¿Influye la calidad de la foto?</p>
   </div>
 
   <div class="exercise-box">
-    <div class="ex-header"><div class="ex-icon">✏️</div> Actividad 3.2 — Añade la etnia al análisis</div>
+    <div class="ex-header"><div class="ex-icon">✏️<span class="diff-badge diff-facil">Fácil</span></div> Actividad 3.2 — Añade la etnia al análisis<span class="diff-badge diff-facil">Fácil</span></div>
     <p><strong>Objetivo:</strong> Ampliar el análisis añadiendo <code>"race"</code> a la lista de <code>actions</code>.</p>
     <p><strong>Pista:</strong> Modifica la línea de <code>actions</code> para que incluya también <code>"race"</code>, y añade un <code>print()</code> con <code>cara['dominant_race']</code>.</p>
     <details><summary>Ver solución</summary><div class="solution-content"><div class="code-block"><div class="code-header"><div class="dots"><span></span><span></span><span></span></div><span>solución</span></div>
@@ -605,7 +671,7 @@ resultados = DeepFace.<span class="fn">analyze</span>(
 <span class="cm"># ─── Buscar todas las caras en la imagen ───</span>
 caras = DeepFace.<span class="fn">extract_faces</span>(
     img_path=<span class="str">"foto_grupo.jpg"</span>,
-    detector_backend=<span class="str">"opencv"</span>,  <span class="cm"># El detector más rápido</span>
+    detector_backend=<span class="str">"opencv"</span>,  <span class="cm"># El detector mas rapido</span>
     align=<span class="kw">True</span>                   <span class="cm"># Alinear caras (ojos horizontales)</span>
 )
 
@@ -628,7 +694,7 @@ caras = DeepFace.<span class="fn">extract_faces</span>(
   <div class="explain"><span class="line-ref">:.2%</span><div class="explain-text">Formato de Python que convierte un número decimal en porcentaje con 2 decimales. Ejemplo: <code>0.9834</code> se muestra como <code>98.34%</code>. Los <code>:</code> introducen el formato y <code>.2%</code> indica "2 decimales y símbolo %".</div></div>
 
   <div class="exercise-box">
-    <div class="ex-header"><div class="ex-icon">✏️</div> Actividad 4.1 — Foto de grupo</div>
+    <div class="ex-header"><div class="ex-icon">✏️<span class="diff-badge diff-medio">Medio</span></div> Actividad 4.1 — Foto de grupo<span class="diff-badge diff-medio">Medio</span></div>
     <p><strong>Objetivo:</strong> Comprobar cuántas caras detecta DeepFace en una foto de grupo.</p>
     <p><strong>Pasos:</strong></p>
     <p>1. Busca en internet una foto de grupo (por ejemplo: "foto clase colegio" o "equipo fútbol").</p>
@@ -694,16 +760,16 @@ cv2.<span class="fn">imwrite</span>(<span class="str">"resultado.jpg"</span>, im
 
   <div class="explain"><span class="line-ref">cv2.rectangle()</span><div class="explain-text">Dibuja un rectángulo. Los parámetros son: imagen donde dibujar, esquina superior izquierda <code>(x, y)</code>, esquina inferior derecha <code>(x+ancho, y+alto)</code>, color <code>(0, 255, 0)</code> = verde en formato BGR, y grosor de línea <code>2</code> píxeles.</div></div>
   <div class="explain"><span class="line-ref">cv2.putText()</span><div class="explain-text">Escribe texto sobre la imagen. Parámetros: imagen, texto, posición <code>(x, y-10)</code> (un poco por encima del rectángulo), tipo de letra, tamaño <code>0.6</code>, color verde, y grosor <code>2</code>.</div></div>
-  <div class="explain"><span class="line-ref">detector_backend</span><div class="explain-text">Usamos <code>"retinaface"</code> porque es el detector más preciso: detecta <strong>caras de perfil, parcialmente ocultas y en ángulo</strong>. El detector por defecto (<code>"opencv"</code>) solo funciona bien con caras de frente. En fotos de grupo, la diferencia es enorme. Tarda un poco más, pero merece la pena.</div></div>
+  <div class="explain"><span class="line-ref">detector_backend</span><div class="explain-text">Usamos <code>"retinaface"</code> porque es el detector más preciso: detecta <strong>caras de perfil, parcialmente ocultas y en ángulo</strong>. El detector por defecto (<code>"opencv"</code>) solo funcióna bien con caras de frente. En fotos de grupo, la diferencia es enorme. Tarda un poco más, pero merece la pena.</div></div>
   <div class="explain"><span class="line-ref">enforce_detection=False</span><div class="explain-text">Por defecto, DeepFace da error si no encuentra cara. Con <code>False</code>, simplemente ignora las zonas donde no hay cara. Útil en fotos de grupo donde alguna cara puede estar parcialmente oculta.</div></div>
   <div class="explain"><span class="line-ref">cv2.imwrite()</span><div class="explain-text">Guarda la imagen modificada como un archivo nuevo. En Colab, el archivo se guarda en el espacio temporal del servidor. Puedes descargarlo con <code>from google.colab import files; files.download("resultado.jpg")</code>.</div></div>
 
   <div class="exercise-box">
-    <div class="ex-header"><div class="ex-icon">✏️</div> Actividad 5.1 — Colores según la emoción</div>
+    <div class="ex-header"><div class="ex-icon">✏️<span class="diff-badge diff-medio">Medio</span></div> Actividad 5.1 — Colores según la emoción<span class="diff-badge diff-medio">Medio</span></div>
     <p><strong>Objetivo:</strong> Que el rectángulo sea de un color diferente según la emoción detectada.</p>
     <p><strong>Instrucciones:</strong> Antes del bucle <code>for</code>, crea un diccionario que asigne un color a cada emoción. Después, dentro del bucle, usa ese diccionario para elegir el color del rectángulo.</p>
     <details><summary>Ver solución</summary><div class="solution-content"><div class="code-block"><div class="code-header"><div class="dots"><span></span><span></span><span></span></div><span>solución</span></div>
-<pre><span class="cm"># Diccionario: emoción → color (en formato BGR)</span>
+<pre><span class="cm"># Diccionario: emocion → color (en formato BGR)</span>
 colores = {
     <span class="str">"happy"</span>: (<span class="num">0</span>, <span class="num">255</span>, <span class="num">0</span>),      <span class="cm"># Verde</span>
     <span class="str">"sad"</span>: (<span class="num">255</span>, <span class="num">0</span>, <span class="num">0</span>),        <span class="cm"># Azul</span>
@@ -722,7 +788,7 @@ cv2.<span class="fn">putText</span>(imagen, etiqueta, (x, y-<span class="num">10
   </div>
 
   <div class="exercise-box">
-    <div class="ex-header"><div class="ex-icon">✏️</div> Actividad 5.2 — Descarga tu resultado</div>
+    <div class="ex-header"><div class="ex-icon">✏️<span class="diff-badge diff-facil">Fácil</span></div> Actividad 5.2 — Descarga tu resultado<span class="diff-badge diff-facil">Fácil</span></div>
     <p><strong>Objetivo:</strong> Descargar la imagen con los rectángulos a tu ordenador.</p>
     <p><strong>Instrucciones:</strong> Después de <code>cv2.imwrite()</code>, añade estas dos líneas:</p>
     <div class="code-block"><div class="code-header"><div class="dots"><span></span><span></span><span></span></div><span>Descargar archivo desde Colab</span><button class="copy-btn" onclick="copyCode(this)">Copiar</button></div>
@@ -762,10 +828,21 @@ files.<span class="fn">download</span>(<span class="str">"resultado.jpg"</span>)
 </section>
 
 <div class="divider"></div>
+</div><!-- /pathBasico -->
+
+<section class="section" style="text-align:center;padding:2rem 3rem">
+  <div style="background:var(--bg-card);border:2px solid var(--accent-orange);border-radius:14px;padding:1.5rem;max-width:600px;margin:0 auto">
+    <div style="font-size:2rem;margin-bottom:.4rem">🟡</div>
+    <div style="font-size:1.2rem;font-weight:700;color:var(--accent-orange);margin-bottom:.5rem">Nivel Intermedio · Google Colab</div>
+    <div style="font-size:.95rem;color:var(--text-secondary);line-height:1.6;margin-bottom:1rem">Secciones 6 a 8 + Quiz. Verifica, analiza y busca personas en bases de datos.</div>
+    <button class="path-toggle-btn" style="background:rgba(245,158,11,.12);color:var(--accent-orange);border:1.5px solid rgba(245,158,11,.3)" onclick="toggleLevel(this)" data-path="pathIntermedio"><span class="arrow">▶</span> Desplegar</button>
+  </div>
+</section>
 
 <!-- ══════════════════════════════════════════ -->
 <!--          NIVEL INTERMEDIO                  -->
 <!-- ══════════════════════════════════════════ -->
+<div class="path-block" id="pathIntermedio">
 <div class="level-bar"><div class="lb-seg" style="background:var(--accent-green);opacity:.3"></div><div class="lb-seg" style="background:var(--accent-orange)"></div><div class="lb-seg" style="background:var(--accent-red);opacity:.3"></div></div>
 
 <!-- SECCIÓN 6: VERIFICAR -->
@@ -807,7 +884,7 @@ resultado = DeepFace.<span class="fn">verify</span>(
   <div class="explain"><span class="line-ref">threshold</span><div class="explain-text">Es el valor de corte que usa DeepFace para decidir. Cada modelo de IA tiene su propio umbral. Por ejemplo, VGG-Face usa ~0.40. Si la distancia es 0.25 (menor que 0.40) → misma persona. Si es 0.65 (mayor que 0.40) → diferentes.</div></div>
 
   <div class="exercise-box">
-    <div class="ex-header"><div class="ex-icon">✏️</div> Actividad 6.1 — Pon a prueba el sistema</div>
+    <div class="ex-header"><div class="ex-icon">✏️<span class="diff-badge diff-medio">Medio</span></div> Actividad 6.1 — Pon a prueba el sistema<span class="diff-badge diff-medio">Medio</span></div>
     <p><strong>Objetivo:</strong> Comprobar cuándo acierta y cuándo falla la verificación facial.</p>
     <p><strong>Pasos:</strong> Sube fotos y prueba estas comparaciones:</p>
     <p>1. Dos fotos <strong>tuyas</strong> (hechas en momentos diferentes). ¿Dice que eres tú?</p>
@@ -843,7 +920,7 @@ resultados = DeepFace.<span class="fn">analyze</span>(
     <span class="bi">print</span>(<span class="str">f"😊 Emoción: {cara[<span class="str">'dominant_emotion'</span>]}"</span>)
 
     <span class="cm"># Mostrar TODAS las emociones con barras visuales</span>
-    <span class="bi">print</span>(<span class="str">"\n   Probabilidad de cada emoción:"</span>)
+    <span class="bi">print</span>(<span class="str">"\n   Probabilidad de cada emocion:"</span>)
     <span class="kw">for</span> emocion, probabilidad <span class="kw">in</span> cara[<span class="str">"emotion"</span>].<span class="fn">items</span>():
         <span class="cm"># Crear una barra visual con bloques ██</span>
         num_bloques = <span class="bi">int</span>(probabilidad / <span class="num">5</span>)  <span class="cm"># 1 bloque por cada 5%</span>
@@ -852,10 +929,10 @@ resultados = DeepFace.<span class="fn">analyze</span>(
 
   <div class="explain"><span class="line-ref">cara["emotion"]</span><div class="explain-text">Además de la emoción dominante, DeepFace devuelve un diccionario con la <strong>probabilidad de cada una de las 7 emociones</strong>: angry (enfado), disgust (asco), fear (miedo), happy (alegría), sad (tristeza), surprise (sorpresa), neutral. Cada valor es un porcentaje de 0 a 100. Por ejemplo: 72% happy, 15% neutral, 8% surprise, 5% el resto.</div></div>
   <div class="explain"><span class="line-ref">"█" * num_bloques</span><div class="explain-text">En Python, multiplicar un texto por un número lo repite. <code>"█" * 5</code> genera <code>"█████"</code>. Dividimos la probabilidad entre 5 para que una emoción con 50% tenga 10 bloques, una con 100% tenga 20, etc. Es un "gráfico de barras" hecho con caracteres de texto.</div></div>
-  <div class="explain"><span class="line-ref">{emocion:>10}</span><div class="explain-text">Formato que alinea el texto a la derecha en un espacio de 10 caracteres. Así todas las barras empiezan en la misma columna, independientemente de si la emoción se llama "sad" (3 letras) o "surprise" (8 letras). Es un truco para que la salida sea visualmente ordenada.</div></div>
+  <div class="explain"><span class="line-ref">{emoción:>10}</span><div class="explain-text">Formato que alínea el texto a la derecha en un espacio de 10 caracteres. Así todas las barras empiezan en la misma columna, independientemente de si la emoción se llama "sad" (3 letras) o "surprise" (8 letras). Es un truco para que la salida sea visualmente ordenada.</div></div>
 
   <div class="exercise-box">
-    <div class="ex-header"><div class="ex-icon">✏️</div> Actividad 7.1 — Emociones actuadas</div>
+    <div class="ex-header"><div class="ex-icon">✏️<span class="diff-badge diff-medio">Medio</span></div> Actividad 7.1 — Emociones actuadas<span class="diff-badge diff-medio">Medio</span></div>
     <p><strong>Objetivo:</strong> Comprobar si DeepFace distingue bien diferentes emociones.</p>
     <p><strong>Instrucciones:</strong></p>
     <p>1. Hazte 4 selfies "actuando" diferentes emociones: feliz (sonriendo mucho), triste (cara seria mirando abajo), sorprendido (ojos y boca abiertos), enfadado (ceño fruncido).</p>
@@ -943,7 +1020,7 @@ resultados = DeepFace.<span class="fn">find</span>(
   <div class="explain"><span class="line-ref">os.path.basename()</span><div class="explain-text">De una ruta como <code>"base_datos/Carlos.jpg"</code>, extrae solo el nombre del archivo: <code>"Carlos.jpg"</code>. Luego <code>splitext()</code> separa el nombre de la extensión, quedándonos con <code>"Carlos"</code>.</div></div>
 
   <div class="exercise-box">
-    <div class="ex-header"><div class="ex-icon">✏️</div> Actividad 8.1 — Tu propia base de datos</div>
+    <div class="ex-header"><div class="ex-icon">✏️<span class="diff-badge diff-medio">Medio</span></div> Actividad 8.1 — Tu propia base de datos<span class="diff-badge diff-medio">Medio</span></div>
     <p><strong>Objetivo:</strong> Crear una base de datos con al menos 3 personas e identificarlas.</p>
     <p><strong>Pasos:</strong></p>
     <p>1. Consigue fotos de 3-5 compañeros/as de clase (o usa fotos de famosos).</p>
@@ -980,20 +1057,50 @@ resultados = DeepFace.<span class="fn">find</span>(
 </section>
 
 <div class="divider"></div>
+</div><!-- /pathIntermedio -->
+
+<!-- ══════════════════════════════════════════ -->
+<!--          BIFURCACIÓN DE CAMINOS           -->
+<!-- ══════════════════════════════════════════ -->
+<section class="section" id="elegir-camino" style="text-align:center;padding-bottom:2rem">
+  <h2 style="margin-bottom:1rem">¿Quécamino eliges?</h2>
+  <p>Has completado los niveles Basico e Intermedio. Para las secciónes avanzadas con webcam, hay <strong>dos opciones</strong> según tu situación:</p>
+  <div style="display:flex;gap:1.5rem;justify-content:center;flex-wrap:wrap;margin-top:1.5rem">
+    <div style="flex:1;min-width:260px;max-width:400px;text-align:center">
+      <div style="background:var(--bg-card);border:2px solid var(--accent-red);border-radius:14px;padding:1.5rem">
+        <div style="font-size:2.2rem;margin-bottom:.5rem">💻</div>
+        <div style="font-size:1.2rem;font-weight:700;color:var(--accent-red);margin-bottom:.5rem">Camino A: Ordenador local</div>
+        <div style="font-size:.95rem;color:var(--text-secondary);line-height:1.6;margin-bottom:1rem">Puedes instalar Python y VS Code en tu ordenador. Secciones <strong>9, 10, 11 y 12</strong>.</div>
+        <button class="path-toggle-btn btn-local" onclick="togglePath('local')"><span class="arrow">▶</span> Desplegar camino A</button>
+      </div>
+    </div>
+    <div style="flex:1;min-width:260px;max-width:400px;text-align:center">
+      <div style="background:var(--bg-card);border:2px solid var(--accent-cyan);border-radius:14px;padding:1.5rem">
+        <div style="font-size:2.2rem;margin-bottom:.5rem">🌐</div>
+        <div style="font-size:1.2rem;font-weight:700;color:var(--accent-cyan);margin-bottom:.5rem">Camino B: Solo navegador</div>
+        <div style="font-size:.95rem;color:var(--text-secondary);line-height:1.6;margin-bottom:1rem">No puedes instalar nada (ordenadores del centro). Secciones <strong>9b, 10b y 11b</strong> con JavaScript.</div>
+        <button class="path-toggle-btn btn-browser" onclick="togglePath('browser')"><span class="arrow">▶</span> Desplegar camino B</button>
+      </div>
+    </div>
+  </div>
+</section>
 
 <!-- ══════════════════════════════════════════ -->
 <!--          NIVEL AVANZADO · LOCAL            -->
 <!-- ══════════════════════════════════════════ -->
+<div class="path-block" id="pathLocal">
+<div class="divider"></div>
 <div class="level-bar"><div class="lb-seg" style="background:var(--accent-green);opacity:.3"></div><div class="lb-seg" style="background:var(--accent-orange);opacity:.3"></div><div class="lb-seg" style="background:var(--accent-red)"></div></div>
 
 <!-- SECCIÓN 9: INSTALAR EN LOCAL -->
 <section class="section" id="instalar-local">
   <div class="section-tag tag-avanzado">🔴 Nivel Avanzado · Ordenador local</div>
   <h2>9. Preparar tu ordenador para programar</h2>
+  <a href="#elegir-camino" style="display:inline-flex;align-items:center;gap:.3rem;font-size:.85rem;color:var(--text-muted);text-decoration:none;margin-bottom:1rem" onmouseover="this.style.color='var(--accent-cyan)'" onmouseout="this.style.color='var(--text-muted)'">← Volver a elegir camino</a>
 
   <div class="info-box important">
-    <div class="ib-title cyan">ℹ️ ¿Por que cambiar al ordenador local?</div>
-    <p>Hasta ahora todo ha sido desde el navegador con Google Colab. Pero las secciones 10 y 11 necesitan la <strong>webcam de tu ordenador en tiempo real</strong> (video continuo), y eso no se puede hacer desde Colab. Vamos a preparar tu equipo en 4 pasos.</p>
+    <div class="ib-title cyan">ℹ️ ¿Por quécambiar al ordenador local?</div>
+    <p>Hasta ahora todo ha sido desde el navegador con Google Colab. Pero las secciónes 10 y 11 necesitan la <strong>webcam de tu ordenador en tiempo real</strong> (video continuo), y eso no se puede hacer desde Colab. Vamos a preparar tu equipo en 4 pasos.</p>
   </div>
 
   <!-- Diagrama visual del proceso -->
@@ -1012,7 +1119,7 @@ resultados = DeepFace.<span class="fn">find</span>(
   <!-- ══════════════════════════════ -->
   <h3>Paso 1: Instalar Python 🐍</h3>
 
-  <p>Python es el lenguaje de programacion que usamos en todo el curso. Tu ordenador no lo tiene instalado por defecto, asi que hay que descargarlo.</p>
+  <p>Python es el lenguaje de programación que usamos en todo el curso. Tu ordenador no lo tiene instalado por defecto, así que hay que descargarlo.</p>
 
   <div class="os-tabs">
     <button class="os-tab active" onclick="switchOS('windows',event)">🪟 Windows</button>
@@ -1024,35 +1131,35 @@ resultados = DeepFace.<span class="fn">find</span>(
     <h4>1.1 — Descargar e instalar</h4>
     <ol>
       <li>Entra en <strong>python.org/downloads</strong></li>
-      <li>Haz clic en el boton amarillo <strong>"Download Python 3.12.x"</strong> (o la version mas reciente).</li>
+      <li>Haz clic en el botón amarillo <strong>"Download Python 3.12.x"</strong> (o la versión mas reciente).</li>
       <li>Ejecuta el instalador descargado.</li>
     </ol>
 
     <div class="info-box warning">
       <div class="ib-title orange">⚠️ ANTES de darle a "Install Now"</div>
-      <p>En la primera pantalla del instalador veras una casilla abajo que dice <strong>"Add Python to PATH"</strong>. Tienes que <strong>marcarla</strong>. Si no la marcas, el terminal no encontrara Python y nada de lo que hagamos despues funcionara. Es el error mas comun.</p>
+      <p>En la primera pantalla del instalador verás una casilla abajo que dice <strong>"Add Python to PATH"</strong>. Tienes que <strong>marcarla</strong>. Si no la marcas, el terminal no encontrará Python y nada de lo que hagamos despues funciónara. Es el error mas comun.</p>
     </div>
 
-    <h4>1.2 — Comprobar que funciona</h4>
-    <p>Abre el menu Inicio, escribe <strong>"CMD"</strong> y abre el Simbolo del sistema. Escribe:</p>
+    <h4>1.2 — Comprobar que funcióna</h4>
+    <p>Abre el menú Inicio, escribe <strong>"CMD"</strong> y abre el Símbolo del sistema. Escribe:</p>
     <div class="code-block"><div class="code-header"><div class="dots"><span></span><span></span><span></span></div><span>CMD — Comprobar Python</span><button class="copy-btn" onclick="copyCode(this)">Copiar</button></div>
 <pre>python --version</pre></div>
-    <p>Si ves algo como <code>Python 3.12.4</code> esta bien. Si dice <strong>"no se reconoce"</strong>, repite la instalacion marcando "Add to PATH".</p>
+    <p>Si ves algo como <code>Python 3.12.4</code> está bien. Si dice <strong>"no se reconoce"</strong>, repite la instalación marcando "Add to PATH".</p>
 
     <h4>1.3 — Instalar las bibliotecas del curso</h4>
-    <p>Sin cerrar CMD, escribe este comando. Instalara DeepFace y todo lo necesario (puede tardar 2-3 minutos):</p>
+    <p>Sin cerrar CMD, escribe este comando. Instalará DeepFace y todo lo necesario (puede tardar 2-3 minutos):</p>
     <div class="code-block"><div class="code-header"><div class="dots"><span></span><span></span><span></span></div><span>CMD — Instalar bibliotecas</span><button class="copy-btn" onclick="copyCode(this)">Copiar</button></div>
 <pre>pip install deepface opencv-python tf-keras</pre></div>
 
     <div class="info-box important">
       <div class="ib-title cyan">ℹ️ En Windows: <code>python</code> y <code>pip</code> (sin el 3)</div>
-      <p>En macOS/Linux los comandos son <code>python3</code> y <code>pip3</code>. En Windows son <code>python</code> y <code>pip</code> (sin el numero 3). Si escribes <code>python3</code> en Windows te dara error o se abrira la Microsoft Store.</p>
+      <p>En macOS/Linux los comandos son <code>python3</code> y <code>pip3</code>. En Windows son <code>python</code> y <code>pip</code> (sin el número 3). Si escribes <code>python3</code> en Windows te dará error o se abrira la Microsoft Store.</p>
     </div>
   </div>
 
   <div class="os-content" id="os-mac">
     <h4>1.1 — Instalar con Homebrew</h4>
-    <p>macOS trae una version antigua de Python que no nos sirve. Vamos a instalar una moderna con Homebrew (un gestor de paquetes para Mac):</p>
+    <p>macOS trae una versión antigua de Python que no nos sirve. Vamos a instalar una moderna con Homebrew (un gestor de paquetes para Mac):</p>
     <div class="code-block"><div class="code-header"><div class="dots"><span></span><span></span><span></span></div><span>Terminal — Instalar Homebrew (si no lo tienes)</span><button class="copy-btn" onclick="copyCode(this)">Copiar</button></div>
 <pre>/bin/bash -c <span class="str">"$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"</span></pre></div>
     <div class="code-block"><div class="code-header"><div class="dots"><span></span><span></span><span></span></div><span>Terminal — Instalar Python</span><button class="copy-btn" onclick="copyCode(this)">Copiar</button></div>
@@ -1082,28 +1189,28 @@ pip3 install deepface opencv-python tf-keras</pre></div>
   <h4>2.1 — Descargar e instalar VS Code</h4>
   <ol>
     <li>Entra en <strong>code.visualstudio.com</strong></li>
-    <li>Haz clic en el boton azul de descarga. Detecta tu sistema automaticamente.</li>
+    <li>Haz clic en el botón azul de descarga. Detecta tu sistema automáticamente.</li>
     <li>Ejecuta el instalador con las opciones por defecto.</li>
-    <li>Abre VS Code cuando termine la instalacion.</li>
+    <li>Abre VS Code cuando termine la instalación.</li>
   </ol>
 
-  <h4>2.2 — Instalar la extension de Python</h4>
-  <p>VS Code por si solo no sabe ejecutar Python. Necesitamos instalarle una extension:</p>
+  <h4>2.2 — Instalar la extensión de Python</h4>
+  <p>VS Code por sí solo no sabe ejecutar Python. Necesitamos instalarle una extensión:</p>
   <ol>
-    <li>En la barra lateral izquierda de VS Code, haz clic en el icono de <strong>Extensiones</strong> (parece 4 cuadraditos). Tambien puedes pulsar <code>Ctrl+Shift+X</code>.</li>
+    <li>En la barra lateral izquierda de VS Code, haz clic en el icono de <strong>Extensiones</strong> (parece 4 cuadraditos). También puedes pulsar <code>Ctrl+Shift+X</code>.</li>
     <li>En el buscador, escribe <strong>"Python"</strong>.</li>
     <li>Elige la primera opcion (la de <strong>Microsoft</strong>, tiene millones de descargas).</li>
-    <li>Haz clic en el boton azul <strong>"Install"</strong>.</li>
+    <li>Haz clic en el botón azul <strong>"Install"</strong>.</li>
   </ol>
 
   <div class="info-box concept">
-    <div class="ib-title purple">🧠 ¿Que te da esta extension?</div>
-    <p><strong>Sin la extension</strong>, VS Code es solo un editor de texto (como el Bloc de notas, pero bonito). <strong>Con la extension</strong>, VS Code se convierte en un entorno completo de Python:</p>
+    <div class="ib-title purple">🧠 ¿Quéte da esta extensión?</div>
+    <p><strong>Sin la extensión</strong>, VS Code es solo un editor de texto (como el Bloc de notas, pero bonito). <strong>Con la extensión</strong>, VS Code se convierte en un entorno completo de Python:</p>
     <ul>
-      <li><strong>Colores en el codigo</strong> — Las palabras clave, textos y funciones se colorean para que el codigo sea facil de leer.</li>
-      <li><strong>Autocompletado</strong> — Mientras escribes, te sugiere funciones y variables.</li>
+      <li><strong>Colores en el código</strong> — Las palabras clave, textos y funciónes se colorean para que el código sea fácil de leer.</li>
+      <li><strong>Autocompletado</strong> — Mientras escribes, te sugiere funciónes y variables.</li>
       <li><strong>Deteccion de errores</strong> — Si escribes algo mal, lo subraya en rojo antes de ejecutar.</li>
-      <li><strong>Boton ▶ para ejecutar</strong> — Aparece arriba a la derecha para ejecutar tu programa con un clic.</li>
+      <li><strong>Botón ▶ para ejecutar</strong> — Aparece arriba a la derecha para ejecutar tu programa con un clic.</li>
     </ul>
   </div>
 
@@ -1126,19 +1233,19 @@ pip3 install deepface opencv-python tf-keras</pre></div>
     <li>Abre VS Code.</li>
     <li>Ve a <strong>Archivo → Abrir carpeta</strong> (o en ingles: <strong>File → Open Folder</strong>).</li>
     <li>Selecciona la carpeta <code>reconocimiento_facial</code> que acabas de crear.</li>
-    <li>Si VS Code pregunta <em>"¿Confias en los autores?"</em>, haz clic en <strong>"Si, confio"</strong>.</li>
+    <li>Si VS Code pregunta <em>"¿Confías en los autores?"</em>, haz clic en <strong>"Sí, confío"</strong>.</li>
   </ol>
 
   <div class="info-box tip">
-    <div class="ib-title green">💡 ¿Por que abrir una carpeta y no un archivo suelto?</div>
-    <p>Cuando abres una carpeta, el <strong>terminal de VS Code se abre directamente ahi</strong>. Eso significa que los comandos <code>python mi_archivo.py</code> funcionan sin problemas. Si abres un archivo suelto, el terminal puede abrirse en otra ubicacion y dara errores de "archivo no encontrado".</p>
+    <div class="ib-title green">💡 ¿Por quéabrir una carpeta y no un archivo suelto?</div>
+    <p>Cuando abres una carpeta, el <strong>terminal de VS Code se abre directamente ahi</strong>. Eso significa que los comandos <code>python mi_archivo.py</code> funciónan sin problemas. Si abres un archivo suelto, el terminal puede abrirse en otra ubicación y dara errores de "archivo no encontrado".</p>
   </div>
 
-  <h4>3.3 — Asi se vera tu proyecto</h4>
-  <p>Cuando terminemos las secciones 10 y 11, tu carpeta tendra esta estructura:</p>
+  <h4>3.3 — Así se verá tu proyecto</h4>
+  <p>Cuando terminemos las secciónes 10 y 11, tu carpeta tendra esta estructura:</p>
   <div class="folder-tree">
     <span class="folder">📁 reconocimiento_facial/</span><br>
-    ├── <span class="file">webcam_facil.py</span> <span class="comment">← Seccion 10, opcion A</span><br>
+    ├── <span class="file">webcam_fácil.py</span> <span class="comment">← Seccion 10, opcion A</span><br>
     ├── <span class="file">webcam_personalizada.py</span> <span class="comment">← Seccion 10, opcion B</span><br>
     ├── <span class="file">control_asistencia.py</span> <span class="comment">← Seccion 11, proyecto final</span><br>
     └── <span class="folder">📁 base_datos/</span> <span class="comment">← Fotos de personas conocidas</span><br>
@@ -1150,25 +1257,25 @@ pip3 install deepface opencv-python tf-keras</pre></div>
   <!-- ══════════════════════════════ -->
   <!--     PASO 4: VERIFICAR         -->
   <!-- ══════════════════════════════ -->
-  <h3>Paso 4: Verificar que todo funciona ✅</h3>
+  <h3>Paso 4: Verificar que todo funcióna ✅</h3>
 
-  <p>Vamos a crear un pequeno programa de prueba para asegurarnos de que Python, VS Code y DeepFace funcionan correctamente juntos.</p>
+  <p>Vamos a crear un pequeño programa de prueba para asegurarnos de que Python, VS Code y DeepFace funciónan correctamente juntos.</p>
 
   <h4>4.1 — Crear el archivo de prueba</h4>
   <ol>
     <li>En VS Code, mira el panel izquierdo (Explorador de archivos). Veras el nombre de tu carpeta.</li>
-    <li>Pasa el raton por encima del nombre de la carpeta. Apareceran unos iconos pequenos.</li>
+    <li>Pasa el raton por encima del nombre de la carpeta. Apareceran unos iconos pequeños.</li>
     <li>Haz clic en el icono de <strong>"Nuevo archivo"</strong> (parece una hoja con un <code>+</code>).</li>
     <li>Escribe el nombre: <code>test_deepface.py</code></li>
   </ol>
 
   <div class="info-box important">
     <div class="ib-title cyan">ℹ️ El nombre DEBE terminar en .py</div>
-    <p>La extension <code>.py</code> le dice a VS Code que es un archivo de Python. Si lo llamas <code>test_deepface</code> sin el <code>.py</code>, VS Code no sabra que es Python y no te dara colores, autocompletado ni el boton ▶.</p>
+    <p>La extensión <code>.py</code> le dice a VS Code que es un archivo de Python. Si lo llamas <code>test_deepface</code> sin el <code>.py</code>, VS Code no sabra que es Python y no te dará colores, autocompletado ni el botón ▶.</p>
   </div>
 
-  <h4>4.2 — Escribir el codigo de prueba</h4>
-  <p>Copia este codigo en el archivo <code>test_deepface.py</code>:</p>
+  <h4>4.2 — Escribir el código de prueba</h4>
+  <p>Copia este código en el archivo <code>test_deepface.py</code>:</p>
   <div class="code-block"><div class="code-header"><div class="dots"><span></span><span></span><span></span></div><span>test_deepface.py</span><button class="copy-btn" onclick="copyCode(this)">Copiar</button></div>
 <pre><span class="kw">from</span> deepface <span class="kw">import</span> DeepFace
 <span class="kw">import</span> cv2
@@ -1186,19 +1293,19 @@ pip3 install deepface opencv-python tf-keras</pre></div>
   <p>Tienes dos formas de ejecutarlo:</p>
 
   <div class="info-box tip">
-    <div class="ib-title green">▶ Opcion A: Boton Play (la mas facil)</div>
-    <p>Mira en la <strong>esquina superior derecha</strong> del editor. Veras un boton <strong>▶</strong> (triangulo). Haz clic y el programa se ejecutara. El resultado aparece en el panel de abajo (terminal).</p>
+    <div class="ib-title green">▶ Opción A: Botón Play (la mas fácil)</div>
+    <p>Mira en la <strong>esquina superior derecha</strong> del editor. Veras un botón <strong>▶</strong> (triangulo). Haz clic y el programa se ejecutara. El resultado aparece en el panel de abajo (terminal).</p>
   </div>
 
   <div class="info-box tip">
-    <div class="ib-title green">⌨️ Opcion B: Desde el terminal</div>
-    <p>Si el boton ▶ no aparece, ve a <strong>Terminal → Nuevo terminal</strong> (en el menu de arriba) y escribe:</p>
+    <div class="ib-title green">⌨️ Opción B: Desde el terminal</div>
+    <p>Si el botón ▶ no aparece, ve a <strong>Terminal → Nuevo terminal</strong> (en el menú de arriba) y escribe:</p>
   </div>
   <div class="code-block"><div class="code-header"><div class="dots"><span></span><span></span><span></span></div><span>Terminal de VS Code</span><button class="copy-btn" onclick="copyCode(this)">Copiar</button></div>
 <pre>python test_deepface.py</pre></div>
 
-  <h4>4.4 — ¿Que deberias ver?</h4>
-  <p>Si todo esta bien instalado, veras algo asi en el terminal:</p>
+  <h4>4.4 — ¿Quédeberías ver?</h4>
+  <p>Si todo está bien instalado, verás algo así en el terminal:</p>
   <div class="code-block"><div class="code-header"><div class="dots"><span></span><span></span><span></span></div><span>Resultado esperado</span></div>
 <pre>===========================
   VERIFICACION DEL SISTEMA
@@ -1219,38 +1326,38 @@ Todo instalado correctamente!</pre></div>
   <!-- ══════════════════════════════ -->
   <h3>Resumen: Colab vs. tu ordenador</h3>
 
-  <p>A partir de ahora vas a escribir codigo en VS Code en vez de en Colab. Estas son las diferencias mas importantes:</p>
+  <p>A partir de ahora vas a escribir código en VS Code en vez de en Colab. Estas son las diferencias mas importantes:</p>
 
   <table class="error-table">
     <thead><tr><th></th><th>Google Colab</th><th>Tu ordenador (VS Code)</th></tr></thead>
     <tbody>
       <tr><td><strong>Instalar paquetes</strong></td><td><code>!pip install deepface</code></td><td><code>pip install deepface</code> (sin <code>!</code>)</td></tr>
-      <tr><td><strong>Subir fotos</strong></td><td><code>files.upload()</code></td><td>Ya estan en tu disco, solo pon la ruta</td></tr>
+      <tr><td><strong>Subir fotos</strong></td><td><code>files.upload()</code></td><td>Ya están en tu disco, solo pon la ruta</td></tr>
       <tr><td><strong>Mostrar imagenes</strong></td><td><code>cv2_imshow()</code></td><td><code>cv2.imshow()</code> (abre una ventana)</td></tr>
-      <tr><td><strong>Usar webcam</strong></td><td>No se puede (video continuo)</td><td>Si, con <code>cv2.VideoCapture(0)</code></td></tr>
-      <tr><td><strong>Ejecutar codigo</strong></td><td>Boton ▶ en cada celda</td><td>Boton ▶ arriba a la derecha o terminal</td></tr>
+      <tr><td><strong>Usar webcam</strong></td><td>No se puede (video continuo)</td><td>Sí, con <code>cv2.VideoCapture(0)</code></td></tr>
+      <tr><td><strong>Ejecutar código</strong></td><td>Botón ▶ en cada celda</td><td>Botón ▶ arriba a la derecha o terminal</td></tr>
       <tr><td><strong>Guardar archivos</strong></td><td>Se borran al cerrar sesion</td><td>Se quedan en tu ordenador para siempre</td></tr>
     </tbody>
   </table>
 
   <div class="info-box concept">
     <div class="ib-title purple">🧠 La regla de oro</div>
-    <p>El <strong>codigo Python es el mismo</strong> en Colab y en tu ordenador. Lo unico que cambia es <em>como</em> cargas las imagenes y <em>como</em> las muestras. Todo lo que has aprendido hasta ahora sigue siendo valido.</p>
+    <p>El <strong>código Python es el mismo</strong> en Colab y en tu ordenador. Lo unico que cambia es <em>como</em> cargas las imagenes y <em>como</em> las muestras. Todo lo que has aprendido hasta ahora sigue siendo válido.</p>
   </div>
 
   <div class="exercise-box">
-    <div class="ex-header"><div class="ex-icon">✏️</div> Actividad 9.1 — Checklist de instalacion</div>
-    <p><strong>Objetivo:</strong> Asegurarte de que todo esta listo antes de empezar con la webcam.</p>
+    <div class="ex-header"><div class="ex-icon">✏️<span class="diff-badge diff-facil">Fácil</span></div> Actividad 9.1 — Checklist de instalación<span class="diff-badge diff-facil">Fácil</span></div>
+    <p><strong>Objetivo:</strong> Asegurarte de que todo está listo antes de empezar con la webcam.</p>
     <p>Marca cada punto cuando lo tengas:</p>
     <ul>
-      <li>☐ <code>python --version</code> muestra Python 3.10 o superior</li>
-      <li>☐ VS Code esta instalado y se abre correctamente</li>
-      <li>☐ La extension de Python esta instalada (icono de Extensiones → buscar "Python" → dice "Installed")</li>
+      <li>☐ <code>python --versión</code> muestra Python 3.10 o superior</li>
+      <li>☐ VS Code está instalado y se abre correctamente</li>
+      <li>☐ La extensión de Python esta instalada (icono de Extensiones → buscar "Python" → dice "Installed")</li>
       <li>☐ Has abierto la carpeta <code>reconocimiento_facial</code> en VS Code</li>
       <li>☐ El archivo <code>test_deepface.py</code> se ejecuta sin errores</li>
-      <li>☐ El terminal muestra las versiones de DeepFace y OpenCV</li>
+      <li>☐ El terminal muestra las versiónes de DeepFace y OpenCV</li>
     </ul>
-    <p>Si todos los puntos estan marcados, estas listo para la <strong>seccion 10: Webcam en tiempo real</strong>.</p>
+    <p>Si todos los puntos están marcados, estás listo para la <strong>sección 10: Webcam en tiempo real</strong>.</p>
   </div>
 </section>
 
@@ -1263,17 +1370,17 @@ Todo instalado correctamente!</pre></div>
 
   <p>Ahora viene lo espectacular: usar tu webcam para <strong>reconocer caras y emociones en directo</strong>. DeepFace incluye una función que hace todo el trabajo en una sola línea.</p>
 
-  <h3>Opcion A: La forma mas facil (una sola linea)</h3>
-  <p>Antes de ejecutar este codigo, necesitas preparar la carpeta con las fotos de las personas que quieres reconocer:</p>
+  <h3>Opcion A: La forma mas fácil (una sola línea)</h3>
+  <p>Antes de ejecutar este código, necesitas preparar la carpeta con las fotos de las personas que quieres reconocer:</p>
   <ol>
     <li>Dentro de tu carpeta de proyecto, crea una subcarpeta llamada <code>base_datos</code>.</li>
     <li>Mete dentro una foto de cada persona. <strong>El nombre del archivo sera el nombre que aparezca en pantalla</strong>: <code>Ana.jpg</code>, <code>Carlos.jpg</code>, etc.</li>
     <li>Usa fotos de buena calidad, de frente y bien iluminadas.</li>
   </ol>
 
-  <p>Ahora crea un archivo llamado <code>webcam_facil.py</code> y escribe este codigo:</p>
+  <p>Ahora crea un archivo llamado <code>webcam_fácil.py</code> y escribe este código:</p>
 
-  <div class="code-block"><div class="code-header"><div class="dots"><span></span><span></span><span></span></div><span>webcam_facil.py</span><button class="copy-btn" onclick="copyCode(this)">Copiar</button></div>
+  <div class="code-block"><div class="code-header"><div class="dots"><span></span><span></span><span></span></div><span>webcam_fácil.py</span><button class="copy-btn" onclick="copyCode(this)">Copiar</button></div>
 <pre><span class="kw">from</span> deepface <span class="kw">import</span> DeepFace
 
 <span class="cm"># ─── UNA SOLA LINEA: webcam + reconocimiento + emociones ───</span>
@@ -1282,14 +1389,14 @@ DeepFace.<span class="fn">stream</span>(
     source=<span class="num">0</span>                 <span class="cm"># 0 = tu webcam principal</span>
 )</pre></div>
 
-  <div class="explain"><span class="line-ref">DeepFace.stream()</span><div class="explain-text">Abre la webcam, detecta caras, las compara con la base de datos, y muestra en pantalla el nombre, emocion, edad y genero. Todo automatico. Pulsa <strong>Q</strong> para salir. Es la forma mas rapida de tener un sistema de reconocimiento facial completo funcionando.</div></div>
-  <div class="explain"><span class="line-ref">db_path</span><div class="explain-text">Ruta a la carpeta donde estan las fotos de personas conocidas. Puede ser una ruta relativa (como <code>"base_datos"</code>, que busca dentro de tu carpeta de proyecto) o una ruta completa (como <code>"C:\Users\tu_nombre\fotos"</code>).</div></div>
-  <div class="explain"><span class="line-ref">source=0</span><div class="explain-text">El numero de camara. <code>0</code> es la webcam principal. Si tienes una camara externa conectada, prueba con <code>1</code> o <code>2</code>. Si no tienes webcam, te dara error.</div></div>
+  <div class="explain"><span class="line-ref">DeepFace.stream()</span><div class="explain-text">Abre la webcam, detecta caras, las compara con la base de datos, y muestra en pantalla el nombre, emoción, edad y género. Todo automático. Pulsa <strong>Q</strong> para salir. Es la forma mas rápida de tener un sistema de reconocimiento facial completo funciónando.</div></div>
+  <div class="explain"><span class="line-ref">db_path</span><div class="explain-text">Ruta a la carpeta dónde están las fotos de personas conocidas. Puede ser una ruta relativa (como <code>"base_datos"</code>, que busca dentro de tu carpeta de proyecto) o una ruta completa (como <code>"C:\Users\tu_nombre\fotos"</code>).</div></div>
+  <div class="explain"><span class="line-ref">source=0</span><div class="explain-text">El número de cámara. <code>0</code> es la webcam principal. Si tienes una cámara externa conectada, prueba con <code>1</code> o <code>2</code>. Si no tienes webcam, te dará error.</div></div>
 
-  <h4>Parametros que puedes modificar</h4>
-  <p>La funcion <code>stream()</code> acepta mas parametros para personalizar su comportamiento:</p>
+  <h4>Parámetros que puedes modificar</h4>
+  <p>La función <code>stream()</code> acepta mas parametros para personalizar su comportamiento:</p>
 
-  <div class="code-block"><div class="code-header"><div class="dots"><span></span><span></span><span></span></div><span>webcam_facil_personalizada.py</span><button class="copy-btn" onclick="copyCode(this)">Copiar</button></div>
+  <div class="code-block"><div class="code-header"><div class="dots"><span></span><span></span><span></span></div><span>webcam_fácil_personalizada.py</span><button class="copy-btn" onclick="copyCode(this)">Copiar</button></div>
 <pre><span class="kw">from</span> deepface <span class="kw">import</span> DeepFace
 
 DeepFace.<span class="fn">stream</span>(
@@ -1302,17 +1409,17 @@ DeepFace.<span class="fn">stream</span>(
     anti_spoofing=<span class="kw">False</span>             <span class="cm"># True = detectar si es foto o cara real</span>
 )</pre></div>
 
-  <div class="explain"><span class="line-ref">time_threshold</span><div class="explain-text">Cada cuantos segundos analiza la webcam. Por defecto es <code>3</code>. Si lo bajas a <code>1</code>, analiza mas a menudo (pero va mas lento). Si lo subes a <code>5</code>, analiza menos (pero el video va mas fluido). Ajustalo segun la velocidad de tu ordenador.</div></div>
-  <div class="explain"><span class="line-ref">frame_threshold</span><div class="explain-text">Cuantas veces tiene que confirmar una deteccion antes de mostrarla. Con <code>1</code> muestra el resultado inmediatamente. Con valores mas altos es mas estable pero tarda mas en reaccionar.</div></div>
+  <div class="explain"><span class="line-ref">time_threshold</span><div class="explain-text">Cada cuántos segúndos analiza la webcam. Por defecto es <code>3</code>. Si lo bajas a <code>1</code>, analiza mas a menudo (pero va mas lento). Si lo subes a <code>5</code>, analiza menos (pero el video va mas fluido). Ajustalo según la velocidad de tu ordenador.</div></div>
+  <div class="explain"><span class="line-ref">frame_threshold</span><div class="explain-text">Cuántas veces tiene que confirmar una detección antes de mostrarla. Con <code>1</code> muestra el resultado inmediatamente. Con valores mas altos es mas estable pero tarda mas en reaccionar.</div></div>
   <div class="explain"><span class="line-ref">anti_spoofing</span><div class="explain-text">Si lo pones a <code>True</code>, intenta detectar si alguien esta mostrando una <strong>foto impresa o una pantalla</strong> en vez de su cara real. Es experimental y a veces falla, pero es interesante para probar.</div></div>
 
   <div class="exercise-box">
-    <div class="ex-header"><div class="ex-icon">✏️</div> Actividad 10.1 — Prueba stream() con tus fotos</div>
-    <p><strong>Objetivo:</strong> Comprobar que el reconocimiento funciona en tiempo real.</p>
+    <div class="ex-header"><div class="ex-icon">✏️<span class="diff-badge diff-facil">Fácil</span></div> Actividad 10.1 — Prueba stream() con tus fotos<span class="diff-badge diff-facil">Fácil</span></div>
+    <p><strong>Objetivo:</strong> Comprobar que el reconocimiento funcióna en tiempo real.</p>
     <p><strong>Pasos:</strong></p>
-    <p>1. Mete 2-3 fotos de companeros o familiares en la carpeta <code>base_datos</code>.</p>
-    <p>2. Ejecuta <code>webcam_facil.py</code>. Espera unos segundos (la primera vez carga modelos).</p>
-    <p>3. Ponte delante de la camara. ¿Te reconoce? ¿Que nombre muestra?</p>
+    <p>1. Mete 2-3 fotos de compañeros o familiares en la carpeta <code>base_datos</code>.</p>
+    <p>2. Ejecuta <code>webcam_fácil.py</code>. Espera unos segúndos (la primera vez carga modelos).</p>
+    <p>3. Ponte delante de la cámara. ¿Te reconoce? ¿Quénombre muestra?</p>
     <p>4. Prueba a cambiar <code>time_threshold</code> entre <code>1</code> y <code>5</code>. ¿Notas la diferencia de velocidad?</p>
     <p>5. Pulsa <strong>Q</strong> para cerrar la ventana.</p>
   </div>
@@ -1320,19 +1427,19 @@ DeepFace.<span class="fn">stream</span>(
   <!-- ─── OPCION B ─── -->
   <h3>Opcion B: Control total (tu propio bucle)</h3>
 
-  <p><code>stream()</code> es comoda pero no puedes cambiar como se ve la pantalla ni anadir funciones extra. Con tu propio bucle puedes <strong>personalizar todo</strong> y ademas combinar dos funciones a la vez: <strong>identificar quien es</strong> (buscando en la base de datos) y <strong>analizar su emocion y edad</strong>.</p>
+  <p><code>stream()</code> es cómoda pero no puedes cambiar cómo se ve la pantalla ni añadir funciónes extra. Con tu propio bucle puedes <strong>personalizar todo</strong> y ademas combinar dos funciónes a la vez: <strong>identificar quién es</strong> (buscando en la base de datos) y <strong>analizar su emoción y edad</strong>.</p>
 
   <div class="flow-diagram">
     <div class="flow-step"><div class="fs-icon">📷</div><div class="fs-label">Webcam</div><div class="fs-detail">Captura frame</div></div>
     <div class="flow-arrow">→</div>
-    <div class="flow-step"><div class="fs-icon">🔍</div><div class="fs-label">find()</div><div class="fs-detail">¿Quien es?</div></div>
+    <div class="flow-step"><div class="fs-icon">🔍</div><div class="fs-label">find()</div><div class="fs-detail">¿Quiénes?</div></div>
     <div class="flow-arrow">→</div>
     <div class="flow-step"><div class="fs-icon">😊</div><div class="fs-label">analyze()</div><div class="fs-detail">Emocion + edad</div></div>
     <div class="flow-arrow">→</div>
     <div class="flow-step"><div class="fs-icon">🖼️</div><div class="fs-label">Dibujar</div><div class="fs-detail">Nombre + datos</div></div>
   </div>
 
-  <p>Crea un archivo llamado <code>webcam_personalizada.py</code> y copia este codigo:</p>
+  <p>Crea un archivo llamado <code>webcam_personalizada.py</code> y copia este código:</p>
 
   <div class="code-block"><div class="code-header"><div class="dots"><span></span><span></span><span></span></div><span>webcam_personalizada.py</span><button class="copy-btn" onclick="copyCode(this)">Copiar</button></div>
 <pre><span class="kw">from</span> deepface <span class="kw">import</span> DeepFace
@@ -1445,54 +1552,54 @@ camara.<span class="fn">release</span>()
 cv2.<span class="fn">destroyAllWindows</span>()
 <span class="bi">print</span>(<span class="str">"Webcam cerrada."</span>)</pre></div>
 
-  <h4>Explicacion del codigo</h4>
+  <h4>Explicacion del código</h4>
 
   <div class="info-box concept">
-    <div class="ib-title purple">🧠 ¿Por que dos llamadas a DeepFace?</div>
+    <div class="ib-title purple">🧠 ¿Por quédos llamadas a DeepFace?</div>
     <p>Este programa hace <strong>dos cosas diferentes</strong> cada vez que analiza un frame:</p>
     <ul>
-      <li><strong><code>DeepFace.find()</code></strong> — Busca la cara en la carpeta <code>base_datos</code> y nos dice <strong>quien es</strong> (el nombre del archivo mas parecido).</li>
-      <li><strong><code>DeepFace.analyze()</code></strong> — Analiza la cara y nos dice su <strong>emocion y edad</strong>.</li>
+      <li><strong><code>DeepFace.find()</code></strong> — Busca la cara en la carpeta <code>base_datos</code> y nos dice <strong>quién es</strong> (el nombre del archivo mas parecido).</li>
+      <li><strong><code>DeepFace.analyze()</code></strong> — Analiza la cara y nos dice su <strong>emoción y edad</strong>.</li>
     </ul>
-    <p>Son funciones distintas porque hacen cosas distintas: <code>find()</code> compara contra una base de datos, <code>analyze()</code> extrae atributos. Combinandolas, conseguimos el resultado completo: <strong>nombre + emocion + edad</strong>.</p>
+    <p>Son funciónes distintas porque hacen cosas distintas: <code>find()</code> compara contra una base de datos, <code>analyze()</code> extrae atributos. Combinándolas, conseguimos el resultado completo: <strong>nombre + emoción + edad</strong>.</p>
   </div>
 
-  <div class="explain"><span class="line-ref">FRECUENCIA = 45</span><div class="explain-text">Cada cuantos frames se ejecuta el analisis. Como ahora hacemos <strong>dos llamadas</strong> a DeepFace (find + analyze), necesitamos un poco mas de tiempo entre cada analisis. Con <code>45</code> a 30fps, analizamos cada ~1.5 segundos. Si tu ordenador es rapido, baja a <code>30</code>. Si va lento, sube a <code>60</code>.</div></div>
-  <div class="explain"><span class="line-ref">DeepFace.find()</span><div class="explain-text">Busca la cara del frame en <strong>todas las fotos</strong> de la carpeta <code>base_datos</code>. Devuelve la coincidencia mas parecida. La primera vez tarda mas porque genera un archivo de cache con los "numeros" (embeddings) de cada cara. Las siguientes veces es mucho mas rapido.</div></div>
-  <div class="explain"><span class="line-ref">os.path.splitext(os.path.basename(ruta))[0]</span><div class="explain-text">De una ruta como <code>"base_datos/Carlos.jpg"</code>, extrae solo el nombre: <code>"Carlos"</code>. Primero <code>basename()</code> quita la carpeta (<code>"Carlos.jpg"</code>), luego <code>splitext()</code> separa el nombre de la extension, y <code>[0]</code> coge solo el nombre.</div></div>
-  <div class="explain"><span class="line-ref">nombre_actual, emocion_actual, edad_actual</span><div class="explain-text">Estas variables guardan el <strong>ultimo resultado</strong> del analisis. Se actualizan cada X frames pero se <strong>dibujan en cada frame</strong>. Por eso la etiqueta se mantiene visible entre analisis, en vez de parpadear.</div></div>
+  <div class="explain"><span class="line-ref">FRECUENCIA = 45</span><div class="explain-text">Cada cuántos frames se ejecuta el analisis. Como ahora hacemos <strong>dos llamadas</strong> a DeepFace (find + analyze), necesitamos un poco mas de tiempo entre cada analisis. Con <code>45</code> a 30fps, analizamos cada ~1.5 segúndos. Si tu ordenador es rápido, baja a <code>30</code>. Si va lento, sube a <code>60</code>.</div></div>
+  <div class="explain"><span class="line-ref">DeepFace.find()</span><div class="explain-text">Busca la cara del frame en <strong>todas las fotos</strong> de la carpeta <code>base_datos</code>. Devuelve la coincidencia mas parecida. La primera vez tarda mas porque genera un archivo de caché con los "números" (embeddings) de cada cara. Las siguientes veces es mucho mas rápido.</div></div>
+  <div class="explain"><span class="line-ref">os.path.splitext(os.path.basename(ruta))[0]</span><div class="explain-text">De una ruta como <code>"base_datos/Carlos.jpg"</code>, extrae solo el nombre: <code>"Carlos"</code>. Primero <code>basename()</code> quita la carpeta (<code>"Carlos.jpg"</code>), luego <code>splitext()</code> separa el nombre de la extensión, y <code>[0]</code> coge solo el nombre.</div></div>
+  <div class="explain"><span class="line-ref">nombre_actual, emoción_actual, edad_actual</span><div class="explain-text">Estas variables guardan el <strong>ultimo resultado</strong> del analisis. Se actualizan cada X frames pero se <strong>dibujan en cada frame</strong>. Por eso la etiqueta se mantiene visible entre analisis, en vez de parpadear.</div></div>
   <div class="explain"><span class="line-ref">Color verde / rojo</span><div class="explain-text">Si la persona esta en la base de datos, el rectangulo y el texto se muestran en <strong>verde</strong>. Si es desconocido o no se pudo identificar, en <strong>rojo</strong>. Esto da un feedback visual inmediato.</div></div>
-  <div class="explain"><span class="line-ref">Dos lineas de putText</span><div class="explain-text">Dibujamos el nombre en una linea (mas grande, a <code>0.8</code>) y la emocion + edad en otra linea justo debajo (mas pequena, a <code>0.6</code>). Usamos <code>y - 30</code> y <code>y - 10</code> para que no se solapen.</div></div>
-  <div class="explain"><span class="line-ref">Tecla S para captura</span><div class="explain-text">Si pulsas la tecla <strong>S</strong>, el programa guarda una foto del frame actual con la etiqueta dibujada encima. Util para tener evidencia de que el reconocimiento funciona.</div></div>
+  <div class="explain"><span class="line-ref">Dos líneas de putText</span><div class="explain-text">Dibujamos el nombre en una línea (mas grande, a <code>0.8</code>) y la emoción + edad en otra línea justo debajo (mas pequeña, a <code>0.6</code>). Usamos <code>y - 30</code> y <code>y - 10</code> para que no se solapen.</div></div>
+  <div class="explain"><span class="line-ref">Tecla S para captura</span><div class="explain-text">Si pulsas la tecla <strong>S</strong>, el programa guarda una foto del frame actual con la etiqueta dibujada encima. Util para tener evidencia de que el reconocimiento funcióna.</div></div>
 
   <div class="info-box tip">
-    <div class="ib-title green">💡 ¿Que puedes personalizar?</div>
+    <div class="ib-title green">💡 ¿Quépuedes personalizar?</div>
     <p>Esta es la ventaja de tener tu propio bucle: puedes cambiar <strong>todo</strong>. Algunas ideas:</p>
     <ul>
-      <li><strong>Colores por emocion:</strong> Usa un diccionario (como en la seccion 5) para que el rectangulo cambie de color segun la emocion: verde si feliz, rojo si enfadado, azul si triste.</li>
-      <li><strong>Anadir genero:</strong> Anade <code>"gender"</code> a <code>actions</code> y muestra <code>cara.get("dominant_gender", "?")</code> junto al resto.</li>
+      <li><strong>Colores por emoción:</strong> Usa un diccionario (como en la sección 5) para que el rectangulo cambie de color según la emoción: verde si feliz, rojo si enfadado, azul si triste.</li>
+      <li><strong>Añadir género:</strong> Anade <code>"gender"</code> a <code>actions</code> y muestra <code>cara.get("dominant_gender", "?")</code> junto al resto.</li>
       <li><strong>Tamano del texto:</strong> Cambia <code>0.8</code> y <code>0.6</code> en <code>putText</code>. Valores mas grandes = texto mas grande.</li>
-      <li><strong>Velocidad:</strong> Baja <code>FRECUENCIA</code> para analizar mas a menudo (mas reactivo) o subela (video mas fluido).</li>
+      <li><strong>Velocidad:</strong> Baja <code>FRECUENCIA</code> para analizar mas a menudo (mas reactivo) o súbela (video mas fluido).</li>
       <li><strong>Titulo de la ventana:</strong> Cambia <code>"DeepFace Webcam"</code> por lo que quieras.</li>
     </ul>
   </div>
 
   <div class="exercise-box">
-    <div class="ex-header"><div class="ex-icon">✏️</div> Actividad 10.2 — Prueba la identificacion</div>
+    <div class="ex-header"><div class="ex-icon">✏️<span class="diff-badge diff-medio">Medio</span></div> Actividad 10.2 — Prueba la identificación<span class="diff-badge diff-medio">Medio</span></div>
     <p><strong>Objetivo:</strong> Comprobar que tu webcam identifica personas de la base de datos.</p>
     <p><strong>Pasos:</strong></p>
-    <p>1. Asegurate de que la carpeta <code>base_datos</code> tiene al menos 2-3 fotos (tuya y de companeros).</p>
-    <p>2. Ejecuta <code>webcam_personalizada.py</code>. La primera vez tardara unos segundos en cargar.</p>
-    <p>3. Ponte delante de la camara. ¿Aparece tu nombre en verde? ¿La emocion y edad son correctas?</p>
-    <p>4. Pide a un companero que no este en la base de datos que se ponga. ¿Aparece "Desconocido" en rojo?</p>
+    <p>1. Asegurate de que la carpeta <code>base_datos</code> tiene al menos 2-3 fotos (tuya y de compañeros).</p>
+    <p>2. Ejecuta <code>webcam_personalizada.py</code>. La primera vez tardara unos segúndos en cargar.</p>
+    <p>3. Ponte delante de la cámara. ¿Aparece tu nombre en verde? ¿La emoción y edad son correctas?</p>
+    <p>4. Pide a un compañero que no esté en la base de datos que se ponga. ¿Aparece "Desconocido" en rojo?</p>
     <p>5. Pulsa <strong>S</strong> para guardar una captura y <strong>Q</strong> para salir.</p>
   </div>
 
   <div class="exercise-box">
-    <div class="ex-header"><div class="ex-icon">✏️</div> Actividad 10.3 — Colores por emocion</div>
-    <p><strong>Objetivo:</strong> Que el color del rectangulo cambie segun la emocion detectada.</p>
+    <div class="ex-header"><div class="ex-icon">✏️<span class="diff-badge diff-medio">Medio</span></div> Actividad 10.3 — Colores por emoción<span class="diff-badge diff-medio">Medio</span></div>
+    <p><strong>Objetivo:</strong> Que el color del rectangulo cambie según la emoción detectada.</p>
     <p><strong>Instrucciones:</strong> Crea un diccionario de colores y usalo para elegir el color en vez del verde/rojo fijo.</p>
-    <details><summary>Ver solucion</summary><div class="solution-content"><div class="code-block"><div class="code-header"><div class="dots"><span></span><span></span><span></span></div><span>solucion — anadir antes del bloque "if hay_cara:"</span></div>
+    <details><summary>Ver solucion</summary><div class="solution-content"><div class="code-block"><div class="code-header"><div class="dots"><span></span><span></span><span></span></div><span>solucion — añadir antes del bloque "if hay_cara:"</span></div>
 <pre><span class="cm"># Diccionario de colores por emocion (BGR)</span>
 colores_emocion = {
     <span class="str">"happy"</span>: (<span class="num">0</span>, <span class="num">255</span>, <span class="num">0</span>),      <span class="cm"># Verde</span>
@@ -1509,8 +1616,8 @@ color = colores_emocion.<span class="fn">get</span>(emocion_actual, (<span class
   </div>
 
   <div class="exercise-box">
-    <div class="ex-header"><div class="ex-icon">✏️</div> Reto 10.4 — Mostrar la hora en pantalla</div>
-    <p><strong>Objetivo:</strong> Anadir la fecha y hora actual en la esquina superior de la ventana, como en las camaras de seguridad.</p>
+    <div class="ex-header"><div class="ex-icon">✏️<span class="diff-badge diff-dificil">Difícil</span></div> Reto 10.4 — Mostrar la hora en pantalla<span class="diff-badge diff-dificil">Difícil</span></div>
+    <p><strong>Objetivo:</strong> Añadir la fecha y hora actual en la esquina superior de la ventana, como en las cámaras de seguridad.</p>
     <p><strong>Pista:</strong> Importa <code>datetime</code> y usa <code>datetime.now().strftime("%d/%m/%Y %H:%M:%S")</code> para obtener la hora. Dibujala con <code>cv2.putText()</code> en la posicion <code>(10, 30)</code>.</p>
     <details><summary>Ver solucion</summary><div class="solution-content"><div class="code-block"><div class="code-header"><div class="dots"><span></span><span></span><span></span></div><span>solucion</span></div>
 <pre><span class="cm"># Arriba del archivo, anadir:</span>
@@ -1612,10 +1719,10 @@ CARPETA_CAPTURAS = <span class="str">"capturas"</span>      <span class="cm"># D
     <span class="kw">with</span> <span class="bi">open</span>(ARCHIVO_CSV, <span class="str">"w"</span>) <span class="kw">as</span> f:
         f.<span class="fn">write</span>(<span class="str">"Nombre,Fecha,Hora\n"</span>)
 
-<span class="cm"># Abrir cámara</span>
+<span class="cm"># Abrir camara</span>
 camara = cv2.<span class="fn">VideoCapture</span>(<span class="num">0</span>)
 <span class="kw">if not</span> camara.<span class="fn">isOpened</span>():
-    <span class="bi">print</span>(<span class="str">"❌ No se pudo abrir la cámara. Cierra Zoom/Meet si están abiertos."</span>)
+    <span class="bi">print</span>(<span class="str">"❌ No se pudo abrir la camara. Cierra Zoom/Meet si están abiertos."</span>)
     <span class="bi">exit</span>()
 
 <span class="bi">print</span>(<span class="str">"📷 Cámara abierta. Pulsa 'q' para salir.\n"</span>)
@@ -1629,7 +1736,7 @@ nombre_actual = <span class="str">""</span>
 
     contador += <span class="num">1</span>
 
-    <span class="cm"># Identificar cada 60 frames (~2 segundos a 30fps)</span>
+    <span class="cm"># Identificar cada 60 frames (~2 segúndos a 30fps)</span>
     <span class="kw">if</span> contador % <span class="num">60</span> == <span class="num">0</span>:
         <span class="kw">try</span>:
             resultados = DeepFace.<span class="fn">find</span>(
@@ -1664,6 +1771,27 @@ camara.<span class="fn">release</span>()
 cv2.<span class="fn">destroyAllWindows</span>()
 <span class="bi">print</span>(<span class="str">f"\n✅ Asistencias guardadas en '{ARCHIVO_CSV}'"</span>)
 <span class="bi">print</span>(<span class="str">f"📸 Capturas en '{CARPETA_CAPTURAS}/'"</span>)</pre></div>
+
+  <h3>Explicacion del código</h3>
+
+  <div class="explain"><span class="line-ref">registrar_asistencia()</span><div class="explain-text">Funcion que recibe un nombre y lo apunta en el CSV con la fecha y hora. Antes de escribir, <strong>lee todo el archivo</strong> y comprueba si esa persona ya se registró hoy. Si ya existe, no la duplica. Esto evita que el sistema registre a la misma persona 100 veces mientras está delante de la cámara.</div></div>
+  <div class="explain"><span class="line-ref">registrados_hoy = set()</span><div class="explain-text">Un <code>set</code> (conjunto) es como una lista pero <strong>sin elementos repetidos</strong> y mucho mas rápida para buscar. Recorremos cada línea del CSV, extraemos el nombre y la fecha, y si la fecha es hoy, añadimos el nombre al conjunto. Despues, comprobar si alguien ya está es instantaneo con <code>if nombre not in registrados_hoy</code>.</div></div>
+  <div class="explain"><span class="line-ref">guardar_captura()</span><div class="explain-text">Guarda una foto del frame actual como evidencia. El nombre del archivo incluye el nombre de la persona y la fecha/hora exacta (<code>Carlos_20240315_091523.jpg</code>), así cada foto es unica y sabes exactamente cuándo se tomó.</div></div>
+  <div class="explain"><span class="line-ref">contador % 60</span><div class="explain-text">El sistema identifica personas cada 60 frames (~2 segúndos a 30fps). <code>DeepFace.find()</code> es mas lento que <code>analyze()</code> porque tiene que comparar contra toda la base de datos. Si lo ejecutáramos en cada frame, el video se congelaria. Puedes ajustar este número: menor = mas reactivo pero mas lento.</div></div>
+  <div class="explain"><span class="line-ref">DeepFace.find(img_path=frame)</span><div class="explain-text">Busca la cara del frame actual en <strong>todas las fotos</strong> de la carpeta <code>base_datos</code>. Devuelve la coincidencia mas cercana. Pasamos directamente el frame (array NumPy) en vez de una ruta de archivo, lo que permite analizar video en tiempo real.</div></div>
+  <div class="explain"><span class="line-ref">color condicional</span><div class="explain-text">Si la persona esta identificada (nombre distinto de "Desconocido"), el texto se muestra en <strong>verde</strong> <code>(0, 200, 0)</code>. Si no se reconoce, en <strong>rojo</strong> <code>(0, 0, 200)</code>. Esto da feedback visual inmediato: verde = todo bien, rojo = persona no registrada.</div></div>
+  <div class="explain"><span class="line-ref">datetime.now().strftime()</span><div class="explain-text">Obtiene la fecha y hora actual del sistema y la formatea como texto. <code>"%d/%m/%Y %H:%M:%S"</code> produce por ejemplo <code>"15/03/2024 09:15:23"</code>. Se muestra en la esquina de la ventana (cómo las cámaras de seguridad) y se usa para registrar la hora exacta de asistencia.</div></div>
+
+  <div class="exercise-box">
+    <div class="ex-header"><div class="ex-icon">✏️<span class="diff-badge diff-medio">Medio</span></div> Actividad 11.1 — Monta tu sistema de asistencia<span class="diff-badge diff-medio">Medio</span></div>
+    <p><strong>Objetivo:</strong> Poner en marcha el proyecto completo.</p>
+    <p>1. Crea la carpeta <code>mi_proyecto</code> con la subcarpeta <code>base_datos</code> dentro.</p>
+    <p>2. Mete 3-5 fotos de compañeros en <code>base_datos</code> (una foto por persona, nombrada con su nombre).</p>
+    <p>3. Copia el código en <code>control_asistencia.py</code> y ejecutalo.</p>
+    <p>4. Pide a cada compañero que pase por la cámara. ¿Los reconoce? ¿Aparece su nombre en verde?</p>
+    <p>5. Pulsa Q para salir. Abre <code>asistencia.csv</code> con Excel. ¿Estan los registros?</p>
+    <p>6. Mira la carpeta <code>capturas</code>. ¿Hay una foto de cada persona registrada?</p>
+  </div>
 </section>
 
 <div class="divider"></div>
@@ -1701,7 +1829,7 @@ cv2.<span class="fn">destroyAllWindows</span>()
   </table>
 
   <div class="code-block"><div class="code-header"><div class="dots"><span></span><span></span><span></span></div><span>Celda — Cambiar modelo y detector</span><button class="copy-btn" onclick="copyCode(this)">Copiar</button></div>
-<pre><span class="cm"># Máxima precisión (más lento)</span>
+<pre><span class="cm"># Máxima precisión (mas lento)</span>
 resultado = DeepFace.<span class="fn">verify</span>(
     img1_path=<span class="str">"cara1.jpg"</span>, img2_path=<span class="str">"cara2.jpg"</span>,
     model_name=<span class="str">"ArcFace"</span>, detector_backend=<span class="str">"retinaface"</span>
@@ -1713,10 +1841,68 @@ resultado = DeepFace.<span class="fn">verify</span>(
     model_name=<span class="str">"SFace"</span>, detector_backend=<span class="str">"opencv"</span>
 )</pre></div>
 
+  <div class="explain"><span class="line-ref">model_name</span><div class="explain-text">Le dice a DeepFace qué "cerebro" usar para reconocer caras. Cada modelo fue entrenado de forma diferente y da resultados ligeramente distintos. <code>"VGG-Face"</code> es el de por defecto. <code>"ArcFace"</code> es el más preciso en competiciones profesionales. <code>"SFace"</code> es el más rápido sin perder mucha precisión.</div></div>
+  <div class="explain"><span class="line-ref">detector_backend</span><div class="explain-text">Le dice a DeepFace qué algoritmo usar para <strong>encontrar</strong> dónde están las caras (diferente del modelo que las <strong>reconoce</strong>). Es como la diferencia entre "buscar un objeto en una habitación" (detector) y "saber qué objeto es" (modelo).</div></div>
+
+  <div class="info-box concept">
+    <div class="ib-title purple">🧠 ¿Modelo o detector? ¿Cuál es la diferencia?</div>
+    <p>Son dos pasos diferentes que trabajan juntos:</p>
+    <ul>
+      <li><strong>Detector</strong> (detector_backend) → "¿<em>Dónde</em> hay una cara en esta imagen?" → Devuelve coordenadas (x, y, ancho, alto).</li>
+      <li><strong>Modelo</strong> (model_name) → "¿<em>De quién</em> es esta cara?" → Convierte la cara en 128 números y los compara.</li>
+    </ul>
+    <p>Puedes combinar cualquier detector con cualquier modelo. Por ejemplo: <code>retinaface</code> (detector muy preciso) + <code>ArcFace</code> (modelo muy preciso) = la combinación más potente pero más lenta.</p>
+  </div>
+
+  <h3>¿Cómo elegir la mejor combinación?</h3>
+  <div class="flow-diagram">
+    <div class="flow-step"><div class="fs-icon">📷</div><div class="fs-label">Fotos de calidad</div><div class="fs-detail">de frente, buena luz</div></div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step" style="border-color:var(--accent-green)"><div class="fs-icon">⚡</div><div class="fs-label">opencv + VGG-Face</div><div class="fs-detail">Rápido y suficiente</div></div>
+  </div>
+  <div class="flow-diagram">
+    <div class="flow-step"><div class="fs-icon">📷</div><div class="fs-label">Fotos difíciles</div><div class="fs-detail">perfil, gafas, lejos</div></div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step" style="border-color:var(--accent-orange)"><div class="fs-icon">🎯</div><div class="fs-label">retinaface + ArcFace</div><div class="fs-detail">Máxima precisión</div></div>
+  </div>
+  <div class="flow-diagram">
+    <div class="flow-step"><div class="fs-icon">📷</div><div class="fs-label">Webcam tiempo real</div><div class="fs-detail">necesita velocidad</div></div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step" style="border-color:var(--accent-cyan)"><div class="fs-icon">🏎️</div><div class="fs-label">opencv + SFace</div><div class="fs-detail">Rápido y preciso</div></div>
+  </div>
+
   <div class="exercise-box">
-    <div class="ex-header"><div class="ex-icon">✏️</div> Actividad 12.1 — Compara modelos</div>
+    <div class="ex-header"><div class="ex-icon">✏️<span class="diff-badge diff-medio">Medio</span></div> Actividad 12.1 — Compara modelos<span class="diff-badge diff-medio">Medio</span></div>
     <p><strong>Objetivo:</strong> Ver cómo diferentes modelos dan diferentes resultados para las mismas fotos.</p>
-    <p><strong>Instrucciones:</strong> Usa <code>DeepFace.verify()</code> con las mismas dos fotos pero cambiando <code>model_name</code> entre "VGG-Face", "Facenet512" y "ArcFace". ¿Dan el mismo resultado? ¿Las distancias son iguales?</p>
+    <p><strong>Instrucciones:</strong> Usa <code>DeepFace.verify()</code> con las mismas dos fotos pero cambiando <code>model_name</code> entre "VGG-Face", "Facenet512" y "ArcFace". Anota la distancia y el resultado de cada uno.</p>
+    <table class="error-table" style="margin:.8rem 0">
+      <thead><tr><th>Modelo</th><th>Distancia</th><th>Umbral</th><th>¿Misma persona?</th></tr></thead>
+      <tbody>
+        <tr><td>VGG-Face</td><td contenteditable="true" style="background:rgba(0,212,255,.04);outline:none"></td><td contenteditable="true" style="background:rgba(0,212,255,.04);outline:none"></td><td contenteditable="true" style="background:rgba(0,212,255,.04);outline:none"></td></tr>
+        <tr><td>Facenet512</td><td contenteditable="true" style="background:rgba(0,212,255,.04);outline:none"></td><td contenteditable="true" style="background:rgba(0,212,255,.04);outline:none"></td><td contenteditable="true" style="background:rgba(0,212,255,.04);outline:none"></td></tr>
+        <tr><td>ArcFace</td><td contenteditable="true" style="background:rgba(0,212,255,.04);outline:none"></td><td contenteditable="true" style="background:rgba(0,212,255,.04);outline:none"></td><td contenteditable="true" style="background:rgba(0,212,255,.04);outline:none"></td></tr>
+      </tbody>
+    </table>
+    <p style="font-size:.85rem;color:var(--text-muted);font-style:italic">Haz clic en las celdas para escribir tus resultados.</p>
+    <p><strong>Reflexiona:</strong> ¿Dan todos el mismo veredicto? ¿Las distancias y umbrales son diferentes? ¿Por qué crees que cada modelo usa un umbral distinto?</p>
+  </div>
+
+  <div class="exercise-box">
+    <div class="ex-header"><div class="ex-icon">✏️<span class="diff-badge diff-dificil">Difícil</span></div> Reto 12.2 — Detector vs. detector<span class="diff-badge diff-dificil">Difícil</span></div>
+    <p><strong>Objetivo:</strong> Comparar cuántas caras detecta cada detector en una foto de grupo.</p>
+    <p><strong>Instrucciones:</strong> Usa <code>DeepFace.extract_faces()</code> con una foto de grupo cambiando <code>detector_backend</code> entre <code>"opencv"</code>, <code>"retinaface"</code> y <code>"mtcnn"</code>. ¿Cuál detecta más caras? ¿Cuál tarda más?</p>
+    <details><summary>Ver solución</summary><div class="solution-content"><div class="code-block"><div class="code-header"><div class="dots"><span></span><span></span><span></span></div><span>solución</span></div>
+<pre><span class="kw">import</span> time
+<span class="kw">from</span> deepface <span class="kw">import</span> DeepFace
+
+<span class="kw">for</span> detector <span class="kw">in</span> [<span class="str">"opencv"</span>, <span class="str">"retinaface"</span>, <span class="str">"mtcnn"</span>]:
+    inicio = time.<span class="fn">time</span>()
+    caras = DeepFace.<span class="fn">extract_faces</span>(
+        img_path=<span class="str">"foto_grupo.jpg"</span>,
+        detector_backend=detector
+    )
+    duracion = time.<span class="fn">time</span>() - inicio
+    <span class="bi">print</span>(<span class="str">f"{detector:>12}: {<span class="bi">len</span>(caras)} caras en {duracion:.2f}s"</span>)</pre></div></div></details>
   </div>
 </section>
 
@@ -1732,8 +1918,8 @@ resultado = DeepFace.<span class="fn">verify</span>(
       <button class="quiz-option" onclick="checkQuiz('q8',this,true)">Abre la webcam y hace reconocimiento facial en tiempo real</button>
       <button class="quiz-option" onclick="checkQuiz('q8',this,false)">Transmite vídeo por internet</button>
       <div class="quiz-feedback" id="q8-fb"></div></div>
-    <div class="quiz-question" id="q9"><p>2. ¿Puede <code>DeepFace.stream()</code> funcionar en Google Colab?</p>
-      <button class="quiz-option" onclick="checkQuiz('q9',this,false)">Sí, funciona igual que en local</button>
+    <div class="quiz-question" id="q9"><p>2. ¿Puede <code>DeepFace.stream()</code> funciónar en Google Colab?</p>
+      <button class="quiz-option" onclick="checkQuiz('q9',this,false)">Sí, funcióna igual que en local</button>
       <button class="quiz-option" onclick="checkQuiz('q9',this,true)">No, necesita webcam local que Colab no puede usar para vídeo continuo</button>
       <button class="quiz-option" onclick="checkQuiz('q9',this,false)">Solo si tienes cuenta de Google premium</button>
       <div class="quiz-feedback" id="q9-fb"></div></div>
@@ -1746,10 +1932,613 @@ resultado = DeepFace.<span class="fn">verify</span>(
 </section>
 
 <div class="divider"></div>
+</div><!-- /pathLocal -->
+
+<!-- ══════════════════════════════════════════ -->
+<!--    ALTERNATIVA AVANZADA · NAVEGADOR       -->
+<!-- ══════════════════════════════════════════ -->
+<div class="path-block" id="pathBrowser">
+<div class="divider"></div>
+<div class="level-bar"><div class="lb-seg" style="background:var(--accent-green);opacity:.3"></div><div class="lb-seg" style="background:var(--accent-orange);opacity:.3"></div><div class="lb-seg" style="background:var(--accent-cyan)"></div></div>
+
+<!-- SECCIÓN 9b: PREPARAR ENTORNO WEB -->
+<section class="section" id="preparar-web">
+  <div class="section-tag tag-browser">🔵 Alternativa Avanzada · Navegador</div>
+  <h2>9b. Preparar el entorno web (sin instalar nada)</h2>
+  <a href="#elegir-camino" style="display:inline-flex;align-items:center;gap:.3rem;font-size:.85rem;color:var(--text-muted);text-decoration:none;margin-bottom:1rem" onmouseover="this.style.color='var(--accent-cyan)'" onmouseout="this.style.color='var(--text-muted)'">← Volver a elegir camino</a>
+
+  <div class="info-box important">
+    <div class="ib-title cyan">ℹ️ ¿Por quéexiste esta alternativa?</div>
+    <p>Las secciónes 9-12 originales requieren instalar Python y DeepFace en el ordenador. Si tu centro no permite instalar software, estas secciónes <strong>9b, 10b y 11b</strong> son la alternativa: hacemos lo mismo pero <strong>desde el navegador</strong>, con JavaScript y la biblioteca <strong>face-api.js</strong>. Solo necesitas <strong>Google Chrome</strong> y crear un archivo HTML.</p>
+  </div>
+
+  <h3>¿Quécambia respecto a las secciónes de Colab?</h3>
+  <p>En las secciónes 1-8 usamos <strong>Python</strong> dentro de Google Colab. Ahora vamos a usar <strong>JavaScript</strong> dentro de un archivo HTML que abrimos directamente en Chrome. La lógica es la misma, solo cambia el lenguaje:</p>
+
+  <table class="error-table">
+    <thead><tr><th></th><th>Secciones 1-8 (Colab)</th><th>Secciones 9b-11b (Navegador)</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Lenguaje</strong></td><td>Python</td><td>JavaScript</td></tr>
+      <tr><td><strong>Biblioteca IA</strong></td><td>DeepFace</td><td>face-api.js</td></tr>
+      <tr><td><strong>Donde se ejecuta</strong></td><td>Servidores de Google</td><td>Tu navegador (Chrome)</td></tr>
+      <tr><td><strong>Webcam</strong></td><td>No disponible</td><td>Sí, directamente</td></tr>
+      <tr><td><strong>Instalar algo</strong></td><td>No (todo online)</td><td>No (todo en un HTML)</td></tr>
+      <tr><td><strong>Funciones IA</strong></td><td>analyze, verify, find</td><td>detectAllFaces, descriptors</td></tr>
+    </tbody>
+  </table>
+
+  <div class="info-box concept">
+    <div class="ib-title purple">🧠 ¿Quées face-api.js?</div>
+    <p><strong>face-api.js</strong> es el equivalente de DeepFace pero para JavaScript. Funciona directamente en el navegador, sin servidor. Puede detectar caras, analizar emociones, estimar edad y género, y <strong>comparar caras para identificar personas</strong> (lo que necesitamos para el proyecto de asistencia). Los modelos de IA se descargan automáticamente desde internet la primera vez.</p>
+  </div>
+
+  <h3>Paso 1: Crear la carpeta del proyecto</h3>
+  <ol>
+    <li>En el Escritorio, crea una carpeta llamada <code>reconocimiento_web</code>.</li>
+    <li>Dentro, crea un archivo de texto y renombralo a <code>test.html</code> (asegúrate de que la extensión sea <code>.html</code>, no <code>.html.txt</code>).</li>
+  </ol>
+
+  <div class="info-box tip">
+    <div class="ib-title green">💡 Como crear un archivo .html</div>
+    <p>Haz clic derecho en la carpeta → <strong>Nuevo → Documento de texto</strong>. Renómbralo a <code>test.html</code>. Si Windows no te deja cambiar la extensión, ve a las opciones de carpeta y desmarca "Ocultar extensiónes de archivo conocidas". Luego abre el archivo con el <strong>Bloc de notas</strong> (clic derecho → Abrir con → Bloc de notas) para escribir el código.</p>
+  </div>
+
+  <h3>Paso 2: Archivo de prueba</h3>
+  <p>Abre <code>test.html</code> con el Bloc de notas y copia este código:</p>
+
+  <div class="code-block"><div class="code-header"><div class="dots"><span></span><span></span><span></span></div><span>test.html — Verificar que face-api.js funcióna</span><button class="copy-btn" onclick="copyCode(this)">Copiar</button></div>
+<pre>&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+  &lt;meta charset=<span class="str">"UTF-8"</span>&gt;
+  &lt;title&gt;Test face-api.js&lt;/title&gt;
+  &lt;script src=<span class="str">"https://cdn.jsdelivr.net/npm/@vladmandic/face-api/dist/face-api.js"</span>&gt;&lt;/script&gt;
+&lt;/head&gt;
+&lt;body style=<span class="str">"background:#0a0e1a;color:#e2e8f0;font-family:Arial;padding:2rem;text-align:center"</span>&gt;
+  &lt;h1 id=<span class="str">"estado"</span>&gt;Cargando face-api.js...&lt;/h1&gt;
+  &lt;script&gt;
+    <span class="cm">// Si este mensaje aparece, face-api.js se cargo correctamente</span>
+    document.<span class="fn">getElementById</span>(<span class="str">"estado"</span>).<span class="var">textContent</span> =
+      <span class="str">"face-api.js cargado correctamente. Version: "</span> + faceapi.<span class="var">version</span>;
+  &lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</pre></div>
+
+  <h3>Paso 3: Abrir en Chrome</h3>
+  <p>Guarda el archivo y haz <strong>doble clic</strong> en <code>test.html</code>. Se abrirá en Chrome. Si ves el mensaje <strong>"face-api.js cargado correctamente"</strong> con el número de versión, todo funcióna.</p>
+
+  <div class="info-box warning">
+    <div class="ib-title orange">⚠️ ¿No funcióna?</div>
+    <p>Si ves "Cargando face-api.js..." y no cambia, comprueba que tienes <strong>conexión a internet</strong> (la biblioteca se descarga desde un CDN). Si el centro bloquea ese dominio, pide al profesor que lo autorice. También asegúrate de que se abre con <strong>Chrome</strong> (no con Internet Explorer).</p>
+  </div>
+
+  <div class="exercise-box">
+    <div class="ex-header"><div class="ex-icon">✏️<span class="diff-badge diff-facil">Fácil</span></div> Actividad 9b.1 — Checklist<span class="diff-badge diff-facil">Fácil</span></div>
+    <p>Marca cada punto cuando lo tengas:</p>
+    <ul>
+      <li>☐ Carpeta <code>reconocimiento_web</code> creada</li>
+      <li>☐ Archivo <code>test.html</code> creado y abierto con el Bloc de notas</li>
+      <li>☐ Codigo copiado y guardado</li>
+      <li>☐ Al abrir en Chrome, muestra la versión de face-api.js</li>
+    </ul>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- SECCIÓN 10b: WEBCAM EN EL NAVEGADOR -->
+<section class="section" id="webcam-web">
+  <div class="section-tag tag-browser">🔵 Alternativa Avanzada · Navegador</div>
+  <h2>10b. Webcam en tiempo real (navegador)</h2>
+
+  <p>Vamos a crear un archivo HTML que abra la webcam, detecte caras en tiempo real y muestre la <strong>emoción, edad y género</strong> de cada persona. Todo funcióna directamente en Chrome, sin instalar nada.</p>
+
+  <div class="flow-diagram">
+    <div class="flow-step"><div class="fs-icon">📄</div><div class="fs-label">Abrir HTML</div><div class="fs-detail">en Chrome</div></div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step"><div class="fs-icon">🧠</div><div class="fs-label">Cargar modelos</div><div class="fs-detail">desde CDN</div></div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step"><div class="fs-icon">📷</div><div class="fs-label">Webcam</div><div class="fs-detail">getUserMedia</div></div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step"><div class="fs-icon">😊</div><div class="fs-label">Detectar</div><div class="fs-detail">Cada 0.5s</div></div>
+  </div>
+
+  <p>Crea un archivo llamado <code>webcam.html</code> en tu carpeta y copia este código completo:</p>
+
+  <div class="code-block"><div class="code-header"><div class="dots"><span></span><span></span><span></span></div><span>webcam.html — Deteccion de caras en vivo</span><button class="copy-btn" onclick="copyCode(this)">Copiar</button></div>
+<pre class="numbered">&lt;!DOCTYPE html&gt;
+&lt;html lang=<span class="str">"es"</span>&gt;
+&lt;head&gt;
+&lt;meta charset=<span class="str">"UTF-8"</span>&gt;
+&lt;title&gt;Reconocimiento Facial - Webcam&lt;/title&gt;
+&lt;script src=<span class="str">"https://cdn.jsdelivr.net/npm/@vladmandic/face-api/dist/face-api.js"</span>&gt;&lt;/script&gt;
+&lt;style&gt;
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #0a0e1a; color: #e2e8f0; font-family: Arial, sans-serif;
+         text-align: center; padding: 1rem; }
+  h1 { color: #00d4ff; margin-bottom: 0.3rem; }
+  #estado { color: #94a3b8; margin-bottom: 1rem; }
+  .contenedor { position: relative; display: inline-block; }
+  video { border-radius: 12px; max-width: 100%; }
+  canvas { position: absolute; top: 0; left: 0; }
+&lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;h1&gt;Reconocimiento Facial en Vivo&lt;/h1&gt;
+  &lt;p id=<span class="str">"estado"</span>&gt;Cargando modelos de IA...&lt;/p&gt;
+  &lt;div class=<span class="str">"contenedor"</span>&gt;
+    &lt;video id=<span class="str">"video"</span> autoplay muted playsinline&gt;&lt;/video&gt;
+    &lt;canvas id=<span class="str">"canvas"</span>&gt;&lt;/canvas&gt;
+  &lt;/div&gt;
+
+&lt;script&gt;
+<span class="cm">// ═══ ELEMENTOS HTML ═══</span>
+<span class="kw">const</span> video = document.<span class="fn">getElementById</span>(<span class="str">"video"</span>);
+<span class="kw">const</span> canvas = document.<span class="fn">getElementById</span>(<span class="str">"canvas"</span>);
+<span class="kw">const</span> estado = document.<span class="fn">getElementById</span>(<span class="str">"estado"</span>);
+
+<span class="cm">// ═══ CONFIGURACION ═══</span>
+<span class="kw">const</span> URL_MODELOS = <span class="str">"https://cdn.jsdelivr.net/npm/@vladmandic/face-api/model/"</span>;
+<span class="kw">const</span> INTERVALO = <span class="num">500</span>;  <span class="cm">// Milisegúndos entre cada analisis</span>
+
+<span class="cm">// ═══ FUNCION PRINCIPAL ═══</span>
+<span class="kw">async function</span> <span class="fn">iniciar</span>() {
+    <span class="cm">// Paso 1: Cargar modelos de IA desde internet</span>
+    estado.<span class="var">textContent</span> = <span class="str">"Descargando modelos de IA (primera vez tarda mas)..."</span>;
+    <span class="kw">await</span> faceapi.nets.ssdMobilenetv1.<span class="fn">loadFromUri</span>(URL_MODELOS);
+    <span class="kw">await</span> faceapi.nets.faceLandmark68Net.<span class="fn">loadFromUri</span>(URL_MODELOS);
+    <span class="kw">await</span> faceapi.nets.faceExpressionNet.<span class="fn">loadFromUri</span>(URL_MODELOS);
+    <span class="kw">await</span> faceapi.nets.ageGenderNet.<span class="fn">loadFromUri</span>(URL_MODELOS);
+    estado.<span class="var">textContent</span> = <span class="str">"Modelos cargados. Iniciando webcam..."</span>;
+
+    <span class="cm">// Paso 2: Encender la webcam</span>
+    <span class="kw">const</span> stream = <span class="kw">await</span> navigator.mediaDevices.<span class="fn">getUserMedia</span>({ video: <span class="kw">true</span> });
+    video.<span class="var">srcObject</span> = stream;
+
+    <span class="cm">// Paso 3: Cuando la webcam este lista, empezar a detectar</span>
+    video.<span class="fn">addEventListener</span>(<span class="str">"playing"</span>, () =&gt; {
+        canvas.<span class="var">width</span> = video.<span class="var">videoWidth</span>;
+        canvas.<span class="var">height</span> = video.<span class="var">videoHeight</span>;
+        estado.<span class="var">textContent</span> = <span class="str">"Webcam activa - detectando caras..."</span>;
+        <span class="fn">setInterval</span>(detectar, INTERVALO);
+    });
+}
+
+<span class="cm">// ═══ DETECTAR CARAS ═══</span>
+<span class="kw">async function</span> <span class="fn">detectar</span>() {
+    <span class="cm">// Pedir a face-api.js que detecte todas las caras</span>
+    <span class="kw">const</span> detecciónes = <span class="kw">await</span> faceapi
+        .<span class="fn">detectAllFaces</span>(video)
+        .<span class="fn">withFaceLandmarks</span>()
+        .<span class="fn">withFaceExpressions</span>()
+        .<span class="fn">withAgeAndGender</span>();
+
+    <span class="cm">// Limpiar lo dibujado antes</span>
+    <span class="kw">const</span> ctx = canvas.<span class="fn">getContext</span>(<span class="str">"2d"</span>);
+    ctx.<span class="fn">clearRect</span>(<span class="num">0</span>, <span class="num">0</span>, canvas.<span class="var">width</span>, canvas.<span class="var">height</span>);
+
+    <span class="cm">// Ajustar coordenadas al tamaño del video</span>
+    <span class="kw">const</span> resultados = faceapi.<span class="fn">resizeResults</span>(detecciónes, {
+        width: canvas.<span class="var">width</span>, height: canvas.<span class="var">height</span>
+    });
+
+    <span class="cm">// Dibujar rectangulo alrededor de cada cara</span>
+    faceapi.draw.<span class="fn">drawDetections</span>(canvas, resultados);
+
+    <span class="cm">// Dibujar etiqueta con emocion, edad y genero</span>
+    <span class="kw">for</span> (<span class="kw">const</span> cara <span class="kw">of</span> resultados) {
+        <span class="kw">const</span> { x, y } = cara.detection.box;
+        <span class="kw">const</span> emocion = cara.expressions.<span class="fn">asSortedArray</span>()[<span class="num">0</span>].expression;
+        <span class="kw">const</span> edad = Math.<span class="fn">round</span>(cara.age);
+        <span class="kw">const</span> genero = cara.gender;
+
+        ctx.<span class="var">fillStyle</span> = <span class="str">"#00ff00"</span>;
+        ctx.<span class="var">font</span> = <span class="str">"bold 16px Arial"</span>;
+        ctx.<span class="fn">fillText</span>(<span class="str">`${emocion}, ${edad} year, ${genero}`</span>, x, y - <span class="num">8</span>);
+    }
+
+    estado.<span class="var">textContent</span> = <span class="str">"Caras detectadas: "</span> + detecciónes.<span class="var">length</span>;
+}
+
+<span class="cm">// ═══ INICIAR ═══</span>
+<span class="fn">iniciar</span>().<span class="fn">catch</span>(err =&gt; {
+    estado.<span class="var">textContent</span> = <span class="str">"Error: "</span> + err.<span class="var">message</span>;
+});
+&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</pre></div>
+
+  <h3>Como funcióna (paso a paso)</h3>
+
+  <div class="explain"><span class="line-ref">&lt;script src="...face-api.js"&gt;</span><div class="explain-text">Carga la biblioteca <strong>face-api.js</strong> directamente desde internet (un CDN). Es como hacer <code>import DeepFace</code> en Python, pero en JavaScript lo haces con una etiqueta <code>&lt;script&gt;</code> que apunta a una URL. No necesitas descargar nada manualmente.</div></div>
+  <div class="explain"><span class="line-ref">async / await</span><div class="explain-text">En JavaScript, las operaciones lentas (descargar modelos, encender webcam) son <strong>asincronas</strong>: el programa no se queda esperando, sigue ejecutando otras cosas. <code>async</code> marca una función que contiene operaciones lentas, y <code>await</code> le dice "espera aquí hasta que termine". Es parecido a como funcióna Python normalmente, pero en JavaScript hay que escribirlo explicitamente.</div></div>
+  <div class="explain"><span class="line-ref">loadFromUri()</span><div class="explain-text">Descarga los modelos de IA desde la URL. Son archivos de ~1-3 MB cada uno. La <strong>primera vez</strong> tarda unos segúndos (dependiendo de la velocidad de internet). Las siguientes veces, el navegador los carga desde su <strong>cache</strong> y es casí instantaneo.</div></div>
+  <div class="explain"><span class="line-ref">getUserMedia({ video: true })</span><div class="explain-text">Le pide al navegador acceso a la webcam. Chrome mostrara un aviso: <strong>"Este sitio quiere usar tu cámara"</strong>. El alumno debe hacer clic en <strong>"Permitir"</strong>. Si lo deniega, la webcam no se enciende.</div></div>
+  <div class="explain"><span class="line-ref">setInterval(detectar, 500)</span><div class="explain-text">Ejecuta la función <code>detectar</code> cada <code>500</code> milisegúndos (cada medio segúndo). Es el equivalente al <code>contador % 30</code> que usábamos en Python. Puedes cambiar el número: <code>300</code> = mas rápido, <code>1000</code> = mas lento pero mas fluido.</div></div>
+  <div class="explain"><span class="line-ref">detectAllFaces(video)</span><div class="explain-text">El equivalente de <code>DeepFace.analyze()</code> en Python. Busca todas las caras en el frame actual del video. Los metodos encadenados (<code>.withFaceLandmarks()</code>, <code>.withFaceExpressions()</code>, <code>.withAgeAndGender()</code>) le dicen que informacion queremos de cada cara.</div></div>
+  <div class="explain"><span class="line-ref">canvas</span><div class="explain-text">Es una capa transparente que se coloca <strong>encima del video</strong>. Dibujamos los rectangulos y etiquetas en el canvas, no en el video. Así el video sigue fluyendo debajo y los dibujos se actualizan sin afectar la imagen. Es como poner un cristal encima de una pantalla y dibujar con rotulador.</div></div>
+  <div class="explain"><span class="line-ref">expressions.asSortedArray()[0]</span><div class="explain-text">face-api.js devuelve las 7 emociones con su probabilidad. <code>asSortedArray()</code> las ordena de mayor a menor, y <code>[0]</code> coge la primera = la emoción dominante. Es similar a <code>cara["dominant_emotion"]</code> en DeepFace.</div></div>
+
+  <div class="info-box tip">
+    <div class="ib-title green">💡 Python vs JavaScript: guía rápida de traducción</div>
+    <ul>
+      <li><code>resultado = ...</code> (Python) → <code>const resultado = ...</code> (JavaScript)</li>
+      <li><code>f"texto {variable}"</code> (Python) → <code>`texto ${variable}`</code> (JavaScript, con acentos graves)</li>
+      <li><code>print(...)</code> (Python) → <code>console.log(...)</code> (JavaScript)</li>
+      <li><code>for cara in resultados:</code> (Python) → <code>for (const cara of resultados) {}</code> (JavaScript)</li>
+      <li><code>def función():</code> (Python) → <code>function función() {}</code> (JavaScript)</li>
+    </ul>
+  </div>
+
+  <div class="exercise-box">
+    <div class="ex-header"><div class="ex-icon">✏️<span class="diff-badge diff-facil">Fácil</span></div> Actividad 10b.1 — Prueba la webcam<span class="diff-badge diff-facil">Fácil</span></div>
+    <p><strong>Objetivo:</strong> Comprobar que la detección funcióna en tu navegador.</p>
+    <p>1. Copia el código en <code>webcam.html</code>, guardalo y abrelo en Chrome.</p>
+    <p>2. Acepta el permiso de cámara cuando Chrome lo pida.</p>
+    <p>3. Espera a que carguen los modelos (primera vez ~10 segúndos).</p>
+    <p>4. Ponte delante de la cámara. ¿Aparece el rectangulo? ¿La emoción es correcta?</p>
+    <p>5. Prueba con varias personas a la vez. ¿Detecta todas las caras?</p>
+  </div>
+
+  <div class="exercise-box">
+    <div class="ex-header"><div class="ex-icon">✏️<span class="diff-badge diff-medio">Medio</span></div> Actividad 10b.2 — Personaliza<span class="diff-badge diff-medio">Medio</span></div>
+    <p><strong>Objetivo:</strong> Modificar el programa para hacerlo tuyo.</p>
+    <p>1. Cambia el color del texto de <code>"#00ff00"</code> (verde) a <code>"#ff0000"</code> (rojo) o <code>"#00d4ff"</code> (cyan).</p>
+    <p>2. Cambia el <code>INTERVALO</code> de <code>500</code> a <code>200</code>. ¿Va mas rápido? ¿El video va peor?</p>
+    <p>3. Cambia el titulo <code>&lt;h1&gt;</code> por tu propio nombre.</p>
+    <p>4. <strong>Reto:</strong> Cambia el tamaño de la fuente de <code>"bold 16px Arial"</code> a <code>"bold 24px Arial"</code>. ¿Se lee mejor?</p>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- SECCIÓN 11b: ASISTENCIA EN EL NAVEGADOR -->
+<section class="section" id="asistencia-web">
+  <div class="section-tag tag-browser">🔵 Alternativa Avanzada · Navegador</div>
+  <h2>11b. Proyecto: Asistencia en el navegador</h2>
+
+  <p>Este es el proyecto estrella: un <strong>sistema completo de control de asistencia</strong> que funcióna en un solo archivo HTML. Registra personas sacándoles una foto con la webcam, las identifica automáticamente, y permite exportar la asistencia como CSV.</p>
+
+  <div class="flow-diagram">
+    <div class="flow-step"><div class="fs-icon">📷</div><div class="fs-label">Registrar</div><div class="fs-detail">Foto + nombre</div></div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step"><div class="fs-icon">💾</div><div class="fs-label">Guardar</div><div class="fs-detail">localStorage</div></div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step"><div class="fs-icon">🔍</div><div class="fs-label">Identificar</div><div class="fs-detail">Cada 2 seg</div></div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step"><div class="fs-icon">📋</div><div class="fs-label">Asistencia</div><div class="fs-detail">Nombre + hora</div></div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step"><div class="fs-icon">📥</div><div class="fs-label">Exportar</div><div class="fs-detail">CSV</div></div>
+  </div>
+
+  <div class="info-box concept">
+    <div class="ib-title purple">🧠 ¿Cómofuncióna la identificación en el navegador?</div>
+    <p>Cuando registras a alguien, face-api.js analiza su cara y la convierte en <strong>128 números</strong> (un "descriptor" o "embedding", como vimos en la sección 1). Esos números se guardan en el <strong>localStorage</strong> del navegador (un almacen interno de Chrome). Cuando la webcam ve una cara, calcula sus 128 números y los compara con todos los guardados. Si la <strong>distancia</strong> es menor que 0.6 → es la misma persona.</p>
+  </div>
+
+  <p>Crea un archivo <code>asistencia.html</code> y copia este código completo:</p>
+
+  <div class="code-block"><div class="code-header"><div class="dots"><span></span><span></span><span></span></div><span>asistencia.html — Control de asistencia completo</span><button class="copy-btn" onclick="copyCode(this)">Copiar</button></div>
+<pre class="numbered">&lt;!DOCTYPE html&gt;
+&lt;html lang=<span class="str">"es"</span>&gt;
+&lt;head&gt;
+&lt;meta charset=<span class="str">"UTF-8"</span>&gt;
+&lt;title&gt;Control de Asistencia&lt;/title&gt;
+&lt;script src=<span class="str">"https://cdn.jsdelivr.net/npm/@vladmandic/face-api/dist/face-api.js"</span>&gt;&lt;/script&gt;
+&lt;style&gt;
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background:#0a0e1a; color:#e2e8f0; font-family:Arial,sans-serif; padding:1.5rem; }
+  h1 { color:#00d4ff; text-align:center; margin-bottom:.3rem; }
+  #estado { text-align:center; color:#94a3b8; margin-bottom:1rem; }
+  .layout { display:flex; gap:1.5rem; max-width:1100px; margin:0 auto; flex-wrap:wrap; }
+  .col-video { flex:1; min-width:300px; }
+  .col-panel { flex:0 0 320px; }
+  .cont-video { position:relative; width:100%; }
+  video { border-radius:12px; width:100%; }
+  canvas { position:absolute; top:0; left:0; width:100%; height:100%; }
+  .panel { background:#111827; border:1px solid #1e293b; border-radius:12px;
+           padding:1.2rem; margin-bottom:1rem; }
+  .panel h3 { color:#00d4ff; margin-bottom:.8rem; font-size:1rem; }
+  input[type=text] { width:100%; padding:.5rem; border-radius:8px; border:1px solid #334155;
+                     background:#0a0e1a; color:#e2e8f0; font-size:.95rem; margin-bottom:.5rem; }
+  button { padding:.5rem 1rem; border-radius:8px; border:none; cursor:pointer;
+           font-size:.9rem; font-weight:600; }
+  .btn-reg { background:#10b981; color:white; width:100%; }
+  .btn-exp { background:#0284c7; color:white; }
+  .btn-del { background:#dc2626; color:white; }
+  .persona { padding:.4rem 0; border-bottom:1px solid #1e293b; font-size:.9rem;
+             display:flex; justify-content:space-between; }
+  .persona .del { color:#ef4444; cursor:pointer; font-size:.8rem; }
+  table { width:100%; border-collapse:collapse; margin-top:.5rem; font-size:.9rem; }
+  th { text-align:left; padding:.5rem; color:#94a3b8; border-bottom:1px solid #1e293b; }
+  td { padding:.5rem; border-bottom:1px solid #1e293b; }
+  .botones { display:flex; gap:.5rem; margin-top:.8rem; }
+  .nombre-det { text-align:center; font-size:1.3rem; font-weight:bold; margin-top:.5rem; min-height:2rem; }
+  .nombre-ok { color:#10b981; }
+  .nombre-no { color:#ef4444; }
+&lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;h1&gt;Control de Asistencia&lt;/h1&gt;
+&lt;p id=<span class="str">"estado"</span>&gt;Cargando modelos de IA...&lt;/p&gt;
+
+&lt;div class=<span class="str">"layout"</span>&gt;
+  &lt;div class=<span class="str">"col-video"</span>&gt;
+    &lt;div class=<span class="str">"cont-video"</span>&gt;
+      &lt;video id=<span class="str">"video"</span> autoplay muted playsinline&gt;&lt;/video&gt;
+      &lt;canvas id=<span class="str">"canvas"</span>&gt;&lt;/canvas&gt;
+    &lt;/div&gt;
+    &lt;div id=<span class="str">"nombreDet"</span> class=<span class="str">"nombre-det"</span>&gt;&lt;/div&gt;
+  &lt;/div&gt;
+  &lt;div class=<span class="str">"col-panel"</span>&gt;
+    &lt;div class=<span class="str">"panel"</span>&gt;
+      &lt;h3&gt;Registrar persona&lt;/h3&gt;
+      &lt;input type=<span class="str">"text"</span> id=<span class="str">"inputNombre"</span> placeholder=<span class="str">"Nombre del alumno/a..."</span>&gt;
+      &lt;button class=<span class="str">"btn-reg"</span> onclick=<span class="str">"registrar()"</span>&gt;Registrar cara&lt;/button&gt;
+    &lt;/div&gt;
+    &lt;div class=<span class="str">"panel"</span>&gt;
+      &lt;h3&gt;Personas (&lt;span id=<span class="str">"numP"</span>&gt;0&lt;/span&gt;)&lt;/h3&gt;
+      &lt;div id=<span class="str">"listaP"</span>&gt;&lt;/div&gt;
+    &lt;/div&gt;
+    &lt;div class=<span class="str">"panel"</span>&gt;
+      &lt;h3&gt;Asistencia de hoy&lt;/h3&gt;
+      &lt;table&gt;&lt;thead&gt;&lt;tr&gt;&lt;th&gt;Nombre&lt;/th&gt;&lt;th&gt;Hora&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;
+        &lt;tbody id=<span class="str">"tablaA"</span>&gt;&lt;/tbody&gt;&lt;/table&gt;
+      &lt;div class=<span class="str">"botones"</span>&gt;
+        &lt;button class=<span class="str">"btn-exp"</span> onclick=<span class="str">"exportarCSV()"</span>&gt;Exportar CSV&lt;/button&gt;
+        &lt;button class=<span class="str">"btn-del"</span> onclick=<span class="str">"borrarTodo()"</span>&gt;Borrar todo&lt;/button&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;script&gt;
+<span class="cm">// ═══ ELEMENTOS ═══</span>
+<span class="kw">const</span> video = document.<span class="fn">getElementById</span>(<span class="str">"video"</span>);
+<span class="kw">const</span> canvas = document.<span class="fn">getElementById</span>(<span class="str">"canvas"</span>);
+<span class="kw">const</span> estado = document.<span class="fn">getElementById</span>(<span class="str">"estado"</span>);
+<span class="kw">const</span> nombreDet = document.<span class="fn">getElementById</span>(<span class="str">"nombreDet"</span>);
+
+<span class="cm">// ═══ CONFIGURACION ═══</span>
+<span class="kw">const</span> URL_MODELOS = <span class="str">"https://cdn.jsdelivr.net/npm/@vladmandic/face-api/model/"</span>;
+<span class="kw">const</span> UMBRAL = <span class="num">0.6</span>;      <span class="cm">// Distancia maxima para coincidencia</span>
+<span class="kw">const</span> INTERVALO = <span class="num">2000</span>;  <span class="cm">// Milisegúndos entre cada identificación</span>
+
+<span class="cm">// ═══ INICIAR ═══</span>
+<span class="kw">async function</span> <span class="fn">iniciar</span>() {
+    estado.<span class="var">textContent</span> = <span class="str">"Descargando modelos de IA..."</span>;
+    <span class="kw">await</span> faceapi.nets.ssdMobilenetv1.<span class="fn">loadFromUri</span>(URL_MODELOS);
+    <span class="kw">await</span> faceapi.nets.faceLandmark68Net.<span class="fn">loadFromUri</span>(URL_MODELOS);
+    <span class="kw">await</span> faceapi.nets.faceRecognitionNet.<span class="fn">loadFromUri</span>(URL_MODELOS);
+    <span class="kw">await</span> faceapi.nets.faceExpressionNet.<span class="fn">loadFromUri</span>(URL_MODELOS);
+
+    <span class="kw">const</span> stream = <span class="kw">await</span> navigator.mediaDevices.<span class="fn">getUserMedia</span>({ video: <span class="kw">true</span> });
+    video.<span class="var">srcObject</span> = stream;
+
+    video.<span class="fn">addEventListener</span>(<span class="str">"playing"</span>, () =&gt; {
+        canvas.<span class="var">width</span> = video.<span class="var">videoWidth</span>;
+        canvas.<span class="var">height</span> = video.<span class="var">videoHeight</span>;
+        <span class="fn">actualizarLista</span>();
+        <span class="fn">actualizarTabla</span>();
+        estado.<span class="var">textContent</span> = <span class="str">"Listo. Registra personas o espera la detección automatica."</span>;
+        <span class="fn">setInterval</span>(identificar, INTERVALO);
+    });
+}
+
+<span class="cm">// ═══ REGISTRAR PERSONA ═══</span>
+<span class="kw">async function</span> <span class="fn">registrar</span>() {
+    <span class="kw">const</span> nombre = document.<span class="fn">getElementById</span>(<span class="str">"inputNombre"</span>).<span class="var">value</span>.<span class="fn">trim</span>();
+    <span class="kw">if</span> (!nombre) { <span class="fn">alert</span>(<span class="str">"Escribe un nombre primero."</span>); <span class="kw">return</span>; }
+
+    estado.<span class="var">textContent</span> = <span class="str">"Analizando cara..."</span>;
+    <span class="kw">const</span> det = <span class="kw">await</span> faceapi.<span class="fn">detectSingleFace</span>(video)
+        .<span class="fn">withFaceLandmarks</span>().<span class="fn">withFaceDescriptor</span>();
+
+    <span class="kw">if</span> (!det) {
+        estado.<span class="var">textContent</span> = <span class="str">"No se detecto ninguna cara. Mirate a la camara."</span>;
+        <span class="kw">return</span>;
+    }
+
+    <span class="cm">// Guardar nombre + 128 numeros del descriptor</span>
+    <span class="kw">const</span> personas = <span class="fn">cargarPersonas</span>();
+    personas.<span class="fn">push</span>({ nombre, descriptor: Array.<span class="fn">from</span>(det.<span class="var">descriptor</span>) });
+    localStorage.<span class="fn">setItem</span>(<span class="str">"personas"</span>, JSON.<span class="fn">stringify</span>(personas));
+
+    document.<span class="fn">getElementById</span>(<span class="str">"inputNombre"</span>).<span class="var">value</span> = <span class="str">""</span>;
+    <span class="fn">actualizarLista</span>();
+    estado.<span class="var">textContent</span> = nombre + <span class="str">" registrado/a correctamente."</span>;
+}
+
+<span class="cm">// ═══ IDENTIFICAR EN TIEMPO REAL ═══</span>
+<span class="kw">async function</span> <span class="fn">identificar</span>() {
+    <span class="kw">const</span> personas = <span class="fn">cargarPersonas</span>();
+    <span class="kw">if</span> (personas.<span class="var">length</span> === <span class="num">0</span>) <span class="kw">return</span>;
+
+    <span class="kw">const</span> det = <span class="kw">await</span> faceapi.<span class="fn">detectSingleFace</span>(video)
+        .<span class="fn">withFaceLandmarks</span>().<span class="fn">withFaceDescriptor</span>().<span class="fn">withFaceExpressions</span>();
+
+    <span class="kw">const</span> ctx = canvas.<span class="fn">getContext</span>(<span class="str">"2d"</span>);
+    ctx.<span class="fn">clearRect</span>(<span class="num">0</span>, <span class="num">0</span>, canvas.<span class="var">width</span>, canvas.<span class="var">height</span>);
+
+    <span class="kw">if</span> (!det) { nombreDet.<span class="var">textContent</span> = <span class="str">""</span>; <span class="kw">return</span>; }
+
+    <span class="cm">// Dibujar rectangulo</span>
+    <span class="kw">const</span> res = faceapi.<span class="fn">resizeResults</span>(det, {
+        width: canvas.<span class="var">width</span>, height: canvas.<span class="var">height</span>
+    });
+    faceapi.draw.<span class="fn">drawDetections</span>(canvas, res);
+
+    <span class="cm">// Comparar con todas las personas guardadas</span>
+    <span class="kw">let</span> mejorNombre = <span class="str">"Desconocido"</span>;
+    <span class="kw">let</span> mejorDist = Infinity;
+
+    <span class="kw">for</span> (<span class="kw">const</span> p <span class="kw">of</span> personas) {
+        <span class="kw">const</span> guardado = <span class="kw">new</span> Float32Array(p.<span class="var">descriptor</span>);
+        <span class="kw">const</span> dist = faceapi.<span class="fn">euclideanDistance</span>(det.<span class="var">descriptor</span>, guardado);
+        <span class="kw">if</span> (dist &lt; mejorDist) { mejorDist = dist; mejorNombre = p.<span class="var">nombre</span>; }
+    }
+
+    <span class="cm">// ¿Es coincidencia?</span>
+    <span class="kw">if</span> (mejorDist &lt; UMBRAL) {
+        nombreDet.<span class="var">textContent</span> = mejorNombre;
+        nombreDet.<span class="var">className</span> = <span class="str">"nombre-det nombre-ok"</span>;
+        <span class="fn">registrarAsistencia</span>(mejorNombre);
+        <span class="kw">const</span> { x, y } = res.detection.box;
+        <span class="kw">const</span> emocion = res.expressions.<span class="fn">asSortedArray</span>()[<span class="num">0</span>].expression;
+        ctx.<span class="var">fillStyle</span> = <span class="str">"#00ff00"</span>; ctx.<span class="var">font</span> = <span class="str">"bold 18px Arial"</span>;
+        ctx.<span class="fn">fillText</span>(mejorNombre + <span class="str">" - "</span> + emocion, x, y - <span class="num">8</span>);
+    } <span class="kw">else</span> {
+        nombreDet.<span class="var">textContent</span> = <span class="str">"Desconocido"</span>;
+        nombreDet.<span class="var">className</span> = <span class="str">"nombre-det nombre-no"</span>;
+    }
+}
+
+<span class="cm">// ═══ REGISTRAR ASISTENCIA (sin duplicados del mismo dia) ═══</span>
+<span class="kw">function</span> <span class="fn">registrarAsistencia</span>(nombre) {
+    <span class="kw">const</span> hoy = <span class="kw">new</span> Date().<span class="fn">toLocaleDateString</span>(<span class="str">"es-ES"</span>);
+    <span class="kw">const</span> hora = <span class="kw">new</span> Date().<span class="fn">toLocaleTimeString</span>(<span class="str">"es-ES"</span>);
+    <span class="kw">const</span> lista = <span class="fn">cargarAsistencias</span>();
+    <span class="kw">if</span> (lista.<span class="fn">some</span>(a =&gt; a.<span class="var">nombre</span> === nombre &amp;&amp; a.<span class="var">fecha</span> === hoy)) <span class="kw">return</span>;
+    lista.<span class="fn">push</span>({ nombre, fecha: hoy, hora });
+    localStorage.<span class="fn">setItem</span>(<span class="str">"asistencia"</span>, JSON.<span class="fn">stringify</span>(lista));
+    <span class="fn">actualizarTabla</span>();
+    estado.<span class="var">textContent</span> = nombre + <span class="str">" - asistencia registrada a las "</span> + hora;
+}
+
+<span class="cm">// ═══ DATOS ═══</span>
+<span class="kw">function</span> <span class="fn">cargarPersonas</span>()    { <span class="kw">return</span> JSON.<span class="fn">parse</span>(localStorage.<span class="fn">getItem</span>(<span class="str">"personas"</span>)    || <span class="str">"[]"</span>); }
+<span class="kw">function</span> <span class="fn">cargarAsistencias</span>() { <span class="kw">return</span> JSON.<span class="fn">parse</span>(localStorage.<span class="fn">getItem</span>(<span class="str">"asistencia"</span>) || <span class="str">"[]"</span>); }
+
+<span class="kw">function</span> <span class="fn">actualizarLista</span>() {
+    <span class="kw">const</span> personas = <span class="fn">cargarPersonas</span>();
+    document.<span class="fn">getElementById</span>(<span class="str">"numP"</span>).<span class="var">textContent</span> = personas.<span class="var">length</span>;
+    document.<span class="fn">getElementById</span>(<span class="str">"listaP"</span>).<span class="var">innerHTML</span> = personas.<span class="fn">map</span>((p, i) =&gt;
+        <span class="str">`&lt;div class="persona"&gt;&lt;span&gt;${p.nombre}&lt;/span&gt;
+         &lt;span class="del" onclick="eliminar(${i})"&gt;eliminar&lt;/span&gt;&lt;/div&gt;`</span>
+    ).<span class="fn">join</span>(<span class="str">""</span>);
+}
+
+<span class="kw">function</span> <span class="fn">eliminar</span>(i) {
+    <span class="kw">const</span> p = <span class="fn">cargarPersonas</span>(); p.<span class="fn">splice</span>(i, <span class="num">1</span>);
+    localStorage.<span class="fn">setItem</span>(<span class="str">"personas"</span>, JSON.<span class="fn">stringify</span>(p)); <span class="fn">actualizarLista</span>();
+}
+
+<span class="kw">function</span> <span class="fn">actualizarTabla</span>() {
+    <span class="kw">const</span> hoy = <span class="kw">new</span> Date().<span class="fn">toLocaleDateString</span>(<span class="str">"es-ES"</span>);
+    <span class="kw">const</span> lista = <span class="fn">cargarAsistencias</span>().<span class="fn">filter</span>(a =&gt; a.<span class="var">fecha</span> === hoy);
+    document.<span class="fn">getElementById</span>(<span class="str">"tablaA"</span>).<span class="var">innerHTML</span> = lista.<span class="fn">map</span>(a =&gt;
+        <span class="str">`&lt;tr&gt;&lt;td&gt;${a.nombre}&lt;/td&gt;&lt;td&gt;${a.hora}&lt;/td&gt;&lt;/tr&gt;`</span>
+    ).<span class="fn">join</span>(<span class="str">""</span>);
+}
+
+<span class="cm">// ═══ EXPORTAR CSV ═══</span>
+<span class="kw">function</span> <span class="fn">exportarCSV</span>() {
+    <span class="kw">const</span> lista = <span class="fn">cargarAsistencias</span>();
+    <span class="kw">if</span> (lista.<span class="var">length</span> === <span class="num">0</span>) { <span class="fn">alert</span>(<span class="str">"No hay asistencias."</span>); <span class="kw">return</span>; }
+    <span class="kw">let</span> csv = <span class="str">"Nombre,Fecha,Hora\n"</span>;
+    <span class="kw">for</span> (<span class="kw">const</span> a <span class="kw">of</span> lista) csv += <span class="str">`${a.nombre},${a.fecha},${a.hora}\n`</span>;
+    <span class="kw">const</span> blob = <span class="kw">new</span> Blob([csv], { type: <span class="str">"text/csv"</span> });
+    <span class="kw">const</span> enlace = document.<span class="fn">createElement</span>(<span class="str">"a"</span>);
+    enlace.<span class="var">href</span> = URL.<span class="fn">createObjectURL</span>(blob);
+    enlace.<span class="var">download</span> = <span class="str">"asistencia.csv"</span>;
+    enlace.<span class="fn">click</span>();
+}
+
+<span class="cm">// ═══ BORRAR TODO ═══</span>
+<span class="kw">function</span> <span class="fn">borrarTodo</span>() {
+    <span class="kw">if</span> (<span class="fn">confirm</span>(<span class="str">"¿Borrar todas las personas y asistencias?"</span>)) {
+        localStorage.<span class="fn">removeItem</span>(<span class="str">"personas"</span>);
+        localStorage.<span class="fn">removeItem</span>(<span class="str">"asistencia"</span>);
+        <span class="fn">actualizarLista</span>(); <span class="fn">actualizarTabla</span>();
+        estado.<span class="var">textContent</span> = <span class="str">"Datos borrados."</span>;
+    }
+}
+
+<span class="cm">// ═══ ARRANCAR ═══</span>
+<span class="fn">iniciar</span>().<span class="fn">catch</span>(err =&gt; { estado.<span class="var">textContent</span> = <span class="str">"Error: "</span> + err.<span class="var">message</span>; });
+&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</pre></div>
+
+  <h3>Explicacion de las partes clave</h3>
+
+  <div class="explain"><span class="line-ref">faceRecognitionNet</span><div class="explain-text">Este es el modelo que genera los <strong>128 números</strong> (descriptor) que identifican una cara. Es el modelo equivalente a lo que hace <code>DeepFace.find()</code> en Python. Sin este modelo, podríamos detectar caras pero no saber <em>de quien</em> son.</div></div>
+  <div class="explain"><span class="line-ref">detectSingleFace().withFaceDescriptor()</span><div class="explain-text">Detecta UNA cara y calcula su descriptor (los 128 números). Usamos <code>detectSingleFace</code> en vez de <code>detectAllFaces</code> porque al registrar solo necesitamos la cara de la persona que está delante de la cámara.</div></div>
+  <div class="explain"><span class="line-ref">Array.from(det.descriptor)</span><div class="explain-text">El descriptor es un <code>Float32Array</code> (un tipo especial de JavaScript). Para guardarlo en localStorage necesitamos convertirlo a un array normal con <code>Array.from()</code>, porque <code>JSON.stringify()</code> no funcióna directamente con Float32Array.</div></div>
+  <div class="explain"><span class="line-ref">localStorage</span><div class="explain-text">Es el "disco duro" del navegador. Guarda datos como texto (JSON) que <strong>persisten</strong> aunque cierres Chrome. Las personas registradas y las asistencias se guardan aqui. Tiene un limite de ~5 MB, suficiente para decenas de personas.</div></div>
+  <div class="explain"><span class="line-ref">euclideanDistance()</span><div class="explain-text">Calcula la <strong>distancia</strong> entre dos descriptores de cara (igual que en la sección 6). Si la distancia es menor que <code>0.6</code>, face-api.js considera que son la misma persona. Este umbral funcióna bien para la mayoria de casos.</div></div>
+  <div class="explain"><span class="line-ref">lista.some(a =&gt; ...)</span><div class="explain-text">Comprueba si <strong>alguno</strong> de los registros cumple una condicion. Aquí verificamos si ya hay una asistencia con el mismo nombre y la misma fecha. Si ya existe, no se registra otra vez. Es el equivalente al <code>if nombre not in registrados_hoy</code> de la versión Python.</div></div>
+  <div class="explain"><span class="line-ref">Blob + createObjectURL</span><div class="explain-text">Para descargar el CSV, creamos un <code>Blob</code> (un archivo en memoria) con el contenido CSV, generamos una URL temporal, y simulamos un clic en un enlace de descarga. Es la forma estandar de descargar archivos generados por JavaScript sin necesitar un servidor.</div></div>
+
+  <div class="exercise-box">
+    <div class="ex-header"><div class="ex-icon">✏️<span class="diff-badge diff-medio">Medio</span></div> Actividad 11b.1 — Tu sistema de asistencia<span class="diff-badge diff-medio">Medio</span></div>
+    <p><strong>Objetivo:</strong> Poner en marcha el sistema con tu clase.</p>
+    <p><strong>Pasos:</strong></p>
+    <p>1. Copia el código en <code>asistencia.html</code>, guardalo y abrelo en Chrome.</p>
+    <p>2. Espera a que carguen los modelos.</p>
+    <p>3. <strong>Registra</strong> a 3-5 compañeros: cada uno se pone delante de la cámara, escribes su nombre y pulsas "Registrar cara".</p>
+    <p>4. Ahora pide a cada uno que vuelva a pasar por la cámara. ¿Los identifica? ¿Aparece su nombre en verde?</p>
+    <p>5. Haz clic en <strong>"Exportar CSV"</strong> y abre el archivo con Excel. ¿Estan todos los registros?</p>
+    <p>6. Cierra Chrome y vuelve a abrir <code>asistencia.html</code>. ¿Las personas registradas siguen ahi? (Deberian, gracias a localStorage).</p>
+  </div>
+
+  <div class="exercise-box">
+    <div class="ex-header"><div class="ex-icon">✏️<span class="diff-badge diff-dificil">Difícil</span></div> Reto 11b.2 — Mejora el sistema<span class="diff-badge diff-dificil">Difícil</span></div>
+    <p><strong>Objetivo:</strong> Personalizar y mejorar tu sistema de asistencia.</p>
+    <p><strong>Ideas:</strong></p>
+    <p>1. Cambia el <code>UMBRAL</code> de <code>0.6</code> a <code>0.5</code> (mas estricto) o <code>0.7</code> (mas permisivo). ¿Quépasa?</p>
+    <p>2. Cambia los colores del CSS para adaptarlos a los colores de tu instituto.</p>
+    <p>3. Anade la emoción a la tabla de asistencia (necesitaras guardar <code>emoción</code> junto con nombre, fecha y hora).</p>
+    <p>4. <strong>Reto dificil:</strong> Haz que el sistema muestre una foto miniatura de cada persona registrada junto a su nombre en la lista.</p>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- QUIZ NAVEGADOR -->
+<section class="section" id="quiz-browser">
+  <div class="section-tag tag-browser">🔵 Test</div>
+  <h2>Quiz — Alternativa Navegador</h2>
+  <div class="quiz-box"><div class="quiz-title">📝 Comprueba lo que has aprendido</div>
+    <div class="quiz-question" id="q11"><p>1. ¿Québiblioteca de JavaScript usamos para reconocimiento facial en el navegador?</p>
+      <button class="quiz-option" onclick="checkQuiz('q11',this,false)">DeepFace.js</button>
+      <button class="quiz-option" onclick="checkQuiz('q11',this,true)">face-api.js</button>
+      <button class="quiz-option" onclick="checkQuiz('q11',this,false)">OpenCV.js</button>
+      <div class="quiz-feedback" id="q11-fb"></div></div>
+    <div class="quiz-question" id="q12"><p>2. ¿Dóndese guardan las personas registradas y las asistencias en el proyecto del navegador?</p>
+      <button class="quiz-option" onclick="checkQuiz('q12',this,false)">En un archivo CSV en el ordenador</button>
+      <button class="quiz-option" onclick="checkQuiz('q12',this,false)">En los servidores de Google</button>
+      <button class="quiz-option" onclick="checkQuiz('q12',this,true)">En el localStorage del navegador (almacen interno de Chrome)</button>
+      <div class="quiz-feedback" id="q12-fb"></div></div>
+    <div class="quiz-question" id="q13"><p>3. ¿Quéhace <code>faceapi.euclideanDistance()</code>?</p>
+      <button class="quiz-option" onclick="checkQuiz('q13',this,false)">Detecta caras en una imagen</button>
+      <button class="quiz-option" onclick="checkQuiz('q13',this,true)">Calcula la distancia entre dos descriptores de cara para saber si son la misma persona</button>
+      <button class="quiz-option" onclick="checkQuiz('q13',this,false)">Descarga los modelos de IA desde internet</button>
+      <div class="quiz-feedback" id="q13-fb"></div></div>
+    <div class="quiz-question" id="q14"><p>4. ¿Por quéusamos <code>async/await</code> en JavaScript?</p>
+      <button class="quiz-option" onclick="checkQuiz('q14',this,false)">Para que el código sea mas rápido</button>
+      <button class="quiz-option" onclick="checkQuiz('q14',this,false)">Para crear variables</button>
+      <button class="quiz-option" onclick="checkQuiz('q14',this,true)">Para esperar operaciones lentas (descargar modelos, encender webcam) sin bloquear la página</button>
+      <div class="quiz-feedback" id="q14-fb"></div></div>
+  </div>
+</section>
+
+<div class="divider"></div>
+</div><!-- /pathBrowser -->
+
+<section class="section" style="text-align:center;padding:2rem 3rem">
+  <div style="background:var(--bg-card);border:2px solid var(--accent-purple);border-radius:14px;padding:1.5rem;max-width:600px;margin:0 auto">
+    <div style="font-size:2rem;margin-bottom:.4rem">🟣</div>
+    <div style="font-size:1.2rem;font-weight:700;color:var(--accent-purple);margin-bottom:.5rem">Extras</div>
+    <div style="font-size:.95rem;color:var(--text-secondary);line-height:1.6;margin-bottom:1rem">Limitaciones, casos reales, errores comunes, glosario, ética y siguientes pasos.</div>
+    <button class="path-toggle-btn" style="background:rgba(167,139,250,.12);color:var(--accent-purple);border:1.5px solid rgba(167,139,250,.3)" onclick="toggleLevel(this)" data-path="pathExtras"><span class="arrow">▶</span> Desplegar</button>
+  </div>
+</section>
 
 <!-- ══════════════════════════════════════════ -->
 <!--                 EXTRAS                     -->
 <!-- ══════════════════════════════════════════ -->
+<div class="path-block" id="pathExtras">
 <div class="level-bar"><div class="lb-seg" style="background:var(--accent-purple)"></div><div class="lb-seg" style="background:var(--accent-purple)"></div><div class="lb-seg" style="background:var(--accent-purple)"></div></div>
 
 <section class="section" id="limitaciones">
@@ -1790,13 +2579,26 @@ resultado = DeepFace.<span class="fn">verify</span>(
   <table class="error-table">
     <thead><tr><th>Error</th><th>Causa</th><th>Solución</th></tr></thead>
     <tbody>
-      <tr><td><code>ModuleNotFoundError: No module named 'deepface'</code></td><td>Las bibliotecas no estan instaladas o se instalaron en otro Python</td><td>Ejecuta <code>pip install deepface opencv-python tf-keras</code> desde CMD o el terminal de VS Code</td></tr>
+      <tr><td><code>ModuleNotFoundError: No module named 'deepface'</code></td><td>Las bibliotecas no están instaladas o se instalaron en otro Python</td><td>Ejecuta <code>pip install deepface opencv-python tf-keras</code> desde CMD o el terminal de VS Code</td></tr>
       <tr><td><code>'python3' no se reconoce</code></td><td>En Windows se usa <code>python</code></td><td>Escribe <code>python</code> sin el 3</td></tr>
       <tr><td><strong>"requires tf-keras package"</strong></td><td>TensorFlow separó Keras</td><td><code>pip install tf-keras</code></td></tr>
       <tr><td><strong>"Face could not be detected"</strong></td><td>No encontró cara</td><td>Usa <code>enforce_detection=False</code></td></tr>
       <tr><td><strong>Descarga lenta la primera vez</strong></td><td>Baja modelos (~500 MB)</td><td>Normal. Solo la primera vez</td></tr>
       <tr><td><code>cv2.imshow()</code> no va en Colab</td><td>Colab no tiene ventanas</td><td>Usa <code>cv2_imshow()</code> o <code>matplotlib</code></td></tr>
       <tr><td><strong>Cámara no abre</strong></td><td>Otra app la usa</td><td>Cierra Zoom/Meet/Teams</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Errores en el navegador (secciónes 9b-11b)</h3>
+  <table class="error-table">
+    <thead><tr><th>Error</th><th>Causa</th><th>Solucion</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Chrome pide permiso de cámara y no aparece video</strong></td><td>Se denego el permiso la primera vez</td><td>Haz clic en el icono de candado en la barra de direcciones → Permisos → Camara → Permitir. Recarga la página</td></tr>
+      <tr><td><strong>"Cargando modelos..." se queda para siempre</strong></td><td>La red del centro bloquea el CDN</td><td>Comprueba que tienes internet. Si el centro bloquea <code>cdn.jsdelivr.net</code>, pide al profesor que lo autorice</td></tr>
+      <tr><td><strong>La detección va muy lenta</strong></td><td>Ordenador con poca potencia</td><td>Sube el <code>INTERVALO</code> a <code>1000</code> o <code>2000</code> (analiza menos veces por segúndo)</td></tr>
+      <tr><td><strong>El archivo se abre como texto, no como web</strong></td><td>La extensión no es <code>.html</code></td><td>Asegurate de que el archivo se llama <code>webcam.html</code> y no <code>webcam.html.txt</code>. Desactiva "Ocultar extensiónes" en Windows</td></tr>
+      <tr><td><strong>"getUserMedia is not a function"</strong></td><td>Navegador antiguo o Internet Explorer</td><td>Usa <strong>Google Chrome</strong> actualizado. No funcióna en Internet Explorer ni en Edge antiguo</td></tr>
+      <tr><td><strong>Las personas registradas desaparecen</strong></td><td>Se borro el localStorage o se cambio de navegador</td><td>Los datos se guardan en el navegador que usaste. Si cambias de navegador o usas modo incognito, se pierden</td></tr>
     </tbody>
   </table>
 </section>
@@ -1815,8 +2617,13 @@ resultado = DeepFace.<span class="fn">verify</span>(
     <div class="glossary-card"><div class="gc-emoji">📊</div><div class="gc-term">Umbral (threshold)</div><div class="gc-def">Valor límite. Si distancia < umbral → misma persona.</div></div>
     <div class="glossary-card"><div class="gc-emoji">☁️</div><div class="gc-term">Google Colab</div><div class="gc-def">Editor de Python online gratuito de Google. Ejecuta código en la nube.</div></div>
     <div class="glossary-card"><div class="gc-emoji">📄</div><div class="gc-term">CSV</div><div class="gc-def">Archivo de texto con datos separados por comas. Se abre con Excel.</div></div>
-    <div class="glossary-card"><div class="gc-emoji">🎬</div><div class="gc-term">Frame</div><div class="gc-def">Un fotograma de vídeo. La webcam captura ~30 por segundo.</div></div>
+    <div class="glossary-card"><div class="gc-emoji">🎬</div><div class="gc-term">Frame</div><div class="gc-def">Un fotograma de vídeo. La webcam captura ~30 por segúndo.</div></div>
     <div class="glossary-card"><div class="gc-emoji">🎭</div><div class="gc-term">Anti-spoofing</div><div class="gc-def">Detectar si la cara es real o una foto/pantalla para engañar.</div></div>
+    <div class="glossary-card"><div class="gc-emoji">🌐</div><div class="gc-term">CDN</div><div class="gc-def">Red de servidores que distribuye archivos (como face-api.js) por todo el mundo para que se descarguen rápido.</div></div>
+    <div class="glossary-card"><div class="gc-emoji">💾</div><div class="gc-term">localStorage</div><div class="gc-def">Almacen interno del navegador. Guarda datos (texto/JSON) que persisten al cerrar Chrome. Limite ~5 MB.</div></div>
+    <div class="glossary-card"><div class="gc-emoji">🖌️</div><div class="gc-term">Canvas</div><div class="gc-def">Elemento HTML que permite dibujar graficos. Lo usamos como capa transparente sobre el video para pintar rectangulos.</div></div>
+    <div class="glossary-card"><div class="gc-emoji">⏳</div><div class="gc-term">async / await</div><div class="gc-def">Palabras clave de JavaScript para esperar operaciones lentas (descargar modelos, encender webcam) sin bloquear la página.</div></div>
+    <div class="glossary-card"><div class="gc-emoji">📦</div><div class="gc-term">face-api.js</div><div class="gc-def">Biblioteca de reconocimiento facial para JavaScript. Equivalente a DeepFace pero funcióna directamente en el navegador.</div></div>
   </div>
 </section>
 
@@ -1828,7 +2635,7 @@ resultado = DeepFace.<span class="fn">verify</span>(
   <div class="info-box warning"><div class="ib-title orange">⚠️ Marco legal</div>
     <p>En Europa, el <strong>RGPD</strong> clasifica los datos faciales como <strong>datos biométricos</strong> (categoría especial). Usar reconocimiento facial sin consentimiento puede ser <strong>ilegal</strong> y conlleva multas muy elevadas.</p></div>
   <p><strong>1. Privacidad:</strong> ¿Quién tiene derecho a grabar y analizar tu cara? ¿Hay cámaras con reconocimiento facial en tu barrio?</p>
-  <p><strong>2. Sesgos:</strong> Si un modelo funciona peor con ciertos grupos étnicos, eso no es solo un "error técnico" — es un problema de <strong>discriminación</strong>.</p>
+  <p><strong>2. Sesgos:</strong> Si un modelo funcióna peor con ciertos grupos étnicos, eso no es solo un "error técnico" — es un problema de <strong>discriminación</strong>.</p>
   <p><strong>3. Consentimiento:</strong> ¿Deberías poder decidir si tu cara se usa para entrenar una IA?</p>
   <p><strong>4. Transparencia:</strong> Si un sistema de IA toma una decisión sobre ti (acceso, seguridad), ¿deberías saberlo?</p>
   <div class="debate-box">
@@ -1839,9 +2646,37 @@ resultado = DeepFace.<span class="fn">verify</span>(
   </div>
 </section>
 
+<div class="divider"></div>
+
+<section class="section" id="siguiente">
+  <div class="section-tag tag-extra">🟣 Siguientes pasos</div>
+  <h2>¿Y ahora que?</h2>
+
+  <p>Has completado el curso. Sabes detectar caras, analizar emociones, identificar personas y construir un sistema de asistencia. Pero esto es solo el principio. Aquí tienes <strong>4 ideas de proyectos</strong> para seguir aprendiendo:</p>
+
+  <div class="curiosity-grid">
+    <div class="curiosity-card"><div class="cc-num">1</div><div class="cc-emoji">😷</div><div class="cc-title">Detector de mascarillas</div><div class="cc-text">Entrena un clasificador que detecte si una persona lleva mascarilla o no. Usa <code>DeepFace.analyze()</code> y añade tu propia lógica: si la cara se detecta pero la emoción no se puede leer → probablemente lleva mascarilla.</div></div>
+    <div class="curiosity-card"><div class="cc-num">2</div><div class="cc-emoji">📊</div><div class="cc-title">Mapa de emociones de clase</div><div class="cc-text">Haz una foto de grupo y analiza la emoción de cada persona. Genera un grafico de barras con matplotlib (Python) o Chart.js (JavaScript) que muestre el "estado de animo" general de la clase.</div></div>
+    <div class="curiosity-card"><div class="cc-num">3</div><div class="cc-title">Sistema de acceso seguro</div><div class="cc-emoji">🚪</div><div class="cc-text">Conecta el reconocimiento facial a una Raspberry Pi con un servo motor. Si la persona esta en la base de datos → el servo abre una puerta. Un proyecto completo de electronica + IA.</div></div>
+    <div class="curiosity-card"><div class="cc-num">4</div><div class="cc-emoji">🎮</div><div class="cc-title">Juego controlado con gestos</div><div class="cc-text">Usa la detección de emociones para controlar un juego: sonrie para saltar, abre la boca para disparar, levanta las cejas para pausar. Combina face-api.js con un canvas de juego HTML.</div></div>
+  </div>
+
+  <div class="info-box concept">
+    <div class="ib-title purple">🧠 Recursos para seguir aprendiendo</div>
+    <ul>
+      <li><strong>DeepFace (Python):</strong> Documentación oficial en GitHub — <code>github.com/serengil/deepface</code></li>
+      <li><strong>face-api.js (JavaScript):</strong> Documentación en <code>github.com/vladmandic/face-api</code></li>
+      <li><strong>Python básico:</strong> El curso gratuito "Python para principiantes" de freeCodeCamp en YouTube (en español)</li>
+      <li><strong>JavaScript básico:</strong> MDN Web Docs en español — <code>developer.mozilla.org/es/</code></li>
+      <li><strong>IA en general:</strong> El curso "Elements of AI" de la Universidad de Helsinki (gratuito, en español)</li>
+    </ul>
+  </div>
+</section>
+</div><!-- /pathExtras -->
+
 <footer class="footer">
-  <p>Curso de Reconocimiento Facial con DeepFace · v6.0 · Colab primero</p>
-  <p style="margin-top:.3rem;opacity:.6">Secciones 1-8: Google Colab · Secciones 9-12: Ordenador local · ESO y Bachillerato</p>
+  <p>Reconocimiento Facial con Python y Javascript</p>
+  <p style="margin-top:.3rem;opacity:.6">Curso creado por Moisés Fernández Ruiz @frMoisesfr</p>
 </footer>
 </div>
 
@@ -1878,9 +2713,7 @@ toggle.addEventListener('click',()=>{
 });
 overlay.addEventListener('click',()=>{sidebar.classList.remove('open');overlay.classList.remove('show')});
 const allSections=document.querySelectorAll('.section'),navLinks=document.querySelectorAll('.nav-link');
-const progressFill=document.getElementById('progressFill'),progressPercent=document.getElementById('progressPercent');
-const visited=new Set();
-const observer=new IntersectionObserver((entries)=>{entries.forEach(entry=>{if(entry.isIntersecting){const id=entry.target.id;visited.add(id);navLinks.forEach(link=>{link.classList.remove('active');if(link.getAttribute('href')==='#'+id)link.classList.add('active')});const pct=Math.round((visited.size/allSections.length)*100);progressFill.style.width=pct+'%';progressPercent.textContent=pct+'%'}})},{rootMargin:'-20% 0px -60% 0px'});
+const observer=new IntersectionObserver((entries)=>{entries.forEach(entry=>{if(entry.isIntersecting){const id=entry.target.id;navLinks.forEach(link=>{link.classList.remove('active');if(link.getAttribute('href')==='#'+id)link.classList.add('active')});updatePathIndicator(id)}})},{rootMargin:'-20% 0px -60% 0px'});
 allSections.forEach(s=>observer.observe(s));
 navLinks.forEach(link=>{link.addEventListener('click',()=>{if(window.innerWidth<=900){sidebar.classList.remove('open');overlay.classList.remove('show')}})});
 
@@ -1953,6 +2786,59 @@ document.addEventListener('keydown',e=>{
   if(e.key==='ArrowLeft'){e.preventDefault();if(presIndex>0)presShow(presIndex-1)}
   if(e.key==='Escape'){e.preventDefault();exitPresentation()}
 });
+
+/* Indicador de path */
+const pathIndicator=document.getElementById('pathIndicator');
+const localSections=new Set(['instalar-local','webcam','proyecto-final','modelos','quiz-avanzado']);
+const browserSections=new Set(['preparar-web','webcam-web','asistencia-web','quiz-browser']);
+function updatePathIndicator(id){if(localSections.has(id)){pathIndicator.textContent='💻 Camino A: Ordenador local';pathIndicator.className='path-indicator visible path-local'}else if(browserSections.has(id)){pathIndicator.textContent='🌐 Camino B: Navegador';pathIndicator.className='path-indicator visible path-browser'}else{pathIndicator.className='path-indicator'}}
+
+/* Buscador en sidebar */
+function filterNav(q){const t=q.toLowerCase().trim();navLinks.forEach(link=>{const text=link.textContent.toLowerCase();link.style.display=!t||text.includes(t)?'':'none'});document.querySelectorAll('.nav-section-title').forEach(title=>{const section=title.parentElement;const visible=[...section.querySelectorAll('.nav-link')].some(l=>l.style.display!=='none');title.style.display=visible||!t?'':'none'})}
+
+/* Plegar/desplegar niveles */
+const pathMap={
+  'intro':'pathBasico','preparar-colab':'pathBasico','primer-programa':'pathBasico','detectar-caras':'pathBasico','dibujar-caras':'pathBasico','quiz-basico':'pathBasico',
+  'comparar-caras':'pathIntermedio','analizar-cara':'pathIntermedio','buscar-persona':'pathIntermedio','quiz-intermedio':'pathIntermedio',
+  'instalar-local':'pathLocal','webcam':'pathLocal','proyecto-final':'pathLocal','modelos':'pathLocal','quiz-avanzado':'pathLocal',
+  'preparar-web':'pathBrowser','webcam-web':'pathBrowser','asistencia-web':'pathBrowser','quiz-browser':'pathBrowser',
+  'limitaciones':'pathExtras','casos-reales':'pathExtras','errores-comunes':'pathExtras','glosario':'pathExtras','etica':'pathExtras','siguiente':'pathExtras'
+};
+function expandBlock(blockId){
+  const block=document.getElementById(blockId);if(!block)return;
+  if(block.classList.contains('expanded'))return;
+  block.classList.add('expanded');
+  document.querySelectorAll('.nav-section-title[data-path="'+blockId+'"]').forEach(t=>t.classList.add('expanded'));
+  updateToggleBtn(blockId,true);
+}
+function collapseBlock(blockId){
+  const block=document.getElementById(blockId);if(!block)return;
+  block.classList.remove('expanded');
+  document.querySelectorAll('.nav-section-title[data-path="'+blockId+'"]').forEach(t=>t.classList.remove('expanded'));
+  updateToggleBtn(blockId,false);
+}
+function toggleLevel(el){
+  const blockId=el.dataset.path;const block=document.getElementById(blockId);if(!block)return;
+  if(block.classList.contains('expanded')){collapseBlock(blockId);updateToggleBtn(blockId,false)}
+  else{expandBlock(blockId);updateToggleBtn(blockId,true);setTimeout(()=>{block.scrollIntoView({behavior:'smooth',block:'start'})},100)}
+}
+function updateToggleBtn(blockId,open){
+  document.querySelectorAll('[data-path="'+blockId+'"].path-toggle-btn').forEach(b=>{
+    if(open){b.classList.add('active');b.innerHTML='<span class="arrow">▶</span> Plegar'}
+    else{b.classList.remove('active');b.innerHTML='<span class="arrow">▶</span> Desplegar'}
+  });
+}
+function togglePath(path){
+  const blockId=path==='local'?'pathLocal':'pathBrowser';
+  const block=document.getElementById(blockId);if(!block)return;
+  if(block.classList.contains('expanded')){collapseBlock(blockId)}
+  else{expandBlock(blockId);setTimeout(()=>{block.scrollIntoView({behavior:'smooth',block:'start'})},100)}
+}
+/* Desplegar al hacer clic en sidebar nav-links */
+document.querySelectorAll('.nav-link').forEach(link=>{link.addEventListener('click',()=>{const href=link.getAttribute('href');if(!href)return;const id=href.slice(1);const blockId=pathMap[id];if(blockId)expandBlock(blockId)})});
+
+/* Números de línea automáticos */
+document.querySelectorAll('pre.numbered').forEach(pre=>{const lines=pre.textContent.split('\n').length;const nums=Array.from({length:lines},(_,i)=>i+1).join('\n');const el=document.createElement('div');el.className='line-nums';el.textContent=nums;pre.prepend(el)});
 </script>
 </body>
 </html>
