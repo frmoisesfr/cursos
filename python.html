@@ -596,6 +596,7 @@ plt.<span class="fn">show</span>()</pre></div>
 
 <span class="cm"># ─── Analizar la foto ───</span>
 <span class="cm"># Cambia "foto.jpg" por el nombre de tu foto subida</span>
+<span class="cm"># detector_backend="mtcnn", le dices a DeepFace que utilice un detector de caras diferente (MTCNN, Multi-task Cascaded Convolutional Networks), que es un modelo basado en redes neuronales más moderno y robusto</span>
 resultados = DeepFace.<span class="fn">analyze</span>(
     img_path=<span class="str">"foto.jpg"</span>,
     actions=[<span class="str">"age"</span>, <span class="str">"gender"</span>, <span class="str">"emotion"</span>],
