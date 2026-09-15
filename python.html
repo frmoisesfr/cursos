@@ -598,7 +598,8 @@ plt.<span class="fn">show</span>()</pre></div>
 <span class="cm"># Cambia "foto.jpg" por el nombre de tu foto subida</span>
 resultados = DeepFace.<span class="fn">analyze</span>(
     img_path=<span class="str">"foto.jpg"</span>,
-    actions=[<span class="str">"age"</span>, <span class="str">"gender"</span>, <span class="str">"emotion"</span>]
+    actions=[<span class="str">"age"</span>, <span class="str">"gender"</span>, <span class="str">"emotion"</span>],
+    detector_backend="mtcnn"
 )
 
 <span class="cm"># ─── Mostrar lo que ha descubierto ───</span>
