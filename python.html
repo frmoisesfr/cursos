@@ -673,7 +673,7 @@ resultados = DeepFace.<span class="fn">analyze</span>(
 <span class="cm"># ─── Buscar todas las caras en la imagen ───</span>
 caras = DeepFace.<span class="fn">extract_faces</span>(
     img_path=<span class="str">"foto_grupo.jpg"</span>,
-    detector_backend=<span class="str">"opencv"</span>,  <span class="cm"># El detector mas rapido</span>
+    detector_backend=<span class="str">"mtcnn"</span>,  <span class="cm"># El detector mas rapido</span>
     align=<span class="kw">True</span>                   <span class="cm"># Alinear caras (ojos horizontales)</span>
 )
 
